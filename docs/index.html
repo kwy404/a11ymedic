@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
+  <title>a11ymedic: website accessibility checker that writes the fix</title>
+  <meta name="description" content="Free accessibility checker for WCAG 2.2: 61 rules, plain language explanations in English and Portuguese, exact HTML fixes, a contrast fixer, CLI, CI and test matchers.">
+  <link rel="canonical" href="https://kwy404.github.io/a11ymedic/">
+  <meta name="author" content="Alexandre Kohler">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#f3faf9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1f24" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="a11ymedic">
+  <meta property="og:title" content="a11ymedic: website accessibility checker that writes the fix">
+  <meta property="og:description" content="Free accessibility checker for WCAG 2.2: 61 rules, plain language explanations in English and Portuguese, exact HTML fixes, a contrast fixer, CLI, CI and test matchers.">
+  <meta property="og:url" content="https://kwy404.github.io/a11ymedic/">
+  <meta property="og:image" content="https://kwy404.github.io/a11ymedic/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="a11ymedic: an accessibility checker with plain language explanations and exact fixes, with Patch the otter medic">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="a11ymedic: website accessibility checker that writes the fix">
+  <meta name="twitter:description" content="Free accessibility checker for WCAG 2.2: 61 rules, plain language explanations in English and Portuguese, exact HTML fixes, a contrast fixer, CLI, CI and test matchers.">
+  <meta name="twitter:image" content="https://kwy404.github.io/a11ymedic/og.png">
+  <meta name="twitter:image:alt" content="a11ymedic: an accessibility checker with plain language explanations and exact fixes, with Patch the otter medic">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SoftwareApplication","name":"a11ymedic","applicationCategory":"DeveloperApplication","operatingSystem":"Any (web browsers, Node.js 18 or newer)","description":"Free accessibility checker that explains every problem in plain language and gives the exact fix: 61 WCAG 2.2 rules, color contrast fixes in OKLCH, a browser overlay, a CLI with safe auto fix, CI annotations and test matchers.","url":"https://kwy404.github.io/a11ymedic/","downloadUrl":"https://www.npmjs.com/package/a11ymedic","softwareVersion":"0.1.0","license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"image":"https://kwy404.github.io/a11ymedic/og.png"},{"@type":"WebSite","name":"a11ymedic","url":"https://kwy404.github.io/a11ymedic/","inLanguage":"en","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best free website accessibility checker?","acceptedAnswer":{"@type":"Answer","text":"Use one that finds problems and tells you how to fix them. a11ymedic is free and open source: it checks 61 WCAG 2.2 rules in the browser, on the command line and in CI, explains each problem in plain English or Portuguese and gives the patched HTML for every finding."}},{"@type":"Question","name":"How do I check a website for accessibility problems?","acceptedAnswer":{"@type":"Answer","text":"Run npx a11ymedic https://your-site.com for a full report, or add the a11ymedic script tag (or the bookmarklet) to see numbered pins on the page itself. For your own code, run npx a11ymedic \"src/**/*.html\" and add --fail-on serious in CI."}},{"@type":"Question","name":"Can a11ymedic fix accessibility issues automatically?","acceptedAnswer":{"@type":"Answer","text":"It fixes the safe ones: a11ymedic fix \"src/**/*.html\" shows a diff and --write applies it. Safe fixes are things like an empty alt on a spacer image, tabindex 0 instead of 5, re-enabling zoom or a misspelled ARIA attribute. Everything that needs a human decision (alt text that describes a photo, a label text) comes as a ready to paste suggestion instead."}},{"@type":"Question","name":"Does a11ymedic replace testing with real users?","acceptedAnswer":{"@type":"Answer","text":"No. Automated checks catch a large share of common problems, but not all of them: whether alt text is accurate, whether a flow makes sense with a screen reader or whether captions are correct still need people. a11ymedic marks what it cannot decide as a human check."}},{"@type":"Question","name":"Does it work with React, Vue, Angular and Next.js?","acceptedAnswer":{"@type":"Answer","text":"Yes. Test rendered components with expect(await audit(container)).toHaveNoViolations() in Vitest or Jest, check built HTML with the CLI, or load the overlay script in development."}},{"@type":"Question","name":"Is a11ymedic an accessibility overlay?","acceptedAnswer":{"@type":"Answer","text":"No. Its overlay is a diagnosis tool for the people who build the site: it highlights problems and shows the fix. It never changes the page for visitors. Real fixes belong in your source code."}}]}]}</script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+  <link rel="stylesheet" href="site.css">
+  <script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
+  <script src="a11ymedic.js"></script>
+  <script type="module" src="site.js"></script>
+</head>
+<body class="bg-background text-foreground antialiased">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="cl-top">
+  <div class="cl-wrap cl-top-row">
+    <a class="cl-brand" href="./" aria-label="a11ymedic home"><img src="favicon.svg" width="32" height="32" alt=""><span>a11y<b>medic</b></span></a>
+    <a class="badge badge-sm badge-outline cl-ver" href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md" aria-label="v0.1.0 changelog">v0.1.0</a>
+    <nav class="cl-nav" aria-label="Main"><a class="cl-nav-link" href="./#checkup">Check-up</a><a class="cl-nav-link" href="./#contrast">Contrast fixer</a><a class="cl-nav-link" href="wcag-cheat-sheet.html">WCAG cheat sheet</a><a class="cl-nav-link" href="./#rules">Rules</a><a class="cl-nav-link" href="guides.html">Guides</a><a class="cl-nav-link" href="./#install">Install</a></nav>
+    <div class="cl-top-end">
+      <a class="cl-icon-btn" href="https://github.com/kwy404/a11ymedic" aria-label="a11ymedic on GitHub"><svg class="cl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg></a>
+      <button type="button" class="cl-icon-btn cl-theme" v-theme-toggle.cycle aria-label="Color theme: follow the system, light or dark" title="Color theme"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="system"><rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/></svg><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="light"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="dark"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
+      <button type="button" class="cl-icon-btn cl-menu-btn" aria-controls="cl-menu" aria-expanded="false" :aria-expanded="menu ? 'true' : 'false'" @click="menu = !menu" aria-label="Menu"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+  <nav id="cl-menu" class="cl-mobile" aria-label="Mobile" style="display:none" v-show="menu" @click="menu = false">
+    <div class="cl-wrap"><a class="cl-nav-link" href="./#checkup">Check-up</a><a class="cl-nav-link" href="./#contrast">Contrast fixer</a><a class="cl-nav-link" href="wcag-cheat-sheet.html">WCAG cheat sheet</a><a class="cl-nav-link" href="./#rules">Rules</a><a class="cl-nav-link" href="guides.html">Guides</a><a class="cl-nav-link" href="./#install">Install</a><a class="cl-nav-link" href="https://github.com/kwy404/a11ymedic">GitHub</a><a class="cl-nav-link" href="https://www.npmjs.com/package/a11ymedic">npm</a></div>
+  </nav>
+</header>
+  <main id="main">
+
+<section class="cl-hero" aria-labelledby="hero-title">
+  <div class="cl-wrap cl-hero-grid">
+    <div class="cl-hero-copy">
+      <p class="cl-eyebrow">Free accessibility checker for WCAG 2.2</p>
+      <h1 id="hero-title">The accessibility checker that <span>explains every problem</span> and writes the fix.</h1>
+      <p class="cl-lead">a11ymedic examines your pages with 61 WCAG 2.2 rules, tells you in plain language what is wrong and who it hurts, and hands you the patched HTML. Run it as a page overlay, from the command line, in CI or inside your tests.</p>
+      <div class="cl-hero-cta">
+        <a class="btn btn-primary btn-lg" href="#checkup">Start a check-up <svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <button type="button" class="cl-npx" @click="copyText('npx a11ymedic index.html', 'npx')"><code><span aria-hidden="true">$</span> npx a11ymedic index.html</code><span class="cl-npx-copy" v-text="copied === 'npx' ? 'Copied' : 'Copy'">Copy</span></button>
+      </div>
+      <ul class="cl-vitals" aria-label="At a glance">
+        <li><strong>61</strong><span>WCAG 2.2 rules</span></li>
+        <li><strong>EN + PT</strong><span>plain language</span></li>
+        <li><strong>OKLCH</strong><span>color fixes</span></li>
+        <li><strong>1 diff</strong><span>safe auto fix</span></li>
+      </ul>
+    </div>
+    <div class="cl-hero-art">
+      <svg class="cl-ekg" viewBox="0 0 600 120" aria-hidden="true" preserveAspectRatio="none"><path d="M0 70h170l18-40 22 80 20-62 14 22h356"/></svg>
+      <picture>
+        <source srcset="assets/mascot-dark.svg" media="(prefers-color-scheme: dark)">
+        <img class="cl-mascot" src="assets/mascot.svg" width="360" height="360" alt="Patch, the a11ymedic otter paramedic, holding a broken button with a bandage on it">
+      </picture>
+    </div>
+  </div>
+</section>
+
+<section id="checkup" class="cl-section cl-checkup" aria-labelledby="checkup-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head">
+      <p class="cl-eyebrow">Live demo</p>
+      <h2 id="checkup-title">The check-up room</h2>
+      <p>Pick a patient or paste your own HTML, then run the medic. Numbered pins appear on the page, and the diagnosis chart explains each problem with the exact fix. Press <strong>Treat</strong> to apply a fix to the live page and watch it heal.</p>
+    </div>
+    <div class="cl-room">
+      <div class="cl-intake card">
+        <div class="card-body">
+          <h3 class="cl-card-title">Patient intake</h3>
+          <div class="segmented segmented-block" role="radiogroup" aria-label="Patient source">
+            <label class="segmented-item"><input type="radio" name="src" value="samples" v-model="tab" checked> Sample patients</label>
+            <label class="segmented-item"><input type="radio" name="src" value="paste" v-model="tab"> Paste HTML</label>
+          </div>
+          <fieldset class="cl-samples" v-show="tab === 'samples'">
+            <legend class="sr-only">Sample patient</legend>
+            <label class="cl-sample"><input type="radio" name="sample" value="bakery" v-model="sample" checked><span><strong>Bakery landing page</strong><small>Pretty, but quiet text, mystery buttons and images nobody can hear.</small></span></label>
+            <label class="cl-sample"><input type="radio" name="sample" value="signup" v-model="sample"><span><strong>Sign-up form</strong><small>Placeholders as labels, a div pretending to be a button.</small></span></label>
+            <label class="cl-sample"><input type="radio" name="sample" value="news" v-model="sample"><span><strong>News article</strong><small>Scrolling text, a table without headers, an untitled frame.</small></span></label>
+            <label class="cl-sample"><input type="radio" name="sample" value="dashboard" v-model="sample"><span><strong>Analytics dashboard</strong><small>ARIA typos, hidden links that still take focus, a nameless dialog.</small></span></label>
+          </fieldset>
+          <div class="cl-paste" v-show="tab === 'paste'" style="display:none">
+            <label for="paste-html">Your HTML</label>
+            <textarea id="paste-html" class="textarea" rows="9" spellcheck="false" v-model="paste" placeholder="&lt;img src=&quot;team.jpg&quot;&gt;"></textarea>
+          </div>
+          <div class="cl-options">
+            <div>
+              <label for="opt-level">WCAG level</label>
+              <select id="opt-level" class="select select-sm" v-model="level"><option value="A">A</option><option value="AA" selected>AA</option><option value="AAA">AAA</option></select>
+            </div>
+            <div>
+              <span id="lang-label" class="cl-label">Report language</span>
+              <div class="segmented segmented-sm" role="radiogroup" aria-labelledby="lang-label">
+                <label class="segmented-item"><input type="radio" name="lang" value="en" v-model="lang" checked> English</label>
+                <label class="segmented-item" lang="pt-BR"><input type="radio" name="lang" value="pt" v-model="lang"> Português</label>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary btn-block cl-run" @click="run()"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5v14l12-7z"/></svg> Run the medic</button>
+          <button type="button" class="btn btn-ghost btn-sm btn-block" @click="selfCheck()">Check this docs page instead</button>
+        </div>
+      </div>
+
+      <div class="cl-exam">
+        <div class="cl-browser">
+          <div class="cl-browser-bar" aria-hidden="true"><i></i><i></i><i></i><span v-text="patientName">Bakery landing page</span></div>
+          <iframe id="patient" title="Patient page under examination" sandbox="allow-same-origin" loading="lazy"></iframe>
+        </div>
+        <p class="cl-note">The patient page runs in a sandboxed frame with no scripts. Pins are buttons: select one to open its diagnosis.</p>
+      </div>
+
+      <section class="cl-chart card" aria-labelledby="chart-title">
+        <div class="card-body">
+          <div class="cl-chart-head">
+            <h3 id="chart-title" class="cl-card-title" v-text="t.chart">Diagnosis chart</h3>
+            <span class="cl-chart-meta" v-text="ran ? (total + ' ' + t.problems) : t.notYet">Not examined yet</span>
+          </div>
+          <ul class="cl-sev-row" aria-label="Problems by severity">
+            <li data-sev="critical"><strong v-text="counts.critical">0</strong><span v-text="t.critical">critical</span></li><li data-sev="serious"><strong v-text="counts.serious">0</strong><span v-text="t.serious">serious</span></li><li data-sev="moderate"><strong v-text="counts.moderate">0</strong><span v-text="t.moderate">moderate</span></li><li data-sev="minor"><strong v-text="counts.minor">0</strong><span v-text="t.minor">minor</span></li>
+          </ul>
+          <div class="cl-treat-all" v-show="ran && total > 0" style="display:none">
+            <button type="button" class="btn btn-sm btn-outline" @click="treatAll(true)" :disabled="safeCount === 0"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="8" width="19" height="8" rx="4" transform="rotate(-35 12 12)"/><path d="M10.5 10.5h.01M13.5 13.5h.01M13.5 10.5h.01M10.5 13.5h.01"/></svg><span v-text="t.treatSafe + ' (' + safeCount + ')'">Treat safe fixes</span></button>
+            <button type="button" class="btn btn-sm btn-ghost" @click="treatAll(false)" v-text="t.treatAll">Treat everything</button>
+            <button type="button" class="btn btn-sm btn-ghost" @click="run()" v-text="t.reset">Start over</button>
+          </div>
+          <p class="cl-healthy" v-show="ran && total === 0" style="display:none"><img src="assets/mascot-head.svg" width="48" height="48" alt=""><span v-text="t.healthy">Healthy.</span></p>
+          <p class="cl-healed" role="status" v-text="status"></p>
+          <ol class="cl-findings" aria-label="Findings">
+            <li v-for="f in items" :key="f.key" class="cl-finding" :data-sev="f.severity" :class="{ 'is-open': open === f.i }" :id="'finding-' + f.i">
+              <button type="button" class="cl-finding-head" @click="toggle(f.i)" :aria-expanded="open === f.i ? 'true' : 'false'" :aria-controls="'fbody-' + f.i">
+                <span class="cl-num" :data-sev="f.severity" v-text="f.n" aria-hidden="true"></span>
+                <span class="cl-finding-titles"><span class="cl-sev" v-text="f.sevLabel">severity</span><strong v-text="f.title">Finding</strong><span class="cl-msg" v-text="f.message"></span></span>
+              </button>
+              <div class="cl-finding-body" :id="'fbody-' + f.i" v-show="open === f.i">
+                <h4 v-text="t.why">Why it matters</h4><p v-text="f.explanation"></p>
+                <h4 v-text="t.who">Who is affected</h4><p v-text="f.affects"></p>
+                <h4>WCAG</h4><p><a :href="f.wcagUrl" target="_blank" rel="noopener" v-text="f.wcagLabel"></a></p>
+                <h4 v-text="t.fix">The fix</h4><p v-text="f.summary"></p>
+                <div class="cl-rx">
+                  <div><span class="cl-rx-label" v-text="t.before"></span><div class="cl-rx-code is-before" v-text="f.before"></div></div>
+                  <div><span class="cl-rx-label" v-text="t.after"></span><div class="cl-rx-code is-after" v-text="f.after"></div></div>
+                </div>
+                <div class="cl-rx-actions">
+                  <button type="button" class="btn btn-sm btn-primary" @click="treat(f.i)" v-show="f.treatable"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="8" width="19" height="8" rx="4" transform="rotate(-35 12 12)"/><path d="M10.5 10.5h.01M13.5 13.5h.01M13.5 10.5h.01M10.5 13.5h.01"/></svg><span v-text="t.treat">Treat on the page</span></button>
+                  <button type="button" class="btn btn-sm btn-outline" @click="copyText(f.after, 'fix-' + f.i)" v-text="copied === 'fix-' + f.i ? t.copied : t.copy">Copy fix</button>
+                  <span class="cl-safe" v-show="f.safe" v-text="t.safe"></span>
+                </div>
+                <p class="cl-selector"><code v-text="f.selector"></code></p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<section id="contrast" class="cl-section cl-contrast" aria-labelledby="contrast-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head">
+      <p class="cl-eyebrow">Contrast fixer</p>
+      <h2 id="contrast-title">Find the closest accessible color pair</h2>
+      <p>Pick a text color and a background. a11ymedic keeps the hue and moves only the OKLCH lightness until the pair passes, so your brand still looks like your brand. The same math powers the color-contrast fix in every report.</p>
+    </div>
+    <div class="cl-cf">
+      <div class="card cl-cf-inputs"><div class="card-body">
+        <div class="cl-cf-field">
+          <label for="fg-text">Text color</label>
+          <div class="cl-color-row"><input type="color" aria-label="Pick the text color" :value="hexOf(fg)" @input="fg = $event.target.value"><input id="fg-text" class="input" v-model="fg" spellcheck="false" autocomplete="off"></div>
+        </div>
+        <div class="cl-cf-field">
+          <label for="bg-text">Background color</label>
+          <div class="cl-color-row"><input type="color" aria-label="Pick the background color" :value="hexOf(bg)" @input="bg = $event.target.value"><input id="bg-text" class="input" v-model="bg" spellcheck="false" autocomplete="off"></div>
+        </div>
+        <button type="button" class="btn btn-sm btn-ghost" @click="swap()">Swap colors</button>
+        <div class="cl-cf-field">
+          <label for="cf-target">Target</label>
+          <select id="cf-target" class="select" v-model="target">
+            <option value="4.5">AA, normal text (4.5:1)</option>
+            <option value="3">AA, large text (3:1)</option>
+            <option value="7">AAA, normal text (7:1)</option>
+          </select>
+        </div>
+      </div></div>
+      <div class="cl-cf-result">
+        <div class="cl-cf-preview" data-a11ymedic-ignore :style="{ color: fg, background: bg }">
+          <p class="cl-cf-big">Large text, 24px</p>
+          <p>Normal body text at 16px. The quick brown otter jumps over the lazy bug.</p>
+        </div>
+        <div class="cl-cf-score" aria-live="polite">
+          <p class="cl-ratio"><strong v-text="valid ? ratioText : '?'">4.5</strong><span>:1 contrast</span></p>
+          <ul class="cl-checks">
+            <li :data-ok="aaNormal ? 'yes' : 'no'"><span v-text="aaNormal ? 'Pass' : 'Fail'"></span> AA normal text</li>
+            <li :data-ok="aaLarge ? 'yes' : 'no'"><span v-text="aaLarge ? 'Pass' : 'Fail'"></span> AA large text</li>
+            <li :data-ok="aaaNormal ? 'yes' : 'no'"><span v-text="aaaNormal ? 'Pass' : 'Fail'"></span> AAA normal text</li>
+          </ul>
+          <p class="cl-cf-error" v-show="!valid">Type a CSS color: #0f8b8d, rgb(), hsl(), oklch() or a name.</p>
+        </div>
+        <div class="cl-cf-options" v-show="valid">
+          <div class="cl-cf-option" v-show="optFg">
+            <h3>Change the text</h3>
+            <div class="cl-cf-swatch" :style="{ color: optFg ? optFg.foreground : '', background: optFg ? optFg.background : '' }">Aa</div>
+            <p><code v-text="optFg ? optFg.foreground : ''"></code> on <code v-text="optFg ? optFg.background : ''"></code>, <strong v-text="optFg ? optFg.ratio : ''"></strong>:1</p>
+            <button type="button" class="btn btn-sm btn-outline" @click="fg = optFg.foreground">Use this text color</button>
+          </div>
+          <div class="cl-cf-option" v-show="optBg">
+            <h3>Change the background</h3>
+            <div class="cl-cf-swatch" :style="{ color: optBg ? optBg.foreground : '', background: optBg ? optBg.background : '' }">Aa</div>
+            <p><code v-text="optBg ? optBg.foreground : ''"></code> on <code v-text="optBg ? optBg.background : ''"></code>, <strong v-text="optBg ? optBg.ratio : ''"></strong>:1</p>
+            <button type="button" class="btn btn-sm btn-outline" @click="bg = optBg.background">Use this background</button>
+          </div>
+          <div class="cl-cf-option" v-show="optBoth">
+            <h3>Change both</h3>
+            <div class="cl-cf-swatch" :style="{ color: optBoth ? optBoth.foreground : '', background: optBoth ? optBoth.background : '' }">Aa</div>
+            <p><code v-text="optBoth ? optBoth.foreground : ''"></code> on <code v-text="optBoth ? optBoth.background : ''"></code>, <strong v-text="optBoth ? optBoth.ratio : ''"></strong>:1</p>
+            <button type="button" class="btn btn-sm btn-outline" @click="fg = optBoth.foreground; bg = optBoth.background">Use this pair</button>
+          </div>
+          <p class="cl-cf-pass" v-show="passes">This pair already passes the target. Nothing to fix.</p>
+        </div>
+      </div>
+    </div>
+    <p class="cl-more">Read the guide: <a href="how-to-fix-color-contrast.html">How to fix color contrast</a>.</p>
+  </div>
+</section>
+
+<section id="how" class="cl-section" aria-labelledby="how-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head">
+      <p class="cl-eyebrow">How it works</p>
+      <h2 id="how-title">Exam, diagnosis, treatment</h2>
+    </div>
+    <ol class="cl-steps">
+      <li><picture><source srcset="assets/icons/dark/stethoscope.svg" media="(prefers-color-scheme: dark)"><img src="assets/icons/light/stethoscope.svg" width="40" height="40" alt=""></picture><h3>1. Exam</h3><p>An engine written from scratch runs 61 rules on a real DOM. In the browser it reads computed styles and real boxes. On Node it parses HTML with jsdom, cascades your CSS itself (specificity, variables, inheritance) and keeps line numbers.</p></li>
+      <li><picture><source srcset="assets/icons/dark/report.svg" media="(prefers-color-scheme: dark)"><img src="assets/icons/light/report.svg" width="40" height="40" alt=""></picture><h3>2. Diagnosis</h3><p>Every finding says what is wrong with this exact element, why it matters, who is affected and which WCAG 2.2 criterion it breaks, in English and Portuguese, with the selector and the HTML snippet.</p></li>
+      <li><picture><source srcset="assets/icons/dark/fix.svg" media="(prefers-color-scheme: dark)"><img src="assets/icons/light/fix.svg" width="40" height="40" alt=""></picture><h3>3. Treatment</h3><p>Each finding comes with patched code: the missing alt, aria-label or label for, a contrast safe color picked in OKLCH. Safe fixes apply in one command with a diff preview, and they are idempotent.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="install" class="cl-section" aria-labelledby="install-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head">
+      <p class="cl-eyebrow">Quick start</p>
+      <h2 id="install-title">Four ways to call the medic</h2>
+    </div>
+    <div class="cl-ways">
+      <article class="card"><div class="card-body">
+        <h3><picture class="cl-way-icon"><source srcset="assets/icons/dark/overlay-pin.svg" media="(prefers-color-scheme: dark)"><img src="assets/icons/light/overlay-pin.svg" width="28" height="28" alt=""></picture> On any page: script tag or bookmarklet</h3>
+        <p>Add one script tag in development. Numbered pins mark each problem and a keyboard accessible side panel explains it. <kbd class="kbd kbd-sm">Alt</kbd> + <kbd class="kbd kbd-sm">Shift</kbd> + <kbd class="kbd kbd-sm">A</kbd> toggles it.</p>
+        <figure class="cl-code" id="code-1" data-lang="html"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">&lt;&gt;</span>index.html</span><button type="button" class="cl-code-copy" aria-label="Copy code from index.html" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-1' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="index.html code example"><code><span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">&#x3C;</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">script</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> src</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"https://cdn.jsdelivr.net/npm/a11ymedic@0.1.0/dist/a11ymedic.js"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> data-overlay</span><span style="--shiki-light:#800000;--shiki-dark:#808080">>&#x3C;/</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">script</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">&#x3C;!-- Portuguese: data-overlay="pt" --></span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>HTML</span><span>UTF-8</span><span>2 lines</span></div></figure>
+        <p>Or drag this bookmarklet to your bookmarks bar and press it on any site: <a class="cl-bookmarklet" data-a11ymedic-ignore href="javascript:(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/a11ymedic@0.1.0/dist/a11ymedic.js';s.setAttribute('data-overlay','');document.body.appendChild(s)})()">a11ymedic check-up</a></p>
+      </div></article>
+      <article class="card"><div class="card-body">
+        <h3><picture class="cl-way-icon"><source srcset="assets/icons/dark/cli.svg" media="(prefers-color-scheme: dark)"><img src="assets/icons/light/cli.svg" width="28" height="28" alt=""></picture> Command line: files, globs and URLs</h3>
+        <p>Check built HTML, a folder or a live URL. With Playwright or Puppeteer installed, URLs are checked in a headless browser; without them the HTML is fetched and checked statically.</p>
+        <figure class="cl-code" id="code-2" data-lang="sh"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">$_</span>Terminal</span><button type="button" class="cl-code-copy" aria-label="Copy code from Terminal" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-2' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npx</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> a11ymedic</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "dist/**/*.html"</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npx</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> a11ymedic</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> https://example.com</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --format</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> html</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> -o</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> report.html</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npx</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> a11ymedic</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> fix</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "src/**/*.html"</span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">          # preview safe fixes as a diff</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npx</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> a11ymedic</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> fix</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "src/**/*.html"</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --write</span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">  # apply them</span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>Shell</span><span>UTF-8</span><span>4 lines</span></div></figure>
+      </div></article>
+      <article class="card"><div class="card-body">
+        <h3><picture class="cl-way-icon"><source srcset="assets/icons/dark/ci.svg" media="(prefers-color-scheme: dark)"><img src="assets/icons/light/ci.svg" width="28" height="28" alt=""></picture> CI: fail the build on serious problems</h3>
+        <p>On GitHub Actions a11ymedic prints annotations on the changed lines and writes a job summary on its own.</p>
+        <figure class="cl-code" id="code-3" data-lang="yaml"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">YML</span>.github/workflows/a11y.yml</span><button type="button" class="cl-code-copy" aria-label="Copy code from .github/workflows/a11y.yml" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-3' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label=".github/workflows/a11y.yml code example"><code><span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">name</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">Accessibility</span></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">on</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: [</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">push</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">pull_request</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">]</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">jobs</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">  a11y</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">    runs-on</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">ubuntu-latest</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">    steps</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">uses</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">actions/checkout@v4</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">uses</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">actions/setup-node@v4</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">        with</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">:</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#569CD6">          node-version</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#098658;--shiki-dark:#B5CEA8">22</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">run</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">npm ci &#x26;&#x26; npm run build</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">      - </span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">run</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">npx a11ymedic "dist/**/*.html" --fail-on serious</span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>YAML</span><span>UTF-8</span><span>12 lines</span></div></figure>
+      </div></article>
+      <article class="card"><div class="card-body">
+        <h3><picture class="cl-way-icon"><source srcset="assets/icons/dark/report.svg" media="(prefers-color-scheme: dark)"><img src="assets/icons/light/report.svg" width="28" height="28" alt=""></picture> Tests: Vitest and Jest</h3>
+        <p>Audit rendered components and get a readable failure with the fix for each problem.</p>
+        <figure class="cl-code" id="code-4" data-lang="ts"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">TS</span>button.test.ts</span><button type="button" class="cl-code-copy" aria-label="Copy code from button.test.ts" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-4' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="button.test.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "a11ymedic"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "a11ymedic/vitest"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">; </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// Jest: setupFilesAfterEnv: ["a11ymedic/jest"]</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">test</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"the toolbar is accessible"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">async</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> () </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">=></span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> {</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">  document</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">body</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">innerHTML</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">renderToolbar</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">();</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">  expect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">await</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA"> audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">document</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">body</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">)).</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">toHaveNoViolations</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">();</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">});</span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>TypeScript</span><span>UTF-8</span><span>7 lines</span></div></figure>
+      </div></article>
+    </div>
+    <h3 class="cl-subhead">Install from npm</h3>
+    <figure class="cl-code cl-code-mini" id="code-5" data-lang="sh"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">$_</span>Terminal</span><button type="button" class="cl-code-copy" aria-label="Copy code from Terminal" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-5' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> install</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --save-dev</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> a11ymedic</span></span></code></pre></figure>
+    <h3 class="cl-subhead">With your framework</h3>
+    <div class="cl-fw">
+      <figure class="cl-code" id="code-6" data-lang="tsx"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">TSX</span>React: Toolbar.test.tsx</span><button type="button" class="cl-code-copy" aria-label="Copy code from React: Toolbar.test.tsx" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-6' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="React: Toolbar.test.tsx code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">render</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "@testing-library/react"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "a11ymedic"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "a11ymedic/vitest"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">test</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"Toolbar"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">async</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> () </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">=></span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> {</span></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">  const</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF">container</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } = </span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">render</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#800000;--shiki-dark:#808080">&#x3C;</span><span style="--shiki-light:#267F99;--shiki-dark:#4EC9B0">Toolbar</span><span style="--shiki-light:#800000;--shiki-dark:#808080"> /></span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">  expect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">await</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA"> audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">container</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">)).</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">toHaveNoViolations</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">({ </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">severity:</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "serious"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> });</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">});</span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>TypeScript JSX</span><span>UTF-8</span><span>8 lines</span></div></figure>
+      <figure class="cl-code" id="code-7" data-lang="ts"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">TS</span>Vue: Card.spec.ts</span><button type="button" class="cl-code-copy" aria-label="Copy code from Vue: Card.spec.ts" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-7' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Vue: Card.spec.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">mount</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "@vue/test-utils"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "a11ymedic"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "a11ymedic/vitest"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">it</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"Card"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">async</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> () </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">=></span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> {</span></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">  const</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF"> wrapper</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">mount</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">Card</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">props:</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">title:</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "Plans"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> }, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">attachTo:</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE"> document</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">body</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> });</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">  expect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">await</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA"> audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">wrapper</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">element</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">)).</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">toHaveNoViolations</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">();</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">});</span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>TypeScript</span><span>UTF-8</span><span>8 lines</span></div></figure>
+      <figure class="cl-code" id="code-8" data-lang="ts"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">TS</span>Angular: card.component.spec.ts</span><button type="button" class="cl-code-copy" aria-label="Copy code from Angular: card.component.spec.ts" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-8' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Angular: card.component.spec.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "a11ymedic"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">it</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"is accessible"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">async</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> () </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">=></span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> {</span></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">  const</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF"> fixture</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">TestBed</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">createComponent</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">CardComponent</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">  fixture</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">detectChanges</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">();</span></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">  const</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF"> result</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">await</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA"> audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">fixture</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">nativeElement</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">  expect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">result</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">findings</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">toEqual</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">([]);</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">});</span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>TypeScript</span><span>UTF-8</span><span>8 lines</span></div></figure>
+      <figure class="cl-code" id="code-9" data-lang="tsx"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">TSX</span>Next.js: app/layout.tsx (development only)</span><button type="button" class="cl-code-copy" aria-label="Copy code from Next.js: app/layout.tsx (development only)" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-9' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Next.js: app/layout.tsx (development only) code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE"> Script</span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0"> from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "next/script"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">export</span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0"> default</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> function</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA"> RootLayout</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">({ </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">children</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> }: { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">children</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">: </span><span style="--shiki-light:#267F99;--shiki-dark:#4EC9B0">React</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#267F99;--shiki-dark:#4EC9B0">ReactNode</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> }) {</span></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">  return</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> (</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">    &#x3C;</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">html</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> lang</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en"</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">      &#x3C;</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">body</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">        {</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">children</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">}</span></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">        {</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">process</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">env</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF">NODE_ENV</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> ===</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "development"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> &#x26;&#x26;</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4"> (</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">          &#x3C;</span><span style="--shiki-light:#267F99;--shiki-dark:#4EC9B0">Script</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> src</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"https://cdn.jsdelivr.net/npm/a11ymedic@0.1.0/dist/a11ymedic.js"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> data-overlay</span><span style="--shiki-light:#800000;--shiki-dark:#808080"> /></span></span>
+<span class="line"><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">        )</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">}</span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">      &#x3C;/</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">body</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">    &#x3C;/</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">html</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">  );</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">}</span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>TypeScript JSX</span><span>UTF-8</span><span>14 lines</span></div></figure>
+    </div>
+  </div>
+</section>
+
+<section id="rules" class="cl-section" aria-labelledby="rules-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head">
+      <p class="cl-eyebrow">Rule catalog</p>
+      <h2 id="rules-title">61 rules mapped to WCAG 2.2</h2>
+      <p>Every rule has a passing and a failing test fixture. The ones marked auto fix can be applied by <code>a11ymedic fix --write</code>; the others come with a suggested patch to review.</p>
+    </div>
+    <div class="cl-rule-tools">
+      <div><label for="rq">Filter rules</label><input id="rq" class="input" type="search" v-model="rq" placeholder="contrast, aria, 1.4.3, forms" autocomplete="off"></div>
+      <div><label for="rsev">Severity</label><select id="rsev" class="select" v-model="rsev"><option value="all">All</option><option value="critical">Critical</option><option value="serious">Serious</option><option value="moderate">Moderate</option><option value="minor">Minor</option></select></div>
+    </div>
+    <div class="cl-table-wrap" tabindex="0" role="region" aria-label="Rule catalog table">
+      <table class="table cl-rules">
+        <caption class="sr-only">a11ymedic rules with WCAG criterion, level, severity and auto fix support</caption>
+        <thead><tr><th scope="col">Rule</th><th scope="col">What it finds</th><th scope="col">WCAG</th><th scope="col">Level</th><th scope="col">Severity</th><th scope="col">Auto fix</th></tr></thead>
+        <tbody>
+<tr v-show="ruleVisible('image-alt image without alt text images 1.1.1', 'critical', rq, rsev)"><td><code>image-alt</code></td><td>Image without alt text</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html">1.1.1</a></td><td>A</td><td><span class="cl-pill" data-sev="critical">critical</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('image-alt-quality alt text that does not help images 1.1.1', 'moderate', rq, rsev)"><td><code>image-alt-quality</code></td><td>Alt text that does not help</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html">1.1.1</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('input-image-alt image button without text images forms 1.1.1 4.1.2', 'critical', rq, rsev)"><td><code>input-image-alt</code></td><td>Image button without text</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html">1.1.1</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="critical">critical</span></td><td></td></tr>
+<tr v-show="ruleVisible('area-alt image map area without text images 1.1.1 2.4.4 4.1.2', 'critical', rq, rsev)"><td><code>area-alt</code></td><td>Image map area without text</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html">1.1.1</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context.html">2.4.4</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="critical">critical</span></td><td></td></tr>
+<tr v-show="ruleVisible('role-img-alt graphic without a name images aria 1.1.1', 'serious', rq, rsev)"><td><code>role-img-alt</code></td><td>Graphic without a name</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html">1.1.1</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('object-alt embedded object without a text alternative images media 1.1.1', 'serious', rq, rsev)"><td><code>object-alt</code></td><td>Embedded object without a text alternative</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html">1.1.1</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('button-name button without a name forms keyboard 4.1.2', 'critical', rq, rsev)"><td><code>button-name</code></td><td>Button without a name</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="critical">critical</span></td><td></td></tr>
+<tr v-show="ruleVisible('link-name link without a name keyboard 2.4.4 4.1.2', 'serious', rq, rsev)"><td><code>link-name</code></td><td>Link without a name</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context.html">2.4.4</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('link-text-generic link text like click here keyboard 2.4.4', 'moderate', rq, rsev)"><td><code>link-text-generic</code></td><td>Link text like &quot;click here&quot;</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context.html">2.4.4</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('label-in-name visible label missing from the accessible name aria forms 2.5.3', 'serious', rq, rsev)"><td><code>label-in-name</code></td><td>Visible label missing from the accessible name</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html">2.5.3</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('aria-dialog-name dialog without a name aria 4.1.2', 'serious', rq, rsev)"><td><code>aria-dialog-name</code></td><td>Dialog without a name</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('aria-widget-name custom control without a name aria forms 4.1.2', 'serious', rq, rsev)"><td><code>aria-widget-name</code></td><td>Custom control without a name</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('label form field without a label forms 4.1.2 1.3.1 3.3.2', 'critical', rq, rsev)"><td><code>label</code></td><td>Form field without a label</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions.html">3.3.2</a></td><td>A</td><td><span class="cl-pill" data-sev="critical">critical</span></td><td></td></tr>
+<tr v-show="ruleVisible('autocomplete-valid invalid autocomplete value forms 1.3.5', 'serious', rq, rsev)"><td><code>autocomplete-valid</code></td><td>Invalid autocomplete value</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html">1.3.5</a></td><td>AA</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('input-purpose personal data field without autocomplete forms 1.3.5', 'minor', rq, rsev)"><td><code>input-purpose</code></td><td>Personal data field without autocomplete</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html">1.3.5</a></td><td>AA</td><td><span class="cl-pill" data-sev="minor">minor</span></td><td></td></tr>
+<tr v-show="ruleVisible('paste-blocked pasting into a field is blocked forms 3.3.8', 'serious', rq, rsev)"><td><code>paste-blocked</code></td><td>Pasting into a field is blocked</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/accessible-authentication-minimum.html">3.3.8</a></td><td>AA</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('radio-group radio buttons without a group label forms 1.3.1', 'moderate', rq, rsev)"><td><code>radio-group</code></td><td>Radio buttons without a group label</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('color-contrast text with low color contrast color 1.4.3', 'serious', rq, rsev)"><td><code>color-contrast</code></td><td>Text with low color contrast</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">1.4.3</a></td><td>AA</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('color-contrast-enhanced text contrast below the enhanced level (aaa) color 1.4.6', 'minor', rq, rsev)"><td><code>color-contrast-enhanced</code></td><td>Text contrast below the enhanced level (AAA)</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-enhanced.html">1.4.6</a></td><td>AAA</td><td><span class="cl-pill" data-sev="minor">minor</span></td><td></td></tr>
+<tr v-show="ruleVisible('html-has-lang page language is not set language 3.1.1', 'serious', rq, rsev)"><td><code>html-has-lang</code></td><td>Page language is not set</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/language-of-page.html">3.1.1</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('html-lang-valid page language code is invalid language 3.1.1', 'serious', rq, rsev)"><td><code>html-lang-valid</code></td><td>Page language code is invalid</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/language-of-page.html">3.1.1</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('valid-lang invalid language on part of the page language 3.1.2', 'moderate', rq, rsev)"><td><code>valid-lang</code></td><td>Invalid language on part of the page</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/language-of-parts.html">3.1.2</a></td><td>AA</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('document-title page has no title structure 2.4.2', 'serious', rq, rsev)"><td><code>document-title</code></td><td>Page has no title</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/page-titled.html">2.4.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('meta-viewport zoom is disabled structure 1.4.4', 'critical', rq, rsev)"><td><code>meta-viewport</code></td><td>Zoom is disabled</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/resize-text.html">1.4.4</a></td><td>AA</td><td><span class="cl-pill" data-sev="critical">critical</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('meta-refresh page refreshes or redirects on a timer structure 2.2.1', 'critical', rq, rsev)"><td><code>meta-refresh</code></td><td>Page refreshes or redirects on a timer</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/timing-adjustable.html">2.2.1</a></td><td>A</td><td><span class="cl-pill" data-sev="critical">critical</span></td><td></td></tr>
+<tr v-show="ruleVisible('heading-order heading level skipped structure 1.3.1', 'moderate', rq, rsev)"><td><code>heading-order</code></td><td>Heading level skipped</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('page-has-heading-one page has no main heading (h1) structure 1.3.1 2.4.6', 'moderate', rq, rsev)"><td><code>page-has-heading-one</code></td><td>Page has no main heading (h1)</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels.html">2.4.6</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('empty-heading empty heading structure 1.3.1 2.4.6', 'moderate', rq, rsev)"><td><code>empty-heading</code></td><td>Empty heading</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels.html">2.4.6</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('landmark-one-main page needs exactly one main landmark structure 1.3.1', 'moderate', rq, rsev)"><td><code>landmark-one-main</code></td><td>Page needs exactly one main landmark</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('landmark-unique landmarks that cannot be told apart structure 1.3.1', 'moderate', rq, rsev)"><td><code>landmark-unique</code></td><td>Landmarks that cannot be told apart</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('region content outside of landmarks structure 1.3.1', 'moderate', rq, rsev)"><td><code>region</code></td><td>Content outside of landmarks</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('bypass no way to skip repeated content keyboard structure 2.4.1', 'serious', rq, rsev)"><td><code>bypass</code></td><td>No way to skip repeated content</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html">2.4.1</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('skip-link in-page link points nowhere keyboard 2.4.1', 'moderate', rq, rsev)"><td><code>skip-link</code></td><td>In-page link points nowhere</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html">2.4.1</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('list list with invalid children structure 1.3.1', 'serious', rq, rsev)"><td><code>list</code></td><td>List with invalid children</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('listitem list item outside of a list structure 1.3.1', 'serious', rq, rsev)"><td><code>listitem</code></td><td>List item outside of a list</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('definition-list definition list with invalid structure structure 1.3.1', 'serious', rq, rsev)"><td><code>definition-list</code></td><td>Definition list with invalid structure</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('duplicate-id duplicate id aria structure 4.1.2 1.3.1', 'minor', rq, rsev)"><td><code>duplicate-id</code></td><td>Duplicate id</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="minor">minor</span></td><td></td></tr>
+<tr v-show="ruleVisible('aria-valid-role invalid aria role aria 4.1.2', 'serious', rq, rsev)"><td><code>aria-valid-role</code></td><td>Invalid ARIA role</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('aria-valid-attr misspelled or unknown aria attribute aria 4.1.2', 'serious', rq, rsev)"><td><code>aria-valid-attr</code></td><td>Misspelled or unknown ARIA attribute</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('aria-valid-attr-value invalid aria attribute value aria 4.1.2', 'serious', rq, rsev)"><td><code>aria-valid-attr-value</code></td><td>Invalid ARIA attribute value</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('aria-required-attr aria role missing a required state aria 4.1.2', 'critical', rq, rsev)"><td><code>aria-required-attr</code></td><td>ARIA role missing a required state</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="critical">critical</span></td><td></td></tr>
+<tr v-show="ruleVisible('aria-hidden-focus hidden content that can still receive focus aria keyboard 4.1.2 1.3.1', 'serious', rq, rsev)"><td><code>aria-hidden-focus</code></td><td>Hidden content that can still receive focus</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('aria-hidden-body whole page hidden from screen readers aria 4.1.2', 'critical', rq, rsev)"><td><code>aria-hidden-body</code></td><td>Whole page hidden from screen readers</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="critical">critical</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('aria-prohibited-label aria-label on an element that cannot be named aria 4.1.2', 'moderate', rq, rsev)"><td><code>aria-prohibited-label</code></td><td>aria-label on an element that cannot be named</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('aria-required-parent aria role outside of its required container aria 1.3.1', 'critical', rq, rsev)"><td><code>aria-required-parent</code></td><td>ARIA role outside of its required container</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="critical">critical</span></td><td></td></tr>
+<tr v-show="ruleVisible('presentation-role-conflict role=presentation that browsers ignore aria 4.1.2', 'minor', rq, rsev)"><td><code>presentation-role-conflict</code></td><td>role=&quot;presentation&quot; that browsers ignore</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="minor">minor</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('tabindex positive tabindex changes the focus order keyboard 2.4.3', 'serious', rq, rsev)"><td><code>tabindex</code></td><td>Positive tabindex changes the focus order</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html">2.4.3</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('focus-visible focus indicator removed keyboard color 2.4.7', 'serious', rq, rsev)"><td><code>focus-visible</code></td><td>Focus indicator removed</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html">2.4.7</a></td><td>AA</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('nested-interactive interactive element inside another one keyboard 4.1.2', 'serious', rq, rsev)"><td><code>nested-interactive</code></td><td>Interactive element inside another one</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('keyboard-click-handler clickable element that keyboards cannot use keyboard 2.1.1 4.1.2', 'serious', rq, rsev)"><td><code>keyboard-click-handler</code></td><td>Clickable element that keyboards cannot use</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/keyboard.html">2.1.1</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('link-as-button link used as a button keyboard 2.1.1 4.1.2', 'moderate', rq, rsev)"><td><code>link-as-button</code></td><td>Link used as a button</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/keyboard.html">2.1.1</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('target-size click or tap target smaller than 24 by 24 pixels keyboard 2.5.8', 'serious', rq, rsev)"><td><code>target-size</code></td><td>Click or tap target smaller than 24 by 24 pixels</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html">2.5.8</a></td><td>AA</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('autoplay-media media that plays sound on its own media 1.4.2 2.2.2', 'serious', rq, rsev)"><td><code>autoplay-media</code></td><td>Media that plays sound on its own</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/audio-control.html">1.4.2</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html">2.2.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('video-caption video without captions media 1.2.2', 'critical', rq, rsev)"><td><code>video-caption</code></td><td>Video without captions</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/captions-prerecorded.html">1.2.2</a></td><td>A</td><td><span class="cl-pill" data-sev="critical">critical</span></td><td></td></tr>
+<tr v-show="ruleVisible('blink-marquee blinking or scrolling text motion 2.2.2', 'serious', rq, rsev)"><td><code>blink-marquee</code></td><td>Blinking or scrolling text</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html">2.2.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('motion-reduced large animation ignores reduced motion motion 2.3.3 2.2.2', 'moderate', rq, rsev)"><td><code>motion-reduced</code></td><td>Large animation ignores reduced motion</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html">2.3.3</a>, <a href="https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html">2.2.2</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td></td></tr>
+<tr v-show="ruleVisible('frame-title frame without a title media 4.1.2', 'serious', rq, rsev)"><td><code>frame-title</code></td><td>Frame without a title</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('frame-title-unique frames with the same title media 4.1.2', 'minor', rq, rsev)"><td><code>frame-title-unique</code></td><td>Frames with the same title</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">4.1.2</a></td><td>A</td><td><span class="cl-pill" data-sev="minor">minor</span></td><td></td></tr>
+<tr v-show="ruleVisible('table-headers data table without header cells tables 1.3.1', 'serious', rq, rsev)"><td><code>table-headers</code></td><td>Data table without header cells</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="serious">serious</span></td><td></td></tr>
+<tr v-show="ruleVisible('th-scope-valid invalid scope on a header cell tables 1.3.1', 'moderate', rq, rsev)"><td><code>th-scope-valid</code></td><td>Invalid scope on a header cell</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="moderate">moderate</span></td><td>Yes</td></tr>
+<tr v-show="ruleVisible('empty-table-header empty table header cell tables 1.3.1', 'minor', rq, rsev)"><td><code>empty-table-header</code></td><td>Empty table header cell</td><td><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">1.3.1</a></td><td>A</td><td><span class="cl-pill" data-sev="minor">minor</span></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="api" class="cl-section" aria-labelledby="api-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head">
+      <p class="cl-eyebrow">API</p>
+      <h2 id="api-title">A small API for scripts and tests</h2>
+    </div>
+    <div class="cl-api">
+      <figure class="cl-code" id="code-10" data-lang="ts"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">TS</span>audit.ts</span><button type="button" class="cl-code-copy" aria-label="Copy code from audit.ts" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-10' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="audit.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">fixHtml</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">suggestColors</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">formatText</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "a11ymedic"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">const</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF"> result</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">await</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA"> audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">'&#x3C;img src="team.jpg">'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">level:</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "AA"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">lang:</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "en"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> });</span></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">const</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> [</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF">finding</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">] = </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">result</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">findings</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">finding</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">rule</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;         </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// "image-alt"</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">finding</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">severity</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;     </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// "critical"</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">finding</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">message</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">pt</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;   </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// plain language, English and Portuguese</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">finding</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">wcag</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">[</span><span style="--shiki-light:#098658;--shiki-dark:#B5CEA8">0</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">].</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">url</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;  </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">finding</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">fix</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">after</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;    </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// '&#x3C;img src="team.jpg" alt="Team">'</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">console</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">log</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">formatText</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">result</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">));</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">const</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF">output</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF">applied</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } = </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">await</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA"> fixHtml</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">html</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);   </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// safe fixes only</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">suggestColors</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"#999999"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"#ffffff"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">foreground</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;     </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// "#767676"</span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>TypeScript</span><span>UTF-8</span><span>14 lines</span></div></figure>
+      <table class="table cl-api-table">
+        <caption class="sr-only">Main functions</caption>
+        <thead><tr><th scope="col">Function</th><th scope="col">What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>audit(html | document | element, options?)</code></td><td>Runs the rules. Returns findings (most severe first), human checks and counts.</td></tr>
+          <tr><td><code>auditDocument(root, options?)</code></td><td>The same, synchronous, for a live DOM.</td></tr>
+          <tr><td><code>fixHtml(html, options?)</code></td><td>Applies safe fixes to source text and keeps formatting. Idempotent.</td></tr>
+          <tr><td><code>applyFix(finding)</code></td><td>Applies one fix to the live DOM.</td></tr>
+          <tr><td><code>contrastRatio(fg, bg)</code>, <code>suggestColors(fg, bg, { ratio })</code></td><td>WCAG contrast and the closest passing pair in OKLCH.</td></tr>
+          <tr><td><code>accessibleName(el)</code>, <code>getRole(el)</code></td><td>Accessible name and role, as assistive technology sees them.</td></tr>
+          <tr><td><code>formatText</code>, <code>toJSON</code>, <code>toMarkdown</code>, <code>toHtml</code>, <code>githubAnnotations</code>, <code>githubSummary</code></td><td>Reports.</td></tr>
+          <tr><td><code>overlay(options?)</code>, <code>drawPins(doc, findings)</code></td><td>Browser build only: the pins and panel.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cl-more">Full reference with every option: <a href="https://github.com/kwy404/a11ymedic#api">README on GitHub</a>.</p>
+  </div>
+</section>
+
+<section id="guides" class="cl-section" aria-labelledby="guides-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head">
+      <p class="cl-eyebrow">Guides</p>
+      <h2 id="guides-title">Accessibility, explained by the medic</h2>
+    </div>
+    <ul class="cl-guides">
+      <li><a href="website-accessibility-checker.html"><strong>A website accessibility checker that explains every fix</strong><span>Check any website for WCAG 2.2 accessibility problems in the browser, the terminal or your tests, with a plain language explanation and the exact fix for each.</span></a></li>
+      <li><a href="how-to-fix-color-contrast.html"><strong>How to fix color contrast without losing your brand</strong><span>Learn the WCAG contrast ratios (4.5:1, 3:1 and 7:1), find failing text automatically, and fix it with the closest passing color that keeps your brand hue.</span></a></li>
+      <li><a href="alt-text-best-practices.html"><strong>Alt text best practices, with examples for every kind of image</strong><span>Write alt text that helps: when to describe and when to leave alt empty, images in links and buttons, icons, charts and SVG, with before and after examples.</span></a></li>
+      <li><a href="accessible-form-labels.html"><strong>Accessible form labels: how to label every field right</strong><span>Label every form field the accessible way: visible labels, fieldset and legend, hints and errors with aria-describedby, autocomplete and paste friendly logins.</span></a></li>
+      <li><a href="wcag-2-2-checklist.html"><strong>WCAG 2.2 checklist for developers</strong><span>A practical WCAG 2.2 checklist for levels A and AA: what changed from 2.1, the six new criteria, and which items a tool can check and which need a human.</span></a></li>
+      <li><a href="accessibility-testing-in-ci.html"><strong>Accessibility testing in CI</strong><span>Add accessibility testing to CI: fail builds on serious issues, get GitHub Actions annotations and a job summary, and test components with Vitest or Jest.</span></a></li>
+      <li><a href="aria-label-vs-aria-labelledby.html"><strong>aria-label vs aria-labelledby: which one to use and when</strong><span>aria-label vs aria-labelledby explained with examples: how accessible names are computed, when each attribute fits, and the mistakes screen readers ignore.</span></a></li>
+      <li><a href="accessibility-overlay-vs-real-fixes.html"><strong>Accessibility overlay vs real fixes: what actually works</strong><span>Accessibility overlay vs real fixes: what runtime widgets can and cannot repair, why source fixes last longer, and how a diagnostic overlay fits a dev workflow.</span></a></li>
+      <li><a href="wcag-cheat-sheet.html"><strong>WCAG 2.2 cheat sheet in plain language</strong><span>Every A and AA success criterion in one or two sentences, with the a11ymedic rules that check it.</span></a></li>
+    </ul>
+  </div>
+</section>
+
+<section id="faq" class="cl-section" aria-labelledby="faq-title">
+  <div class="cl-wrap cl-narrow">
+    <div class="cl-section-head">
+      <p class="cl-eyebrow">FAQ</p>
+      <h2 id="faq-title">Questions people ask the medic</h2>
+    </div>
+    <details class="cl-faq"><summary>What is the best free website accessibility checker?</summary><p>Use one that finds problems and tells you how to fix them. a11ymedic is free and open source: it checks 61 WCAG 2.2 rules in the browser, on the command line and in CI, explains each problem in plain English or Portuguese and gives the patched HTML for every finding.</p></details>
+    <details class="cl-faq"><summary>How do I check a website for accessibility problems?</summary><p>Run npx a11ymedic https://your-site.com for a full report, or add the a11ymedic script tag (or the bookmarklet) to see numbered pins on the page itself. For your own code, run npx a11ymedic &quot;src/**/*.html&quot; and add --fail-on serious in CI.</p></details>
+    <details class="cl-faq"><summary>Can a11ymedic fix accessibility issues automatically?</summary><p>It fixes the safe ones: a11ymedic fix &quot;src/**/*.html&quot; shows a diff and --write applies it. Safe fixes are things like an empty alt on a spacer image, tabindex 0 instead of 5, re-enabling zoom or a misspelled ARIA attribute. Everything that needs a human decision (alt text that describes a photo, a label text) comes as a ready to paste suggestion instead.</p></details>
+    <details class="cl-faq"><summary>Does a11ymedic replace testing with real users?</summary><p>No. Automated checks catch a large share of common problems, but not all of them: whether alt text is accurate, whether a flow makes sense with a screen reader or whether captions are correct still need people. a11ymedic marks what it cannot decide as a human check.</p></details>
+    <details class="cl-faq"><summary>Does it work with React, Vue, Angular and Next.js?</summary><p>Yes. Test rendered components with expect(await audit(container)).toHaveNoViolations() in Vitest or Jest, check built HTML with the CLI, or load the overlay script in development.</p></details>
+    <details class="cl-faq"><summary>Is a11ymedic an accessibility overlay?</summary><p>No. Its overlay is a diagnosis tool for the people who build the site: it highlights problems and shows the fix. It never changes the page for visitors. Real fixes belong in your source code.</p></details>
+  </div>
+</section>
+
+  </main>
+  <footer class="cl-foot">
+  <div class="cl-wrap cl-foot-grid">
+    <div class="cl-foot-brand">
+      <a class="cl-brand" href="./"><img src="favicon.svg" width="28" height="28" alt=""><span>a11y<b>medic</b></span></a>
+      <p>An accessibility checker that explains every problem in plain language and writes the exact fix. Free and open source under the MIT license.</p>
+      <p class="cl-made">Made by <strong>Alexandre Kohler</strong> (<a href="https://github.com/kwy404" rel="me noopener">GitHub</a> and <a href="https://www.linkedin.com/in/alexandre-silva-173687256/" rel="me noopener">LinkedIn</a>).</p>
+      <p class="cl-made">Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>.</p>
+    </div>
+    <nav aria-label="Project">
+      <h2 class="cl-foot-h">Project</h2>
+      <ul>
+        <li><a href="https://github.com/kwy404/a11ymedic">GitHub repository</a></li>
+        <li><a href="https://www.npmjs.com/package/a11ymedic">npm package</a></li>
+        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md">Changelog</a></li>
+        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/i18n/README.pt-BR.md">Leia em Português</a></li>
+        <li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li>
+        <li><a href="guides.html">All guides</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="More from kwy404">
+      <h2 class="cl-foot-h">More from kwy404</h2>
+      <ul><li><a href="https://kwy404.github.io/monsoon/">Monsoon</a> <span>utility-first CSS with no build step</span></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a> <span>JSX and reactivity in plain HTML</span></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a> <span>find bugs automatically, no tests needed</span></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a> <span>migrate Vue 2 to Vue 3</span></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a> <span>emoji safe string length and truncation</span></li><li><a href="https://kwy404.github.io/numberparrot/">numberparrot</a> <span>parse localized numbers</span></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a> <span>edge case test inputs</span></li></ul>
+    </nav>
+  </div>
+  <div class="cl-wrap cl-foot-legal"><span>MIT license, copyright 2026 Alexandre Kohler.</span><span>a11ymedic diagnoses and suggests fixes. It does not replace testing with disabled people.</span></div>
+</footer>
+</body>
+</html>

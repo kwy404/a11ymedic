@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
+  <title>Web accessibility guides: contrast, alt text, forms, ARIA, CI</title>
+  <meta name="description" content="Practical accessibility guides from a11ymedic: fix color contrast, write alt text, label forms, use ARIA, test in CI and follow the WCAG 2.2 checklist.">
+  <link rel="canonical" href="https://kwy404.github.io/a11ymedic/guides.html">
+  <meta name="author" content="Alexandre Kohler">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#f3faf9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1f24" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="a11ymedic">
+  <meta property="og:title" content="Web accessibility guides: contrast, alt text, forms, ARIA, CI">
+  <meta property="og:description" content="Practical accessibility guides from a11ymedic: fix color contrast, write alt text, label forms, use ARIA, test in CI and follow the WCAG 2.2 checklist.">
+  <meta property="og:url" content="https://kwy404.github.io/a11ymedic/guides.html">
+  <meta property="og:image" content="https://kwy404.github.io/a11ymedic/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="a11ymedic: an accessibility checker with plain language explanations and exact fixes, with Patch the otter medic">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Web accessibility guides: contrast, alt text, forms, ARIA, CI">
+  <meta name="twitter:description" content="Practical accessibility guides from a11ymedic: fix color contrast, write alt text, label forms, use ARIA, test in CI and follow the WCAG 2.2 checklist.">
+  <meta name="twitter:image" content="https://kwy404.github.io/a11ymedic/og.png">
+  <meta name="twitter:image:alt" content="a11ymedic: an accessibility checker with plain language explanations and exact fixes, with Patch the otter medic">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","name":"a11ymedic guides","url":"https://kwy404.github.io/a11ymedic/guides.html","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"hasPart":[{"@type":"TechArticle","headline":"A website accessibility checker that explains every fix","url":"https://kwy404.github.io/a11ymedic/website-accessibility-checker.html"},{"@type":"TechArticle","headline":"How to fix color contrast without losing your brand","url":"https://kwy404.github.io/a11ymedic/how-to-fix-color-contrast.html"},{"@type":"TechArticle","headline":"Alt text best practices, with examples for every kind of image","url":"https://kwy404.github.io/a11ymedic/alt-text-best-practices.html"},{"@type":"TechArticle","headline":"Accessible form labels: how to label every field right","url":"https://kwy404.github.io/a11ymedic/accessible-form-labels.html"},{"@type":"TechArticle","headline":"WCAG 2.2 checklist for developers","url":"https://kwy404.github.io/a11ymedic/wcag-2-2-checklist.html"},{"@type":"TechArticle","headline":"Accessibility testing in CI","url":"https://kwy404.github.io/a11ymedic/accessibility-testing-in-ci.html"},{"@type":"TechArticle","headline":"aria-label vs aria-labelledby: which one to use and when","url":"https://kwy404.github.io/a11ymedic/aria-label-vs-aria-labelledby.html"},{"@type":"TechArticle","headline":"Accessibility overlay vs real fixes: what actually works","url":"https://kwy404.github.io/a11ymedic/accessibility-overlay-vs-real-fixes.html"}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"a11ymedic","item":"https://kwy404.github.io/a11ymedic/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://kwy404.github.io/a11ymedic/guides.html"}]}]}</script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+  <link rel="stylesheet" href="site.css">
+  <script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
+  <script type="module" src="site.js"></script>
+</head>
+<body class="bg-background text-foreground antialiased">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="cl-top">
+  <div class="cl-wrap cl-top-row">
+    <a class="cl-brand" href="./" aria-label="a11ymedic home"><img src="favicon.svg" width="32" height="32" alt=""><span>a11y<b>medic</b></span></a>
+    <a class="badge badge-sm badge-outline cl-ver" href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md" aria-label="v0.1.0 changelog">v0.1.0</a>
+    <nav class="cl-nav" aria-label="Main"><a class="cl-nav-link" href="./#checkup">Check-up</a><a class="cl-nav-link" href="./#contrast">Contrast fixer</a><a class="cl-nav-link" href="wcag-cheat-sheet.html">WCAG cheat sheet</a><a class="cl-nav-link" href="./#rules">Rules</a><a class="cl-nav-link" href="guides.html" aria-current="page">Guides</a><a class="cl-nav-link" href="./#install">Install</a></nav>
+    <div class="cl-top-end">
+      <a class="cl-icon-btn" href="https://github.com/kwy404/a11ymedic" aria-label="a11ymedic on GitHub"><svg class="cl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg></a>
+      <button type="button" class="cl-icon-btn cl-theme" v-theme-toggle.cycle aria-label="Color theme: follow the system, light or dark" title="Color theme"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="system"><rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/></svg><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="light"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="dark"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
+      <button type="button" class="cl-icon-btn cl-menu-btn" aria-controls="cl-menu" aria-expanded="false" :aria-expanded="menu ? 'true' : 'false'" @click="menu = !menu" aria-label="Menu"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+  <nav id="cl-menu" class="cl-mobile" aria-label="Mobile" style="display:none" v-show="menu" @click="menu = false">
+    <div class="cl-wrap"><a class="cl-nav-link" href="./#checkup">Check-up</a><a class="cl-nav-link" href="./#contrast">Contrast fixer</a><a class="cl-nav-link" href="wcag-cheat-sheet.html">WCAG cheat sheet</a><a class="cl-nav-link" href="./#rules">Rules</a><a class="cl-nav-link" href="guides.html">Guides</a><a class="cl-nav-link" href="./#install">Install</a><a class="cl-nav-link" href="https://github.com/kwy404/a11ymedic">GitHub</a><a class="cl-nav-link" href="https://www.npmjs.com/package/a11ymedic">npm</a></div>
+  </nav>
+</header>
+  <main id="main">
+
+<section class="cl-section cl-hub" aria-labelledby="hub-title">
+  <div class="cl-wrap">
+    <nav class="cl-crumbs" aria-label="Breadcrumb"><ol><li><a href="./">a11ymedic</a></li><li><span aria-current="page">Guides</span></li></ol></nav>
+    <div class="cl-section-head">
+      <p class="cl-eyebrow">Guides</p>
+      <h1 id="hub-title">Web accessibility guides</h1>
+      <p>Short, practical guides for developers who want to ship accessible pages: what each rule means, who it helps and the exact code to fix it.</p>
+    </div>
+    <ul class="cl-guides">
+      <li><a href="website-accessibility-checker.html"><strong>A website accessibility checker that explains every fix</strong><span>Check any website for WCAG 2.2 accessibility problems in the browser, the terminal or your tests, with a plain language explanation and the exact fix for each.</span></a></li>
+      <li><a href="how-to-fix-color-contrast.html"><strong>How to fix color contrast without losing your brand</strong><span>Learn the WCAG contrast ratios (4.5:1, 3:1 and 7:1), find failing text automatically, and fix it with the closest passing color that keeps your brand hue.</span></a></li>
+      <li><a href="alt-text-best-practices.html"><strong>Alt text best practices, with examples for every kind of image</strong><span>Write alt text that helps: when to describe and when to leave alt empty, images in links and buttons, icons, charts and SVG, with before and after examples.</span></a></li>
+      <li><a href="accessible-form-labels.html"><strong>Accessible form labels: how to label every field right</strong><span>Label every form field the accessible way: visible labels, fieldset and legend, hints and errors with aria-describedby, autocomplete and paste friendly logins.</span></a></li>
+      <li><a href="wcag-2-2-checklist.html"><strong>WCAG 2.2 checklist for developers</strong><span>A practical WCAG 2.2 checklist for levels A and AA: what changed from 2.1, the six new criteria, and which items a tool can check and which need a human.</span></a></li>
+      <li><a href="accessibility-testing-in-ci.html"><strong>Accessibility testing in CI</strong><span>Add accessibility testing to CI: fail builds on serious issues, get GitHub Actions annotations and a job summary, and test components with Vitest or Jest.</span></a></li>
+      <li><a href="aria-label-vs-aria-labelledby.html"><strong>aria-label vs aria-labelledby: which one to use and when</strong><span>aria-label vs aria-labelledby explained with examples: how accessible names are computed, when each attribute fits, and the mistakes screen readers ignore.</span></a></li>
+      <li><a href="accessibility-overlay-vs-real-fixes.html"><strong>Accessibility overlay vs real fixes: what actually works</strong><span>Accessibility overlay vs real fixes: what runtime widgets can and cannot repair, why source fixes last longer, and how a diagnostic overlay fits a dev workflow.</span></a></li>
+      <li><a href="wcag-cheat-sheet.html"><strong>WCAG 2.2 cheat sheet in plain language</strong><span>Every A and AA success criterion in one or two sentences, with the a11ymedic rules that check it.</span></a></li>
+    </ul>
+  </div>
+</section>
+  </main>
+  <footer class="cl-foot">
+  <div class="cl-wrap cl-foot-grid">
+    <div class="cl-foot-brand">
+      <a class="cl-brand" href="./"><img src="favicon.svg" width="28" height="28" alt=""><span>a11y<b>medic</b></span></a>
+      <p>An accessibility checker that explains every problem in plain language and writes the exact fix. Free and open source under the MIT license.</p>
+      <p class="cl-made">Made by <strong>Alexandre Kohler</strong> (<a href="https://github.com/kwy404" rel="me noopener">GitHub</a> and <a href="https://www.linkedin.com/in/alexandre-silva-173687256/" rel="me noopener">LinkedIn</a>).</p>
+      <p class="cl-made">Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>.</p>
+    </div>
+    <nav aria-label="Project">
+      <h2 class="cl-foot-h">Project</h2>
+      <ul>
+        <li><a href="https://github.com/kwy404/a11ymedic">GitHub repository</a></li>
+        <li><a href="https://www.npmjs.com/package/a11ymedic">npm package</a></li>
+        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md">Changelog</a></li>
+        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/i18n/README.pt-BR.md">Leia em Português</a></li>
+        <li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li>
+        <li><a href="guides.html">All guides</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="More from kwy404">
+      <h2 class="cl-foot-h">More from kwy404</h2>
+      <ul><li><a href="https://kwy404.github.io/monsoon/">Monsoon</a> <span>utility-first CSS with no build step</span></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a> <span>JSX and reactivity in plain HTML</span></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a> <span>find bugs automatically, no tests needed</span></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a> <span>migrate Vue 2 to Vue 3</span></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a> <span>emoji safe string length and truncation</span></li><li><a href="https://kwy404.github.io/numberparrot/">numberparrot</a> <span>parse localized numbers</span></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a> <span>edge case test inputs</span></li></ul>
+    </nav>
+  </div>
+  <div class="cl-wrap cl-foot-legal"><span>MIT license, copyright 2026 Alexandre Kohler.</span><span>a11ymedic diagnoses and suggests fixes. It does not replace testing with disabled people.</span></div>
+</footer>
+</body>
+</html>

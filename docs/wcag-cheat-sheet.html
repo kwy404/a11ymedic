@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
+  <title>WCAG 2.2 cheat sheet in plain language (A and AA)</title>
+  <meta name="description" content="Every WCAG 2.2 level A and AA success criterion explained in one or two plain sentences, with an example failure and the checks a11ymedic runs for 25 of them.">
+  <link rel="canonical" href="https://kwy404.github.io/a11ymedic/wcag-cheat-sheet.html">
+  <meta name="author" content="Alexandre Kohler">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#f3faf9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1f24" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="a11ymedic">
+  <meta property="og:title" content="WCAG 2.2 cheat sheet in plain language (A and AA)">
+  <meta property="og:description" content="Every WCAG 2.2 level A and AA success criterion explained in one or two plain sentences, with an example failure and the checks a11ymedic runs for 25 of them.">
+  <meta property="og:url" content="https://kwy404.github.io/a11ymedic/wcag-cheat-sheet.html">
+  <meta property="og:image" content="https://kwy404.github.io/a11ymedic/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="a11ymedic: an accessibility checker with plain language explanations and exact fixes, with Patch the otter medic">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WCAG 2.2 cheat sheet in plain language (A and AA)">
+  <meta name="twitter:description" content="Every WCAG 2.2 level A and AA success criterion explained in one or two plain sentences, with an example failure and the checks a11ymedic runs for 25 of them.">
+  <meta name="twitter:image" content="https://kwy404.github.io/a11ymedic/og.png">
+  <meta name="twitter:image:alt" content="a11ymedic: an accessibility checker with plain language explanations and exact fixes, with Patch the otter medic">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"WCAG 2.2 cheat sheet in plain language","datePublished":"2026-10-13","dateModified":"2026-10-13","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"publisher":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"image":"https://kwy404.github.io/a11ymedic/og.png","mainEntityOfPage":"https://kwy404.github.io/a11ymedic/wcag-cheat-sheet.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"a11ymedic","item":"https://kwy404.github.io/a11ymedic/"},{"@type":"ListItem","position":2,"name":"WCAG 2.2 cheat sheet","item":"https://kwy404.github.io/a11ymedic/wcag-cheat-sheet.html"}]}]}</script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+  <link rel="stylesheet" href="site.css">
+  <script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
+  <script type="module" src="site.js"></script>
+</head>
+<body class="bg-background text-foreground antialiased">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="cl-top">
+  <div class="cl-wrap cl-top-row">
+    <a class="cl-brand" href="./" aria-label="a11ymedic home"><img src="favicon.svg" width="32" height="32" alt=""><span>a11y<b>medic</b></span></a>
+    <a class="badge badge-sm badge-outline cl-ver" href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md" aria-label="v0.1.0 changelog">v0.1.0</a>
+    <nav class="cl-nav" aria-label="Main"><a class="cl-nav-link" href="./#checkup">Check-up</a><a class="cl-nav-link" href="./#contrast">Contrast fixer</a><a class="cl-nav-link" href="wcag-cheat-sheet.html" aria-current="page">WCAG cheat sheet</a><a class="cl-nav-link" href="./#rules">Rules</a><a class="cl-nav-link" href="guides.html">Guides</a><a class="cl-nav-link" href="./#install">Install</a></nav>
+    <div class="cl-top-end">
+      <a class="cl-icon-btn" href="https://github.com/kwy404/a11ymedic" aria-label="a11ymedic on GitHub"><svg class="cl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg></a>
+      <button type="button" class="cl-icon-btn cl-theme" v-theme-toggle.cycle aria-label="Color theme: follow the system, light or dark" title="Color theme"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="system"><rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/></svg><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="light"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="dark"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
+      <button type="button" class="cl-icon-btn cl-menu-btn" aria-controls="cl-menu" aria-expanded="false" :aria-expanded="menu ? 'true' : 'false'" @click="menu = !menu" aria-label="Menu"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+  <nav id="cl-menu" class="cl-mobile" aria-label="Mobile" style="display:none" v-show="menu" @click="menu = false">
+    <div class="cl-wrap"><a class="cl-nav-link" href="./#checkup">Check-up</a><a class="cl-nav-link" href="./#contrast">Contrast fixer</a><a class="cl-nav-link" href="wcag-cheat-sheet.html">WCAG cheat sheet</a><a class="cl-nav-link" href="./#rules">Rules</a><a class="cl-nav-link" href="guides.html">Guides</a><a class="cl-nav-link" href="./#install">Install</a><a class="cl-nav-link" href="https://github.com/kwy404/a11ymedic">GitHub</a><a class="cl-nav-link" href="https://www.npmjs.com/package/a11ymedic">npm</a></div>
+  </nav>
+</header>
+  <main id="main">
+
+<section class="cl-section cl-cheat" aria-labelledby="cheat-title">
+  <div class="cl-wrap">
+    <nav class="cl-crumbs" aria-label="Breadcrumb"><ol><li><a href="./">a11ymedic</a></li><li><span aria-current="page">WCAG 2.2 cheat sheet</span></li></ol></nav>
+    <div class="cl-section-head">
+      <p class="cl-eyebrow">Cheat sheet</p>
+      <h1 id="cheat-title">WCAG 2.2 in plain language</h1>
+      <p>All 55 success criteria a site needs for level AA (plus the two AAA ones a11ymedic can test), each in a sentence or two, with a typical failure. 25 of them have automated a11ymedic checks; the rest need a person, and the tip says how.</p>
+    </div>
+    <div class="cl-rule-tools cl-sticky-tools">
+      <div><label for="wq">Search criteria</label><input id="wq" class="input" type="search" v-model="wq" placeholder="contrast, keyboard, 2.5.8, captions" autocomplete="off"></div>
+      <div><label for="wlevel">Level</label><select id="wlevel" class="select" v-model="wlevel"><option value="all">All</option><option value="A">A</option><option value="AA">AA</option><option value="AAA">AAA</option></select></div>
+    </div>
+    <section class="cl-principle" aria-labelledby="p-1"><h2 id="p-1">1. Perceivable</h2><p class="cl-principle-plain">People must be able to get the information with the senses they have: text for images, captions for video, enough contrast, and structure that still makes sense when the visual layout is gone.</p><article class="cl-sc" id="sc-1-1-1" v-show="scVisible('1.1.1 non-text content every image, icon, chart or embedded object that carries meaning needs a text alternative. decorative images need an empty alt so screen readers skip them. image-alt image-alt-quality input-image-alt area-alt role-img-alt object-alt', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">1.1.1</span><h3>Non-text Content</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Every image, icon, chart or embedded object that carries meaning needs a text alternative. Decorative images need an empty alt so screen readers skip them.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A product photo with no alt attribute, so a screen reader reads the file name &quot;IMG_2041.jpg&quot;.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Image without alt text">image-alt</code> <code title="Alt text that does not help">image-alt-quality</code> <code title="Image button without text">input-image-alt</code> <code title="Image map area without text">area-alt</code> <code title="Graphic without a name">role-img-alt</code> <code title="Embedded object without a text alternative">object-alt</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> A tool can see that alt exists, not that it is right. Read each alt text out loud without looking at the image and ask if it gives the same information.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html">Understanding 1.1.1 Non-text Content on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-2-1" v-show="scVisible('1.2.1 audio-only and video-only (prerecorded) a recorded podcast or audio clip needs a transcript. a silent video that shows information needs a text description or an audio track that explains it. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">1.2.1</span><h3>Audio-only and Video-only (Prerecorded)</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>A recorded podcast or audio clip needs a transcript. A silent video that shows information needs a text description or an audio track that explains it.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A podcast episode page that only offers the audio player and no transcript.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> List every audio and silent video file on the site and confirm each one links to a transcript or text description.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/audio-only-and-video-only-prerecorded.html">Understanding 1.2.1 Audio-only and Video-only (Prerecorded) on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-2-2" v-show="scVisible('1.2.2 captions (prerecorded) recorded video with sound needs synchronized captions that include speech and important sounds. captions are text tracks, not part of the image. video-caption', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">1.2.2</span><h3>Captions (Prerecorded)</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Recorded video with sound needs synchronized captions that include speech and important sounds. Captions are text tracks, not part of the image.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A product demo video served with a &lt;video&gt; element that has no &lt;track kind=&quot;captions&quot;&gt;.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Video without captions">video-caption</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Turn the sound off and watch the video. Check that the captions are accurate, in sync, and mention sounds that matter such as an alarm or laughter.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/captions-prerecorded.html">Understanding 1.2.2 Captions (Prerecorded) on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-2-3" v-show="scVisible('1.2.3 audio description or media alternative (prerecorded) when a recorded video shows information that is not spoken, provide audio description or a full text alternative that describes what happens on screen. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">1.2.3</span><h3>Audio Description or Media Alternative (Prerecorded)</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>When a recorded video shows information that is not spoken, provide audio description or a full text alternative that describes what happens on screen.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A tutorial video where the presenter says &quot;click here, then here&quot; and never names what is clicked.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Listen to the video with your eyes closed. Anything you miss must be in an audio description or a text version.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/audio-description-or-media-alternative-prerecorded.html">Understanding 1.2.3 Audio Description or Media Alternative (Prerecorded) on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-2-4" v-show="scVisible('1.2.4 captions (live) live video with audio, such as a webinar or a live stream, needs real time captions. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.2.4</span><h3>Captions (Live)</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Live video with audio, such as a webinar or a live stream, needs real time captions.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A live product launch stream with no captions at all.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Before a live event, confirm who provides captions (a human captioner or a captioning service) and test that they show in the player.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/captions-live.html">Understanding 1.2.4 Captions (Live) on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-2-5" v-show="scVisible('1.2.5 audio description (prerecorded) at level aa a text alternative is not enough: recorded video needs audio description of important visual information that the soundtrack does not already explain. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.2.5</span><h3>Audio Description (Prerecorded)</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>At level AA a text alternative is not enough: recorded video needs audio description of important visual information that the soundtrack does not already explain.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A marketing video that shows prices and dates only as on screen text with music playing.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Script the video so speakers describe what is shown, or produce a described version and link to it next to the player.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/audio-description-prerecorded.html">Understanding 1.2.5 Audio Description (Prerecorded) on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-3-1" v-show="scVisible('1.3.1 info and relationships structure that you can see must also exist in the code: headings are real headings, lists are real lists, tables have header cells, and labels are connected to their fields. label radio-group heading-order page-has-heading-one empty-heading landmark-one-main landmark-unique region list listitem definition-list duplicate-id aria-hidden-focus aria-required-parent table-headers th-scope-valid empty-table-header', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">1.3.1</span><h3>Info and Relationships</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Structure that you can see must also exist in the code: headings are real headings, lists are real lists, tables have header cells, and labels are connected to their fields.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A bold &lt;div class=&quot;title&quot;&gt; that looks like a heading but is not an &lt;h2&gt;, so screen reader users cannot jump to it.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Form field without a label">label</code> <code title="Radio buttons without a group label">radio-group</code> <code title="Heading level skipped">heading-order</code> <code title="Page has no main heading (h1)">page-has-heading-one</code> <code title="Empty heading">empty-heading</code> <code title="Page needs exactly one main landmark">landmark-one-main</code> <code title="Landmarks that cannot be told apart">landmark-unique</code> <code title="Content outside of landmarks">region</code> <code title="List with invalid children">list</code> <code title="List item outside of a list">listitem</code> <code title="Definition list with invalid structure">definition-list</code> <code title="Duplicate id">duplicate-id</code> <code title="Hidden content that can still receive focus">aria-hidden-focus</code> <code title="ARIA role outside of its required container">aria-required-parent</code> <code title="Data table without header cells">table-headers</code> <code title="Invalid scope on a header cell">th-scope-valid</code> <code title="Empty table header cell">empty-table-header</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Turn off CSS (or use reader view) and check that the page still reads in a sensible order with headings, lists and tables intact.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html">Understanding 1.3.1 Info and Relationships on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-3-2" v-show="scVisible('1.3.2 meaningful sequence when the order of content matters, the order in the code must match it. css that moves things around visually must not scramble the reading order. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">1.3.2</span><h3>Meaningful Sequence</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>When the order of content matters, the order in the code must match it. CSS that moves things around visually must not scramble the reading order.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A card where CSS order puts the price above the title, but the HTML puts the price after an unrelated footer.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Read the page with a screen reader or tab through it, and compare the order you hear with the order you see.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html">Understanding 1.3.2 Meaningful Sequence on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-3-3" v-show="scVisible('1.3.3 sensory characteristics instructions must not rely only on shape, color, size, position or sound. name the thing as well as describing where it is. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">1.3.3</span><h3>Sensory Characteristics</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Instructions must not rely only on shape, color, size, position or sound. Name the thing as well as describing where it is.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> &quot;Press the round button on the right to continue&quot; with no visible name on the button.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Search your copy for words like &quot;left&quot;, &quot;right&quot;, &quot;above&quot;, &quot;green&quot; or &quot;round&quot; and make sure each instruction also names the control.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/sensory-characteristics.html">Understanding 1.3.3 Sensory Characteristics on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-3-4" v-show="scVisible('1.3.4 orientation do not lock the page to portrait or landscape unless the orientation is essential, such as a piano app. people with mounted devices cannot rotate them. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.3.4</span><h3>Orientation</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Do not lock the page to portrait or landscape unless the orientation is essential, such as a piano app. People with mounted devices cannot rotate them.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A web app that shows &quot;Please rotate your device&quot; and blocks the content in landscape.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Open the page on a phone and rotate it both ways. Everything should remain usable.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/orientation.html">Understanding 1.3.4 Orientation on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-3-5" v-show="scVisible('1.3.5 identify input purpose fields that ask for the users own data (name, email, phone, address) need the correct autocomplete value so browsers can fill them and tools can show familiar icons. autocomplete-valid input-purpose', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.3.5</span><h3>Identify Input Purpose</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Fields that ask for the user's own data (name, email, phone, address) need the correct autocomplete value so browsers can fill them and tools can show familiar icons.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> An email field with no autocomplete attribute, or with autocomplete=&quot;e-mail&quot;, which is not a valid token.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Invalid autocomplete value">autocomplete-valid</code> <code title="Personal data field without autocomplete">input-purpose</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Fill the form with browser autofill. Each personal field should fill correctly on the first try.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html">Understanding 1.3.5 Identify Input Purpose on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-4-1" v-show="scVisible('1.4.1 use of color color must not be the only way to show information. add text, an icon, an underline or a pattern so people who cannot tell colors apart still get the message. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">1.4.1</span><h3>Use of Color</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Color must not be the only way to show information. Add text, an icon, an underline or a pattern so people who cannot tell colors apart still get the message.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> Form errors shown only by turning the field border red, with no error text.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> View the page in grayscale (most browsers' developer tools can emulate it) and check that nothing important disappears.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html">Understanding 1.4.1 Use of Color on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-4-2" v-show="scVisible('1.4.2 audio control sound that plays automatically for more than 3 seconds needs a way to pause or mute it. better: do not autoplay sound at all. autoplay-media', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">1.4.2</span><h3>Audio Control</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Sound that plays automatically for more than 3 seconds needs a way to pause or mute it. Better: do not autoplay sound at all.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A hero video with autoplay and sound, which talks over the user's screen reader.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Media that plays sound on its own">autoplay-media</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Load each page with the volume up. If you hear anything you did not start, check that a pause or mute control is the first thing on the page.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/audio-control.html">Understanding 1.4.2 Audio Control on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-4-3" v-show="scVisible('1.4.3 contrast (minimum) text needs a contrast ratio of at least 4.5:1 against its background. large text (24px, or 18.66px bold) needs 3:1. color-contrast', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.4.3</span><h3>Contrast (Minimum)</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Text needs a contrast ratio of at least 4.5:1 against its background. Large text (24px, or 18.66px bold) needs 3:1.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> Light gray #999999 text on white, which is 2.84:1.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Text with low color contrast">color-contrast</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Text over photos, videos and complex gradients cannot be measured from code alone. Check the worst spot by eye or with a color picker.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">Understanding 1.4.3 Contrast (Minimum) on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-4-4" v-show="scVisible('1.4.4 resize text people must be able to zoom text to 200 percent without losing content or features. never disable pinch zoom in the viewport meta tag. meta-viewport', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.4.4</span><h3>Resize Text</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>People must be able to zoom text to 200 percent without losing content or features. Never disable pinch zoom in the viewport meta tag.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, maximum-scale=1, user-scalable=no&quot;&gt;</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Zoom is disabled">meta-viewport</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Zoom the browser to 200 percent and check that no text is cut off, overlapped or hidden behind fixed elements.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/resize-text.html">Understanding 1.4.4 Resize Text on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-4-5" v-show="scVisible('1.4.5 images of text use real text instead of pictures of text, except for logos. real text can be resized, recolored, translated and read by screen readers. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.4.5</span><h3>Images of Text</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Use real text instead of pictures of text, except for logos. Real text can be resized, recolored, translated and read by screen readers.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A banner with the sale terms baked into a JPEG instead of written in HTML.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Try to select the text with the mouse. If you cannot, it is probably an image and should be rebuilt as HTML and CSS.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/images-of-text.html">Understanding 1.4.5 Images of Text on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-4-6" v-show="scVisible('1.4.6 contrast (enhanced) the stricter version of 1.4.3: text needs 7:1 against its background, and large text needs 4.5:1. color-contrast-enhanced', 'AAA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.4.6</span><h3>Contrast (Enhanced)</h3><span class="cl-pill" data-level="AAA">Level AAA</span></header>
+        <p>The stricter version of 1.4.3: text needs 7:1 against its background, and large text needs 4.5:1.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> Gray #767676 on white passes AA at 4.54:1 but fails AAA.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Text contrast below the enhanced level (AAA)">color-contrast-enhanced</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Run the check with level AAA turned on and look at text over images by eye.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-enhanced.html">Understanding 1.4.6 Contrast (Enhanced) on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-4-10" v-show="scVisible('1.4.10 reflow content must fit a 320 css pixel wide viewport without horizontal scrolling (data tables, maps and similar content are exceptions). this is what 400 percent zoom looks like on a laptop. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.4.10</span><h3>Reflow</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Content must fit a 320 CSS pixel wide viewport without horizontal scrolling (data tables, maps and similar content are exceptions). This is what 400 percent zoom looks like on a laptop.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A fixed 1200px wide layout that forces people who zoom to scroll sideways on every line.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Set the browser window to 1280px wide and zoom to 400 percent, or emulate a 320px wide screen, and read the whole page.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/reflow.html">Understanding 1.4.10 Reflow on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-4-11" v-show="scVisible('1.4.11 non-text contrast parts of controls (input borders, checkbox outlines, focus rings) and meaningful graphics (chart lines, icons) need 3:1 contrast against what is next to them. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.4.11</span><h3>Non-text Contrast</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Parts of controls (input borders, checkbox outlines, focus rings) and meaningful graphics (chart lines, icons) need 3:1 contrast against what is next to them.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A text field whose only visible border is #e0e0e0 on white.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Use a color picker on field borders, icon strokes, chart lines and focus indicators, and check each one against its neighbor color.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html">Understanding 1.4.11 Non-text Contrast on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-4-12" v-show="scVisible('1.4.12 text spacing when people increase line height to 1.5, paragraph spacing to 2 times the font size, letter spacing to 0.12 and word spacing to 0.16, no content may be cut off or overlap. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.4.12</span><h3>Text Spacing</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>When people increase line height to 1.5, paragraph spacing to 2 times the font size, letter spacing to 0.12 and word spacing to 0.16, no content may be cut off or overlap.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A button with a fixed height where text clips when letter spacing is increased.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Apply a text spacing bookmarklet or user stylesheet with those values and look for clipped or overlapping text.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/text-spacing.html">Understanding 1.4.12 Text Spacing on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-1-4-13" v-show="scVisible('1.4.13 content on hover or focus tooltips and popovers that appear on hover or focus must be dismissable with escape, stay open while the pointer moves over them, and stay until the user moves away. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">1.4.13</span><h3>Content on Hover or Focus</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Tooltips and popovers that appear on hover or focus must be dismissable with Escape, stay open while the pointer moves over them, and stay until the user moves away.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A tooltip that disappears when the mouse moves onto it, so people using screen magnifiers can never read it.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Hover and focus every tooltip, move the pointer onto it, and press Escape. It should stay readable and close only when asked.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html">Understanding 1.4.13 Content on Hover or Focus on w3.org</a></p>
+      </article></section>
+<section class="cl-principle" aria-labelledby="p-2"><h2 id="p-2">2. Operable</h2><p class="cl-principle-plain">Everything must work with a keyboard, a mouse, a touch screen, a switch or a voice command, with enough time, nothing that flashes dangerously, and a clear way to find where you are.</p><article class="cl-sc" id="sc-2-1-1" v-show="scVisible('2.1.1 keyboard everything you can do with a mouse must also work with a keyboard alone. use real buttons and links, which handle enter and space for free. keyboard-click-handler link-as-button', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.1.1</span><h3>Keyboard</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Everything you can do with a mouse must also work with a keyboard alone. Use real buttons and links, which handle Enter and Space for free.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A &lt;div onclick=&quot;save()&quot;&gt; that a keyboard can neither focus nor activate.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Clickable element that keyboards cannot use">keyboard-click-handler</code> <code title="Link used as a button">link-as-button</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Put the mouse away and complete every task on the page with Tab, Shift+Tab, Enter, Space and the arrow keys.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/keyboard.html">Understanding 2.1.1 Keyboard on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-1-2" v-show="scVisible('2.1.2 no keyboard trap if focus can move into a component with the keyboard, it must be able to move out again. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.1.2</span><h3>No Keyboard Trap</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>If focus can move into a component with the keyboard, it must be able to move out again.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> An embedded video player or code editor that swallows the Tab key so focus never leaves it.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Tab into every widget, embed and modal, then try to Tab and Escape out of it.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html">Understanding 2.1.2 No Keyboard Trap on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-1-4" v-show="scVisible('2.1.4 character key shortcuts single key shortcuts (a letter, number or symbol with no modifier) must be possible to turn off or remap, or work only when the related part has focus. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.1.4</span><h3>Character Key Shortcuts</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Single key shortcuts (a letter, number or symbol with no modifier) must be possible to turn off or remap, or work only when the related part has focus.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A web mail app where pressing &quot;d&quot; deletes a message, which fires when a voice control user dictates a word.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> List every keyboard shortcut. Any shortcut without Ctrl, Alt or Cmd needs a setting to disable or change it.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/character-key-shortcuts.html">Understanding 2.1.4 Character Key Shortcuts on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-2-1" v-show="scVisible('2.2.1 timing adjustable if there is a time limit, users must be able to turn it off, adjust it or extend it, with a warning before time runs out. meta-refresh', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.2.1</span><h3>Timing Adjustable</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>If there is a time limit, users must be able to turn it off, adjust it or extend it, with a warning before time runs out.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> &lt;meta http-equiv=&quot;refresh&quot; content=&quot;30&quot;&gt; reloading the page every 30 seconds while someone is still reading.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Page refreshes or redirects on a timer">meta-refresh</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Look for session timeouts and countdowns. Check that users get a warning and can ask for more time with a single action.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/timing-adjustable.html">Understanding 2.2.1 Timing Adjustable on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-2-2" v-show="scVisible('2.2.2 pause, stop, hide anything that moves, blinks, scrolls or auto updates for more than 5 seconds needs a way to pause, stop or hide it. autoplay-media blink-marquee motion-reduced', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.2.2</span><h3>Pause, Stop, Hide</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Anything that moves, blinks, scrolls or auto updates for more than 5 seconds needs a way to pause, stop or hide it.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> An auto advancing carousel with no pause button.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Media that plays sound on its own">autoplay-media</code> <code title="Blinking or scrolling text">blink-marquee</code> <code title="Large animation ignores reduced motion">motion-reduced</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Watch the page for 10 seconds without touching it. Everything that moves on its own needs a visible pause control.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html">Understanding 2.2.2 Pause, Stop, Hide on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-3-1" v-show="scVisible('2.3.1 three flashes or below threshold nothing may flash more than 3 times in any one second. flashing can trigger seizures. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.3.1</span><h3>Three Flashes or Below Threshold</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Nothing may flash more than 3 times in any one second. Flashing can trigger seizures.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A promo video with a strobe effect that flashes 6 times per second.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Review videos and animations for flashing. When in doubt, remove the effect: there is no safe way to warn about it afterwards.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/three-flashes-or-below-threshold.html">Understanding 2.3.1 Three Flashes or Below Threshold on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-3-3" v-show="scVisible('2.3.3 animation from interactions motion triggered by interaction (parallax, zooming transitions, large slides) must be possible to turn off. respect the prefers-reduced-motion setting. motion-reduced', 'AAA', wq, wlevel)">
+        <header><span class="cl-sc-id">2.3.3</span><h3>Animation from Interactions</h3><span class="cl-pill" data-level="AAA">Level AAA</span></header>
+        <p>Motion triggered by interaction (parallax, zooming transitions, large slides) must be possible to turn off. Respect the prefers-reduced-motion setting.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A page transition that slides the whole screen even when the operating system is set to reduce motion.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Large animation ignores reduced motion">motion-reduced</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Turn on the reduce motion setting of your operating system and use the site. Large movements should stop or become simple fades.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html">Understanding 2.3.3 Animation from Interactions on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-4-1" v-show="scVisible('2.4.1 bypass blocks provide a way to skip repeated blocks such as the header and navigation: a skip link, landmarks, or headings. bypass skip-link', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.4.1</span><h3>Bypass Blocks</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Provide a way to skip repeated blocks such as the header and navigation: a skip link, landmarks, or headings.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A site with 40 navigation links before the content and no skip link or &lt;main&gt; element.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="No way to skip repeated content">bypass</code> <code title="In-page link points nowhere">skip-link</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Load the page and press Tab once. A &quot;Skip to content&quot; link should appear and move focus to the main content.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html">Understanding 2.4.1 Bypass Blocks on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-4-2" v-show="scVisible('2.4.2 page titled every page needs a &lt;title&gt; that describes its topic or purpose. it is the first thing a screen reader announces. document-title', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.4.2</span><h3>Page Titled</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Every page needs a &lt;title&gt; that describes its topic or purpose. It is the first thing a screen reader announces.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> Every page of a single page app keeps the title &quot;React App&quot;.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Page has no title">document-title</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Open several pages in tabs and read the titles. Each should be unique and put the specific part first.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/page-titled.html">Understanding 2.4.2 Page Titled on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-4-3" v-show="scVisible('2.4.3 focus order keyboard focus must move in an order that keeps the meaning. positive tabindex values and css reordering often break this. tabindex', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.4.3</span><h3>Focus Order</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Keyboard focus must move in an order that keeps the meaning. Positive tabindex values and CSS reordering often break this.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> tabindex=&quot;3&quot; on a footer link, so it receives focus before the main form.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Positive tabindex changes the focus order">tabindex</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Tab through the page and watch the focus. It should follow the visual reading order, and dialogs should receive focus when they open.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html">Understanding 2.4.3 Focus Order on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-4-4" v-show="scVisible('2.4.4 link purpose (in context) the purpose of each link must be clear from its text, or from its text together with the sentence or list item around it. area-alt link-name link-text-generic', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.4.4</span><h3>Link Purpose (In Context)</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>The purpose of each link must be clear from its text, or from its text together with the sentence or list item around it.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> Ten links on a page that all say &quot;Read more&quot;.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Image map area without text">area-alt</code> <code title="Link without a name">link-name</code> <code title="Link text like &quot;click here&quot;">link-text-generic</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Open the list of links in a screen reader (or read only the link texts) and check that each one makes sense on its own.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context.html">Understanding 2.4.4 Link Purpose (In Context) on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-4-5" v-show="scVisible('2.4.5 multiple ways offer more than one way to find a page in a set of pages: navigation plus search, a site map, or a table of contents. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">2.4.5</span><h3>Multiple Ways</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Offer more than one way to find a page in a set of pages: navigation plus search, a site map, or a table of contents.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A documentation site where the only way to reach a page is a deep nested menu.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Pick a deep page and try to reach it in two different ways from the home page.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/multiple-ways.html">Understanding 2.4.5 Multiple Ways on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-4-6" v-show="scVisible('2.4.6 headings and labels headings and labels must describe the topic or purpose of what follows. an empty or vague heading does not help. page-has-heading-one empty-heading', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">2.4.6</span><h3>Headings and Labels</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Headings and labels must describe the topic or purpose of what follows. An empty or vague heading does not help.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> An &lt;h2&gt; that contains only an icon, or a field labeled &quot;Field 1&quot;.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Page has no main heading (h1)">page-has-heading-one</code> <code title="Empty heading">empty-heading</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Read only the headings of the page in order. They should work as a table of contents.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels.html">Understanding 2.4.6 Headings and Labels on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-4-7" v-show="scVisible('2.4.7 focus visible keyboard focus must be visible. never remove the outline without a replacement style. use :focus-visible to show it only for keyboard users. focus-visible', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">2.4.7</span><h3>Focus Visible</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Keyboard focus must be visible. Never remove the outline without a replacement style. Use :focus-visible to show it only for keyboard users.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> *:focus outline: none in a reset stylesheet, with no other focus style anywhere.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Focus indicator removed">focus-visible</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Tab through the page. You should always be able to see which element has focus, on every background color.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html">Understanding 2.4.7 Focus Visible on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-4-11" v-show="scVisible('2.4.11 focus not obscured (minimum) when an element receives keyboard focus, it must not be completely hidden by sticky headers, cookie banners, chat widgets or other content the author added. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">2.4.11</span><h3>Focus Not Obscured (Minimum)</h3><span class="cl-pill" data-level="AA">Level AA</span><span class="cl-pill" data-new="1">New in 2.2</span></header>
+        <p>When an element receives keyboard focus, it must not be completely hidden by sticky headers, cookie banners, chat widgets or other content the author added.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A sticky footer bar that covers the focused link when tabbing near the bottom of the screen.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Tab through a long page with every sticky header, footer and banner visible, and check that the focused element is never fully covered.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html">Understanding 2.4.11 Focus Not Obscured (Minimum) on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-5-1" v-show="scVisible('2.5.1 pointer gestures anything that needs a multi point or path based gesture (pinch, two finger swipe, drawing a shape) must also work with a single tap or click. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.5.1</span><h3>Pointer Gestures</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Anything that needs a multi point or path based gesture (pinch, two finger swipe, drawing a shape) must also work with a single tap or click.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A map that can only be zoomed with a pinch gesture and has no plus and minus buttons.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Use the feature with one finger or a mouse click only, no dragging paths and no multi touch.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/pointer-gestures.html">Understanding 2.5.1 Pointer Gestures on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-5-2" v-show="scVisible('2.5.2 pointer cancellation actions should fire on the up event (click), not the down event, so people can slide off a control to cancel a mistaken press. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.5.2</span><h3>Pointer Cancellation</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Actions should fire on the up event (click), not the down event, so people can slide off a control to cancel a mistaken press.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A delete button that fires on mousedown, so a slip of the hand deletes the item.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Press a control, keep the button held, move the pointer away and release. Nothing should happen.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/pointer-cancellation.html">Understanding 2.5.2 Pointer Cancellation on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-5-3" v-show="scVisible('2.5.3 label in name when a control has visible text, its accessible name must contain that text, ideally at the start. voice control users say what they see. label-in-name', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.5.3</span><h3>Label in Name</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>When a control has visible text, its accessible name must contain that text, ideally at the start. Voice control users say what they see.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A button that shows &quot;Search&quot; but has aria-label=&quot;Find products&quot;, so saying &quot;click Search&quot; does nothing.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Visible label missing from the accessible name">label-in-name</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> For each button and link with an aria-label, compare the label with the visible text. The visible words should appear in the label.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html">Understanding 2.5.3 Label in Name on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-5-4" v-show="scVisible('2.5.4 motion actuation features triggered by shaking or tilting the device must also have a regular control, and the motion trigger must be possible to turn off. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">2.5.4</span><h3>Motion Actuation</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Features triggered by shaking or tilting the device must also have a regular control, and the motion trigger must be possible to turn off.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> &quot;Shake to undo&quot; with no undo button.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Find every feature that uses device motion and check for a button that does the same thing.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/motion-actuation.html">Understanding 2.5.4 Motion Actuation on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-5-7" v-show="scVisible('2.5.7 dragging movements anything you can do by dragging must also be possible with single clicks or taps, such as up and down buttons or a menu to move an item. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">2.5.7</span><h3>Dragging Movements</h3><span class="cl-pill" data-level="AA">Level AA</span><span class="cl-pill" data-new="1">New in 2.2</span></header>
+        <p>Anything you can do by dragging must also be possible with single clicks or taps, such as up and down buttons or a menu to move an item.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A kanban board where cards can only be moved between columns by dragging.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Try every drag and drop interaction with clicks only. Sliders should also accept clicks on the track or arrow keys.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html">Understanding 2.5.7 Dragging Movements on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-2-5-8" v-show="scVisible('2.5.8 target size (minimum) click and tap targets must be at least 24 by 24 css pixels, or have enough space that a 24 pixel circle centered on them does not touch another target. links inside sentences are exempt. target-size', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">2.5.8</span><h3>Target Size (Minimum)</h3><span class="cl-pill" data-level="AA">Level AA</span><span class="cl-pill" data-new="1">New in 2.2</span></header>
+        <p>Click and tap targets must be at least 24 by 24 CSS pixels, or have enough space that a 24 pixel circle centered on them does not touch another target. Links inside sentences are exempt.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> Three 16 by 16 pixel social icons placed 4 pixels apart.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Click or tap target smaller than 24 by 24 pixels">target-size</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Without layout, size depends on CSS a tool may not see. Run the check in a real browser (overlay or headless) or measure small icons in developer tools.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html">Understanding 2.5.8 Target Size (Minimum) on w3.org</a></p>
+      </article></section>
+<section class="cl-principle" aria-labelledby="p-3"><h2 id="p-3">3. Understandable</h2><p class="cl-principle-plain">Text and controls must behave in a predictable way: the page declares its language, nothing changes by surprise, and forms explain what they need and how to fix a mistake.</p><article class="cl-sc" id="sc-3-1-1" v-show="scVisible('3.1.1 language of page the &lt;html&gt; element needs a valid lang attribute so screen readers pick the right voice and pronunciation, and browsers translate and hyphenate correctly. html-has-lang html-lang-valid', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">3.1.1</span><h3>Language of Page</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>The &lt;html&gt; element needs a valid lang attribute so screen readers pick the right voice and pronunciation, and browsers translate and hyphenate correctly.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> &lt;html&gt; with no lang, so a Portuguese page is read with English pronunciation.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Page language is not set">html-has-lang</code> <code title="Page language code is invalid">html-lang-valid</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Check that the lang value matches the language the page is actually written in, especially on translated pages.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/language-of-page.html">Understanding 3.1.1 Language of Page on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-1-2" v-show="scVisible('3.1.2 language of parts passages in a different language from the page need their own lang attribute. valid-lang', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">3.1.2</span><h3>Language of Parts</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Passages in a different language from the page need their own lang attribute.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A French quote on an English page with no lang=&quot;fr&quot;, read aloud with English rules.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Invalid language on part of the page">valid-lang</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Look for quotes, product names in other languages and language switchers, and give each one the correct lang.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/language-of-parts.html">Understanding 3.1.2 Language of Parts on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-2-1" v-show="scVisible('3.2.1 on focus moving focus to an element must not cause a big change on its own, such as opening a new window or submitting a form. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">3.2.1</span><h3>On Focus</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Moving focus to an element must not cause a big change on its own, such as opening a new window or submitting a form.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A field that opens a popup window as soon as it receives focus.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Tab through the page slowly. Focus alone should never submit, navigate or open something.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/on-focus.html">Understanding 3.2.1 On Focus on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-2-2" v-show="scVisible('3.2.2 on input changing a setting (selecting an option, checking a box) must not cause an unexpected change of context unless the user was told in advance. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">3.2.2</span><h3>On Input</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Changing a setting (selecting an option, checking a box) must not cause an unexpected change of context unless the user was told in advance.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A country &lt;select&gt; that navigates to another site as soon as an option is chosen with the arrow keys.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Change every select, radio and checkbox with the keyboard. Nothing should navigate or submit until the user presses a button.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/on-input.html">Understanding 3.2.2 On Input on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-2-3" v-show="scVisible('3.2.3 consistent navigation navigation that repeats on several pages must appear in the same relative order each time. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">3.2.3</span><h3>Consistent Navigation</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Navigation that repeats on several pages must appear in the same relative order each time.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A main menu whose items change order from one section of the site to another.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Compare the header and navigation on a few different page templates.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/consistent-navigation.html">Understanding 3.2.3 Consistent Navigation on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-2-4" v-show="scVisible('3.2.4 consistent identification components with the same function must be labeled the same way across pages. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">3.2.4</span><h3>Consistent Identification</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Components with the same function must be labeled the same way across pages.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A search button labeled &quot;Search&quot; on one page and &quot;Find&quot; on another.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> List common controls (search, cart, login, close) and check that their names and icons match everywhere.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/consistent-identification.html">Understanding 3.2.4 Consistent Identification on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-2-6" v-show="scVisible('3.2.6 consistent help if help options (contact details, a chat, a help link) appear on several pages, they must be in the same relative place each time. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">3.2.6</span><h3>Consistent Help</h3><span class="cl-pill" data-level="A">Level A</span><span class="cl-pill" data-new="1">New in 2.2</span></header>
+        <p>If help options (contact details, a chat, a help link) appear on several pages, they must be in the same relative place each time.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A &quot;Contact us&quot; link in the header on most pages but in the footer on the checkout pages.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Visit several page templates and check that help links and contact options keep the same position.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/consistent-help.html">Understanding 3.2.6 Consistent Help on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-3-1" v-show="scVisible('3.3.1 error identification when an input error is detected, identify the field and describe the error in text. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">3.3.1</span><h3>Error Identification</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>When an input error is detected, identify the field and describe the error in text.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A form that only shakes and turns red when submitted with an empty required field.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Submit each form empty and with wrong values. Each error should name the field and appear as text, linked with aria-describedby.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/error-identification.html">Understanding 3.3.1 Error Identification on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-3-2" v-show="scVisible('3.3.2 labels or instructions fields need visible labels or instructions, including required formats. a placeholder alone is not a label because it disappears while typing. label', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">3.3.2</span><h3>Labels or Instructions</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Fields need visible labels or instructions, including required formats. A placeholder alone is not a label because it disappears while typing.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A date field with only placeholder=&quot;Date&quot; and no hint about the expected format.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Form field without a label">label</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Read each form without filling it. You should know what every field wants and which ones are required.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions.html">Understanding 3.3.2 Labels or Instructions on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-3-3" v-show="scVisible('3.3.3 error suggestion when you know how to fix an input error, tell the user, unless that would compromise security. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">3.3.3</span><h3>Error Suggestion</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>When you know how to fix an input error, tell the user, unless that would compromise security.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> &quot;Invalid date&quot; instead of &quot;Enter the date as DD/MM/YYYY, for example 05/09/2026&quot;.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Trigger each validation error and check that the message says how to fix it, not only that something is wrong.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/error-suggestion.html">Understanding 3.3.3 Error Suggestion on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-3-4" v-show="scVisible('3.3.4 error prevention (legal, financial, data) for submissions with legal or financial effects, or that change stored data, let users review, confirm, or undo before it is final. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">3.3.4</span><h3>Error Prevention (Legal, Financial, Data)</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>For submissions with legal or financial effects, or that change stored data, let users review, confirm, or undo before it is final.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A one click button that transfers money with no confirmation step and no way to cancel.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Walk through checkout, payment and account deletion flows and look for a review step, a confirmation or an undo.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/error-prevention-legal-financial-data.html">Understanding 3.3.4 Error Prevention (Legal, Financial, Data) on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-3-7" v-show="scVisible('3.3.7 redundant entry do not ask for the same information twice in one process. fill it in automatically or let the user select it, unless re-entry is essential. ', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">3.3.7</span><h3>Redundant Entry</h3><span class="cl-pill" data-level="A">Level A</span><span class="cl-pill" data-new="1">New in 2.2</span></header>
+        <p>Do not ask for the same information twice in one process. Fill it in automatically or let the user select it, unless re-entry is essential.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A checkout that asks for the shipping address and then asks for the same address again for billing with no &quot;same as shipping&quot; option.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> Go through each multi step flow and note every field you type twice.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/redundant-entry.html">Understanding 3.3.7 Redundant Entry on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-3-3-8" v-show="scVisible('3.3.8 accessible authentication (minimum) logging in must not depend on a memory or puzzle test, such as transcribing characters, unless there is an alternative. allow paste and password managers. paste-blocked', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">3.3.8</span><h3>Accessible Authentication (Minimum)</h3><span class="cl-pill" data-level="AA">Level AA</span><span class="cl-pill" data-new="1">New in 2.2</span></header>
+        <p>Logging in must not depend on a memory or puzzle test, such as transcribing characters, unless there is an alternative. Allow paste and password managers.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> A password field with onpaste=&quot;return false&quot;, which breaks password managers.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Pasting into a field is blocked">paste-blocked</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Log in using a password manager and by pasting a password and a one time code. Check that any puzzle has an accessible alternative.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/accessible-authentication-minimum.html">Understanding 3.3.8 Accessible Authentication (Minimum) on w3.org</a></p>
+      </article></section>
+<section class="cl-principle" aria-labelledby="p-4"><h2 id="p-4">4. Robust</h2><p class="cl-principle-plain">The code must expose the correct name, role and state of every part so browsers and assistive technologies, today and tomorrow, can present it reliably.</p><article class="cl-sc" id="sc-4-1-2" v-show="scVisible('4.1.2 name, role, value every control needs an accessible name, the correct role, and states that update when they change (expanded, checked, selected). native html elements do this for you. input-image-alt area-alt button-name link-name aria-dialog-name aria-widget-name label duplicate-id aria-valid-role aria-valid-attr aria-valid-attr-value aria-required-attr aria-hidden-focus aria-hidden-body aria-prohibited-label presentation-role-conflict nested-interactive keyboard-click-handler link-as-button frame-title frame-title-unique', 'A', wq, wlevel)">
+        <header><span class="cl-sc-id">4.1.2</span><h3>Name, Role, Value</h3><span class="cl-pill" data-level="A">Level A</span></header>
+        <p>Every control needs an accessible name, the correct role, and states that update when they change (expanded, checked, selected). Native HTML elements do this for you.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> An icon only &lt;button&gt; with an SVG and no text, announced as just &quot;button&quot;.</p>
+        <p class="cl-sc-rules"><strong>a11ymedic checks:</strong> <code title="Image button without text">input-image-alt</code> <code title="Image map area without text">area-alt</code> <code title="Button without a name">button-name</code> <code title="Link without a name">link-name</code> <code title="Dialog without a name">aria-dialog-name</code> <code title="Custom control without a name">aria-widget-name</code> <code title="Form field without a label">label</code> <code title="Duplicate id">duplicate-id</code> <code title="Invalid ARIA role">aria-valid-role</code> <code title="Misspelled or unknown ARIA attribute">aria-valid-attr</code> <code title="Invalid ARIA attribute value">aria-valid-attr-value</code> <code title="ARIA role missing a required state">aria-required-attr</code> <code title="Hidden content that can still receive focus">aria-hidden-focus</code> <code title="Whole page hidden from screen readers">aria-hidden-body</code> <code title="aria-label on an element that cannot be named">aria-prohibited-label</code> <code title="role=&quot;presentation&quot; that browsers ignore">presentation-role-conflict</code> <code title="Interactive element inside another one">nested-interactive</code> <code title="Clickable element that keyboards cannot use">keyboard-click-handler</code> <code title="Link used as a button">link-as-button</code> <code title="Frame without a title">frame-title</code> <code title="Frames with the same title">frame-title-unique</code></p>
+        <p class="cl-sc-manual"><strong>Also check by hand:</strong> Use a screen reader on custom widgets (menus, tabs, accordions) and check that states such as expanded and selected are announced when they change.</p>
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html">Understanding 4.1.2 Name, Role, Value on w3.org</a></p>
+      </article>
+<article class="cl-sc" id="sc-4-1-3" v-show="scVisible('4.1.3 status messages status updates that appear without moving focus (saved, 3 results, added to cart) must be announced, usually with role=status or aria-live. ', 'AA', wq, wlevel)">
+        <header><span class="cl-sc-id">4.1.3</span><h3>Status Messages</h3><span class="cl-pill" data-level="AA">Level AA</span></header>
+        <p>Status updates that appear without moving focus (&quot;Saved&quot;, &quot;3 results&quot;, &quot;Added to cart&quot;) must be announced, usually with role=&quot;status&quot; or aria-live.</p>
+        <p class="cl-sc-example"><strong>Fails when:</strong> An &quot;Item added to cart&quot; toast that screen readers never announce.</p>
+        <p class="cl-sc-rules"><strong>Check by hand:</strong> With a screen reader running, trigger each toast, counter and inline update, and listen for an announcement.</p>
+        
+        <p class="cl-sc-link"><a href="https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html">Understanding 4.1.3 Status Messages on w3.org</a></p>
+      </article></section>
+  </div>
+</section>
+  </main>
+  <footer class="cl-foot">
+  <div class="cl-wrap cl-foot-grid">
+    <div class="cl-foot-brand">
+      <a class="cl-brand" href="./"><img src="favicon.svg" width="28" height="28" alt=""><span>a11y<b>medic</b></span></a>
+      <p>An accessibility checker that explains every problem in plain language and writes the exact fix. Free and open source under the MIT license.</p>
+      <p class="cl-made">Made by <strong>Alexandre Kohler</strong> (<a href="https://github.com/kwy404" rel="me noopener">GitHub</a> and <a href="https://www.linkedin.com/in/alexandre-silva-173687256/" rel="me noopener">LinkedIn</a>).</p>
+      <p class="cl-made">Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>.</p>
+    </div>
+    <nav aria-label="Project">
+      <h2 class="cl-foot-h">Project</h2>
+      <ul>
+        <li><a href="https://github.com/kwy404/a11ymedic">GitHub repository</a></li>
+        <li><a href="https://www.npmjs.com/package/a11ymedic">npm package</a></li>
+        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md">Changelog</a></li>
+        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/i18n/README.pt-BR.md">Leia em Português</a></li>
+        <li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li>
+        <li><a href="guides.html">All guides</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="More from kwy404">
+      <h2 class="cl-foot-h">More from kwy404</h2>
+      <ul><li><a href="https://kwy404.github.io/monsoon/">Monsoon</a> <span>utility-first CSS with no build step</span></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a> <span>JSX and reactivity in plain HTML</span></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a> <span>find bugs automatically, no tests needed</span></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a> <span>migrate Vue 2 to Vue 3</span></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a> <span>emoji safe string length and truncation</span></li><li><a href="https://kwy404.github.io/numberparrot/">numberparrot</a> <span>parse localized numbers</span></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a> <span>edge case test inputs</span></li></ul>
+    </nav>
+  </div>
+  <div class="cl-wrap cl-foot-legal"><span>MIT license, copyright 2026 Alexandre Kohler.</span><span>a11ymedic diagnoses and suggests fixes. It does not replace testing with disabled people.</span></div>
+</footer>
+</body>
+</html>

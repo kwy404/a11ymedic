@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
+  <title>Website Accessibility Checker: Free WCAG 2.2 Audit</title>
+  <meta name="description" content="Check any website for WCAG 2.2 accessibility problems in the browser, the terminal or your tests, with a plain language explanation and the exact fix for each.">
+  <link rel="canonical" href="https://kwy404.github.io/a11ymedic/website-accessibility-checker.html">
+  <meta name="author" content="Alexandre Kohler">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#f3faf9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1f24" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="a11ymedic">
+  <meta property="og:title" content="Website Accessibility Checker: Free WCAG 2.2 Audit">
+  <meta property="og:description" content="Check any website for WCAG 2.2 accessibility problems in the browser, the terminal or your tests, with a plain language explanation and the exact fix for each.">
+  <meta property="og:url" content="https://kwy404.github.io/a11ymedic/website-accessibility-checker.html">
+  <meta property="og:image" content="https://kwy404.github.io/a11ymedic/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="a11ymedic: an accessibility checker with plain language explanations and exact fixes, with Patch the otter medic">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Website Accessibility Checker: Free WCAG 2.2 Audit">
+  <meta name="twitter:description" content="Check any website for WCAG 2.2 accessibility problems in the browser, the terminal or your tests, with a plain language explanation and the exact fix for each.">
+  <meta name="twitter:image" content="https://kwy404.github.io/a11ymedic/og.png">
+  <meta name="twitter:image:alt" content="a11ymedic: an accessibility checker with plain language explanations and exact fixes, with Patch the otter medic">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"A website accessibility checker that explains every fix","description":"Check any website for WCAG 2.2 accessibility problems in the browser, the terminal or your tests, with a plain language explanation and the exact fix for each.","keywords":"website accessibility checker, accessibility checker, wcag checker, accessibility audit, wcag 2.2, a11y checker, free accessibility test","datePublished":"2026-10-13","dateModified":"2026-10-13","wordCount":981,"author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"publisher":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"image":"https://kwy404.github.io/a11ymedic/og.png","mainEntityOfPage":"https://kwy404.github.io/a11ymedic/website-accessibility-checker.html","about":{"@type":"SoftwareApplication","name":"a11ymedic","url":"https://kwy404.github.io/a11ymedic/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can an automated website accessibility checker make my site compliant?","acceptedAnswer":{"@type":"Answer","text":"No tool can prove full WCAG conformance on its own. Automated checks find the problems that can be decided from code, which are also the most common ones. You still need a short manual pass with the keyboard, zoom and a screen reader."}},{"@type":"Question","name":"Is a11ymedic free?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is open source under the MIT license. You can use the CLI, the Node API, the test matchers and the browser overlay at no cost, in personal and commercial projects."}},{"@type":"Question","name":"Can I check a website that is already online?","acceptedAnswer":{"@type":"Answer","text":"Yes. Run npx a11ymedic followed by the URL. If Playwright or Puppeteer is installed it renders the page in a headless browser; otherwise it downloads the HTML and runs a static check."}},{"@type":"Question","name":"Which WCAG version does the checker use?","acceptedAnswer":{"@type":"Answer","text":"The rules map to WCAG 2.2 success criteria. Level AA is checked by default, and you can add the AAA rules with the level option."}}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"a11ymedic","item":"https://kwy404.github.io/a11ymedic/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://kwy404.github.io/a11ymedic/guides.html"},{"@type":"ListItem","position":3,"name":"A website accessibility checker that explains every fix","item":"https://kwy404.github.io/a11ymedic/website-accessibility-checker.html"}]}]}</script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+  <link rel="stylesheet" href="site.css">
+  <script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
+  <script type="module" src="site.js"></script>
+</head>
+<body class="bg-background text-foreground antialiased">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="cl-top">
+  <div class="cl-wrap cl-top-row">
+    <a class="cl-brand" href="./" aria-label="a11ymedic home"><img src="favicon.svg" width="32" height="32" alt=""><span>a11y<b>medic</b></span></a>
+    <a class="badge badge-sm badge-outline cl-ver" href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md" aria-label="v0.1.0 changelog">v0.1.0</a>
+    <nav class="cl-nav" aria-label="Main"><a class="cl-nav-link" href="./#checkup">Check-up</a><a class="cl-nav-link" href="./#contrast">Contrast fixer</a><a class="cl-nav-link" href="wcag-cheat-sheet.html">WCAG cheat sheet</a><a class="cl-nav-link" href="./#rules">Rules</a><a class="cl-nav-link" href="guides.html" aria-current="page">Guides</a><a class="cl-nav-link" href="./#install">Install</a></nav>
+    <div class="cl-top-end">
+      <a class="cl-icon-btn" href="https://github.com/kwy404/a11ymedic" aria-label="a11ymedic on GitHub"><svg class="cl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg></a>
+      <button type="button" class="cl-icon-btn cl-theme" v-theme-toggle.cycle aria-label="Color theme: follow the system, light or dark" title="Color theme"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="system"><rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/></svg><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="light"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="dark"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
+      <button type="button" class="cl-icon-btn cl-menu-btn" aria-controls="cl-menu" aria-expanded="false" :aria-expanded="menu ? 'true' : 'false'" @click="menu = !menu" aria-label="Menu"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+  <nav id="cl-menu" class="cl-mobile" aria-label="Mobile" style="display:none" v-show="menu" @click="menu = false">
+    <div class="cl-wrap"><a class="cl-nav-link" href="./#checkup">Check-up</a><a class="cl-nav-link" href="./#contrast">Contrast fixer</a><a class="cl-nav-link" href="wcag-cheat-sheet.html">WCAG cheat sheet</a><a class="cl-nav-link" href="./#rules">Rules</a><a class="cl-nav-link" href="guides.html">Guides</a><a class="cl-nav-link" href="./#install">Install</a><a class="cl-nav-link" href="https://github.com/kwy404/a11ymedic">GitHub</a><a class="cl-nav-link" href="https://www.npmjs.com/package/a11ymedic">npm</a></div>
+  </nav>
+</header>
+  <main id="main">
+
+<article class="cl-article">
+  <div class="cl-wrap cl-article-grid">
+    <div class="cl-article-main">
+      <nav class="cl-crumbs" aria-label="Breadcrumb"><ol><li><a href="./">a11ymedic</a></li><li><a href="guides.html">Guides</a></li><li><span aria-current="page">A website accessibility checker that explains every fix</span></li></ol></nav>
+      <header class="cl-article-head">
+        <p class="cl-eyebrow">Guide</p>
+        <h1>A website accessibility checker that explains every fix</h1>
+        <p class="cl-lead">A website accessibility checker reads your HTML and CSS and reports the barriers it can prove: images without text, low contrast, unlabeled fields, broken ARIA and more. a11ymedic runs the same checks in the browser, on the command line and in your tests, and every finding comes with who it affects and the code that fixes it.</p>
+        <p class="cl-meta">By <a href="https://github.com/kwy404" rel="me noopener">Alexandre Kohler</a>, updated <time datetime="2026-10-13">October 13, 2026</time>, 4 minute read</p>
+      </header>
+      <div class="cl-prose">
+
+<h2 id="what-a-checker-finds">What an accessibility checker can and cannot find</h2>
+<p>Automated checks are good at anything that can be decided from the code. An <code>&lt;img&gt;</code> with no <code>alt</code> attribute, a <code>&lt;button&gt;</code> that contains only an SVG, a text color of <code>#999999</code> on white (2.84:1, below the 4.5:1 that WCAG asks for), an <code>&lt;html&gt;</code> element with no <code>lang</code>, a positive <code>tabindex</code>, an <code>aria-expanded</code> with a value of <code>"yes"</code>: all of these are facts, and a checker can find every one of them in milliseconds.</p>
+<p>Other questions need judgment. A checker can see that an image has alt text, but not whether "Team" is a good description of a photo that shows a fire exit. It can see that a page has headings, but not whether they describe the sections. Studies of real audits usually find that automated tools catch somewhere between a third and a half of the issues on a typical page. That is still a lot of work saved, because the problems they catch are also the most common ones.</p>
+<p>a11ymedic is honest about that line. Every result is either a <strong>finding</strong> (a proven failure with a fix) or an entry in <strong>incomplete</strong>, which means "needs a human check". Text over a background image and target sizes measured without layout land in the second group, so you know exactly what to review by eye.</p>
+
+<h2 id="three-ways">Three ways to check a website</h2>
+<p>You can run the same rules in three places. Pick the one that matches what you are doing right now.</p>
+<ol>
+<li><strong>In the page you are looking at.</strong> Add one script tag. It audits the live page with the real computed styles and element boxes, draws numbered pins on each problem and opens a side panel you can use with the keyboard. Press <strong>Alt+Shift+A</strong> to show or hide it.</li>
+<li><strong>From the terminal.</strong> Point the CLI at files, globs, folders or a URL. For a URL it uses Playwright or Puppeteer when one of them is installed, and otherwise fetches the HTML and runs a static check.</li>
+<li><strong>From code.</strong> Call <code>audit(html)</code> in Node, inspect the findings, and turn them into a report or a failing test.</li>
+</ol>
+<figure class="cl-code" id="code-1" data-lang="html"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">&lt;&gt;</span>Overlay in any page</span><button type="button" class="cl-code-copy" aria-label="Copy code from Overlay in any page" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-1' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Overlay in any page code example"><code><span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">&#x3C;!-- English panel --></span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">&#x3C;</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">script</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> src</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"https://cdn.jsdelivr.net/npm/a11ymedic@0.1.0/dist/a11ymedic.js"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> data-overlay</span><span style="--shiki-light:#800000;--shiki-dark:#808080">>&#x3C;/</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">script</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">&#x3C;!-- Portuguese panel --></span></span>
+<span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">&#x3C;</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">script</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> src</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"https://cdn.jsdelivr.net/npm/a11ymedic@0.1.0/dist/a11ymedic.js"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> data-overlay</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"pt"</span><span style="--shiki-light:#800000;--shiki-dark:#808080">>&#x3C;/</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">script</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>HTML</span><span>UTF-8</span><span>5 lines</span></div></figure>
+<figure class="cl-code" id="code-2" data-lang="sh"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">$_</span>Terminal</span><button type="button" class="cl-code-copy" aria-label="Copy code from Terminal" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-2' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955"># Local files</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npx</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> a11ymedic</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "src/**/*.html"</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955"># A deployed page, saved as an HTML report</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npx</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> a11ymedic</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> https://example.com</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --format</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> html</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> -o</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> report.html</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955"># Report in Portuguese, including AAA rules</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npx</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> a11ymedic</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> index.html</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --lang</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> pt</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> --level</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> AAA</span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>Shell</span><span>UTF-8</span><span>8 lines</span></div></figure>
+<p>If you want to try it without installing anything, paste a snippet into the <a href="./#checkup">online check-up</a> on the home page.</p>
+
+<h2 id="reading-a-finding">How to read a finding</h2>
+<p>Each finding is written for the person who has to fix it, not for an auditor. It has the same fields in every output format:</p>
+<ul>
+<li><strong>Severity</strong>: critical, serious, moderate or minor. Critical means some people cannot use the feature at all, for example a button with no name.</li>
+<li><strong>Message</strong>: what is wrong with this exact element, in English and Portuguese.</li>
+<li><strong>Explanation and affects</strong>: why it matters and who is hurt by it, such as screen reader users, people with low vision, or people with tremors.</li>
+<li><strong>WCAG</strong>: the success criteria it fails, with their level and a link to the official Understanding page.</li>
+<li><strong>Location</strong>: a unique CSS selector plus the line and column in your source file.</li>
+<li><strong>Fix</strong>: a summary, the element before, and the element after. When <code>fix.safe</code> is true the change needs no human decision and the CLI can apply it for you.</li>
+</ul>
+<figure class="cl-code" id="code-3" data-lang="js"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">JS</span>audit.mjs</span><button type="button" class="cl-code-copy" aria-label="Copy code from audit.mjs" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-3' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="audit.mjs code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">formatText</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "a11ymedic"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">const</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF"> result</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">await</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA"> audit</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">'&#x3C;img src="team-photo.jpg">&#x3C;p style="color:#999">Hi&#x3C;/p>'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">for</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> (</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">const</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF"> f</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> of</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE"> result</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">findings</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">) {</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">  console</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">log</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">f</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">rule</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">f</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">severity</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">f</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">message</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">en</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">  console</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">log</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"  WCAG"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">f</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">wcag</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">map</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">((</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">c</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">) </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">=></span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE"> c</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">id</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">join</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">", "</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">), </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"line"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">f</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">line</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">  console</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">log</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"  before:"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">f</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">fix</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">before</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">  console</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">log</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"  after: "</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">f</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">fix</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">after</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">console</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">log</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">formatText</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">result</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">));</span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>JavaScript</span><span>UTF-8</span><span>12 lines</span></div></figure>
+<p>For the contrast finding above, the fix says to change the text to <code>#767676</code> (4.54:1), the closest color with the same hue that passes. The <a href="how-to-fix-color-contrast.html">color contrast guide</a> explains how that suggestion is chosen.</p>
+
+<h2 id="static-vs-browser">Static check or real browser?</h2>
+<p>When a11ymedic reads an HTML file from disk, there is no layout engine. It cascades the page CSS itself to find colors, display and visibility, which is enough for most rules. What it cannot know is the rendered size of an element or the pixels behind a piece of text. So in a static check, a small icon link without explicit sizes is reported as "needs a human check", and text on a photo is never guessed.</p>
+<p>In a real browser, the overlay and the headless mode use <code>getComputedStyle</code> and real element boxes. That is the most accurate option for target size (24 by 24 CSS pixels, or enough spacing) and for contrast on complex pages. A good rule of thumb: use static checks for fast feedback on every commit, and run the browser mode on the key pages of your deployed site.</p>
+
+<h2 id="manual-checks">The 15 minute manual pass</h2>
+<p>After the automated check is clean, spend a few minutes on what no tool can judge:</p>
+<ul>
+<li><strong>Keyboard only.</strong> Unplug the mouse. Tab through the page, open every menu and dialog, submit every form. Focus should always be visible and never get stuck.</li>
+<li><strong>Zoom to 200 and 400 percent.</strong> Nothing should be cut off, and at 400 percent the page should not scroll sideways.</li>
+<li><strong>Screen reader smoke test.</strong> Open the list of headings and the list of links. They should read like a table of contents and a set of clear destinations.</li>
+<li><strong>Read the alt texts and labels.</strong> Are they true and useful in context?</li>
+</ul>
+<p>The <a href="wcag-cheat-sheet.html">WCAG cheat sheet</a> has a short manual tip for every criterion, including the ones no tool covers.</p>
+
+<h2 id="first-audit-plan">A practical plan for your first audit</h2>
+<p>Large sites often get hundreds of findings on the first run. Do not let the number stop you. Most of them come from a few shared components, so fixing one header or one card template can remove dozens at once.</p>
+<ol>
+<li>Run the CLI over your templates and sort by severity. Fix every critical finding first.</li>
+<li>Apply the safe fixes automatically with <code>npx a11ymedic fix "src/**/*.html" --write</code>, then review the diff.</li>
+<li>Fix contrast at the design token level rather than element by element.</li>
+<li>Add a check to your pipeline so new problems cannot come back. The <a href="accessibility-testing-in-ci.html">CI guide</a> shows how.</li>
+<li>Do the manual pass on your five most visited pages.</li>
+</ol>
+<p>Install instructions for every environment are in the <a href="./#install">install section</a>, and the full list of checks is in the <a href="./#rules">rules reference</a>.</p>
+
+      </div>
+      <section class="cl-guide-faq" aria-labelledby="faq-website-accessibility-checker">
+        <h2 id="faq-website-accessibility-checker">Frequently asked questions</h2>
+        <details class="cl-faq"><summary>Can an automated website accessibility checker make my site compliant?</summary><p>No tool can prove full WCAG conformance on its own. Automated checks find the problems that can be decided from code, which are also the most common ones. You still need a short manual pass with the keyboard, zoom and a screen reader.</p></details>
+        <details class="cl-faq"><summary>Is a11ymedic free?</summary><p>Yes. It is open source under the MIT license. You can use the CLI, the Node API, the test matchers and the browser overlay at no cost, in personal and commercial projects.</p></details>
+        <details class="cl-faq"><summary>Can I check a website that is already online?</summary><p>Yes. Run npx a11ymedic followed by the URL. If Playwright or Puppeteer is installed it renders the page in a headless browser; otherwise it downloads the HTML and runs a static check.</p></details>
+        <details class="cl-faq"><summary>Which WCAG version does the checker use?</summary><p>The rules map to WCAG 2.2 success criteria. Level AA is checked by default, and you can add the AAA rules with the level option.</p></details>
+      </section>
+      <aside class="cl-cta-box" aria-labelledby="cta-website-accessibility-checker">
+        <img src="assets/mascot-head.svg" width="64" height="64" alt="">
+        <div>
+          <h2 id="cta-website-accessibility-checker">Run a check-up on your own page</h2>
+          <p>Paste your HTML into the <a href="./#checkup">live check-up room</a>, or run <code>npx a11ymedic index.html</code>.</p>
+        </div>
+      </aside>
+    </div>
+    <aside class="cl-article-side" aria-label="Guide navigation">
+      <nav class="cl-toc" aria-label="On this page"><h2 class="cl-toc-title">On this page</h2><ol><li><a href="#what-a-checker-finds">What an accessibility checker can and cannot find</a></li><li><a href="#three-ways">Three ways to check a website</a></li><li><a href="#reading-a-finding">How to read a finding</a></li><li><a href="#static-vs-browser">Static check or real browser?</a></li><li><a href="#manual-checks">The 15 minute manual pass</a></li><li><a href="#first-audit-plan">A practical plan for your first audit</a></li></ol></nav>
+      <nav class="cl-related" aria-label="Related guides"><h2 class="cl-toc-title">Related guides</h2><ul><li><a href="wcag-2-2-checklist.html">WCAG 2.2 checklist for developers</a></li><li><a href="accessibility-testing-in-ci.html">Accessibility testing in CI</a></li><li><a href="how-to-fix-color-contrast.html">How to fix color contrast without losing your brand</a></li><li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li></ul></nav>
+    </aside>
+  </div>
+</article>
+  </main>
+  <footer class="cl-foot">
+  <div class="cl-wrap cl-foot-grid">
+    <div class="cl-foot-brand">
+      <a class="cl-brand" href="./"><img src="favicon.svg" width="28" height="28" alt=""><span>a11y<b>medic</b></span></a>
+      <p>An accessibility checker that explains every problem in plain language and writes the exact fix. Free and open source under the MIT license.</p>
+      <p class="cl-made">Made by <strong>Alexandre Kohler</strong> (<a href="https://github.com/kwy404" rel="me noopener">GitHub</a> and <a href="https://www.linkedin.com/in/alexandre-silva-173687256/" rel="me noopener">LinkedIn</a>).</p>
+      <p class="cl-made">Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>.</p>
+    </div>
+    <nav aria-label="Project">
+      <h2 class="cl-foot-h">Project</h2>
+      <ul>
+        <li><a href="https://github.com/kwy404/a11ymedic">GitHub repository</a></li>
+        <li><a href="https://www.npmjs.com/package/a11ymedic">npm package</a></li>
+        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md">Changelog</a></li>
+        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/i18n/README.pt-BR.md">Leia em Português</a></li>
+        <li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li>
+        <li><a href="guides.html">All guides</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="More from kwy404">
+      <h2 class="cl-foot-h">More from kwy404</h2>
+      <ul><li><a href="https://kwy404.github.io/monsoon/">Monsoon</a> <span>utility-first CSS with no build step</span></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a> <span>JSX and reactivity in plain HTML</span></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a> <span>find bugs automatically, no tests needed</span></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a> <span>migrate Vue 2 to Vue 3</span></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a> <span>emoji safe string length and truncation</span></li><li><a href="https://kwy404.github.io/numberparrot/">numberparrot</a> <span>parse localized numbers</span></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a> <span>edge case test inputs</span></li></ul>
+    </nav>
+  </div>
+  <div class="cl-wrap cl-foot-legal"><span>MIT license, copyright 2026 Alexandre Kohler.</span><span>a11ymedic diagnoses and suggests fixes. It does not replace testing with disabled people.</span></div>
+</footer>
+</body>
+</html>
