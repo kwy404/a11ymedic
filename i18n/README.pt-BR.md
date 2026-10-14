@@ -196,6 +196,10 @@ O a11ymedic calcula o fundo efetivo (cores com alfa, `opacity` dos ancestrais, c
 - [graphemely](https://kwy404.github.io/graphemely/): strings com emoji sem quebrar.
 - [numberparrot](https://kwy404.github.io/numberparrot/): números e moedas localizados.
 - [edgegoat](https://kwy404.github.io/edgegoat/): entradas de casos extremos para testes.
+- [cookieowl](https://kwy404.github.io/cookieowl/): consentimento de cookies para LGPD e GDPR que bloqueia rastreadores de verdade.
+- [installkite](https://kwy404.github.io/installkite/): qualquer site instalável e com funcionamento offline.
+- [fontsketch](https://kwy404.github.io/fontsketch/): a sua letra vira uma fonte, grátis e no navegador.
+- [kastor](https://kwy404.github.io/kastor/): ORM para TypeScript para PostgreSQL, MySQL, SQLite, SQL Server, Oracle, MongoDB e mais.
 
 ## Autor
 

@@ -69,6 +69,10 @@ const MORE = [
   ["graphemely", "https://kwy404.github.io/graphemely/", "emoji safe string length and truncation"],
   ["numberparrot", "https://kwy404.github.io/numberparrot/", "parse localized numbers"],
   ["edgegoat", "https://kwy404.github.io/edgegoat/", "edge case test inputs"],
+  ["cookieowl", "https://kwy404.github.io/cookieowl/", "cookie consent for LGPD and GDPR"],
+  ["installkite", "https://kwy404.github.io/installkite/", "make any website installable and offline"],
+  ["fontsketch", "https://kwy404.github.io/fontsketch/", "turn your handwriting into a font"],
+  ["kastor", "https://kwy404.github.io/kastor/", "TypeScript ORM for almost every database"],
 ];
 
 export function footer() {

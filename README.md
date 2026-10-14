@@ -446,6 +446,10 @@ Yes: `--lang pt` on the CLI, `{ lang: "pt" }` in the reports and `data-overlay="
 - [graphemely](https://kwy404.github.io/graphemely/): truncate and count strings with emoji safely.
 - [numberparrot](https://kwy404.github.io/numberparrot/): parse localized number and currency strings.
 - [edgegoat](https://kwy404.github.io/edgegoat/): edge case test inputs for time zones, unicode and numbers.
+- [cookieowl](https://kwy404.github.io/cookieowl/): cookie consent for LGPD and GDPR that really blocks trackers.
+- [installkite](https://kwy404.github.io/installkite/): make any website installable and offline capable.
+- [fontsketch](https://kwy404.github.io/fontsketch/): turn your handwriting into a font, free in your browser.
+- [kastor](https://kwy404.github.io/kastor/): TypeScript ORM for PostgreSQL, MySQL, SQLite, SQL Server, Oracle, MongoDB and more.
 
 ## Contributing
 
