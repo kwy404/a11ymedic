@@ -7,7 +7,6 @@ export default defineConfig([
     entry: { index: "src/index.ts", matchers: "src/matchers.ts", jest: "src/jest.ts" },
     format: ["esm", "cjs"],
     dts: true,
-    clean: true,
     sourcemap: true,
     treeshake: true,
     target: "es2020",
