@@ -10,8 +10,8 @@
   <link rel="canonical" href="https://kwy404.github.io/a11ymedic/alt-text-best-practices.html">
   <meta name="author" content="Alexandre Kohler">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <meta name="theme-color" content="#f3faf9" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0b1f24" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#fbf5ea" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#102a2f" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="a11ymedic">
   <meta property="og:title" content="Alt Text Best Practices: Examples for Every Kind of Image">
@@ -20,18 +20,19 @@
   <meta property="og:image" content="https://kwy404.github.io/a11ymedic/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="a11ymedic: an accessibility checker with plain language explanations and exact fixes, with Patch the otter medic">
+  <meta property="og:image:alt" content="a11ymedic: the accessibility clinic for websites, with Patch the otter paramedic treating a sick browser window">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Alt Text Best Practices: Examples for Every Kind of Image">
   <meta name="twitter:description" content="Write alt text that helps: when to describe and when to leave alt empty, images in links and buttons, icons, charts and SVG, with before and after examples.">
   <meta name="twitter:image" content="https://kwy404.github.io/a11ymedic/og.png">
-  <meta name="twitter:image:alt" content="a11ymedic: an accessibility checker with plain language explanations and exact fixes, with Patch the otter medic">
+  <meta name="twitter:image:alt" content="a11ymedic: the accessibility clinic for websites, with Patch the otter paramedic treating a sick browser window">
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"Alt text best practices, with examples for every kind of image","description":"Write alt text that helps: when to describe and when to leave alt empty, images in links and buttons, icons, charts and SVG, with before and after examples.","keywords":"alt text best practices, alt text, image alt, decorative images, alt attribute, accessible images, svg accessibility, alt text examples","datePublished":"2026-10-13","dateModified":"2026-10-13","wordCount":734,"author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"publisher":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"image":"https://kwy404.github.io/a11ymedic/og.png","mainEntityOfPage":"https://kwy404.github.io/a11ymedic/alt-text-best-practices.html","about":{"@type":"SoftwareApplication","name":"a11ymedic","url":"https://kwy404.github.io/a11ymedic/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Should decorative images have alt text?","acceptedAnswer":{"@type":"Answer","text":"They should have an alt attribute that is empty, written as alt with two quotes and nothing between them. That tells screen readers to skip the image. Leaving the attribute out makes many screen readers read the file name."}},{"@type":"Question","name":"How long should alt text be?","acceptedAnswer":{"@type":"Answer","text":"Usually one short sentence, often under 100 characters. If an image needs more, keep the alt short and put the full description in visible text or a caption linked with aria-describedby."}},{"@type":"Question","name":"Should alt text start with image of?","acceptedAnswer":{"@type":"Answer","text":"No. Screen readers already announce that the element is an image, so the prefix only adds noise. Start with what the image shows."}},{"@type":"Question","name":"What alt text should a logo have?","acceptedAnswer":{"@type":"Answer","text":"The company name. If the logo links to the home page, describe the destination, for example the company name followed by home."}}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"a11ymedic","item":"https://kwy404.github.io/a11ymedic/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://kwy404.github.io/a11ymedic/guides.html"},{"@type":"ListItem","position":3,"name":"Alt text best practices, with examples for every kind of image","item":"https://kwy404.github.io/a11ymedic/alt-text-best-practices.html"}]}]}</script>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400&family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+  <link rel="stylesheet" href="art.css">
   <link rel="stylesheet" href="site.css">
   <script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
   <script type="module" src="site.js"></script>
@@ -40,17 +41,17 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="cl-top">
   <div class="cl-wrap cl-top-row">
-    <a class="cl-brand" href="./" aria-label="a11ymedic home"><img src="favicon.svg" width="32" height="32" alt=""><span>a11y<b>medic</b></span></a>
-    <a class="badge badge-sm badge-outline cl-ver" href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md" aria-label="v0.1.0 changelog">v0.1.0</a>
-    <nav class="cl-nav" aria-label="Main"><a class="cl-nav-link" href="./#checkup">Check-up</a><a class="cl-nav-link" href="./#contrast">Contrast fixer</a><a class="cl-nav-link" href="wcag-cheat-sheet.html">WCAG cheat sheet</a><a class="cl-nav-link" href="./#rules">Rules</a><a class="cl-nav-link" href="guides.html" aria-current="page">Guides</a><a class="cl-nav-link" href="./#install">Install</a></nav>
+    <a class="cl-brand" href="./"><img src="favicon.svg" width="40" height="40" alt=""><span class="cl-brand-text"><span class="cl-brand-name">a11y<b>medic</b></span><span class="cl-brand-sub">accessibility clinic</span></span></a>
+    <nav class="cl-nav" aria-label="Main"><a class="cl-nav-link" href="./#checkup"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#stethoscope"/></svg><span>Check-up</span></a><a class="cl-nav-link" href="./#contrast"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#low-vision"/></svg><span>Eye exam</span></a><a class="cl-nav-link" href="wcag-cheat-sheet.html"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#clipboard-check"/></svg><span>WCAG cheat sheet</span></a><a class="cl-nav-link" href="./#rules"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#cabinet"/></svg><span>Rules</span></a><a class="cl-nav-link" href="guides.html" aria-current="page"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg><span>Guides</span></a><a class="cl-nav-link" href="./#install"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#ambulance"/></svg><span>Install</span></a></nav>
     <div class="cl-top-end">
-      <a class="cl-icon-btn" href="https://github.com/kwy404/a11ymedic" aria-label="a11ymedic on GitHub"><svg class="cl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg></a>
-      <button type="button" class="cl-icon-btn cl-theme" v-theme-toggle.cycle aria-label="Color theme: follow the system, light or dark" title="Color theme"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="system"><rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/></svg><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="light"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-t="dark"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
-      <button type="button" class="cl-icon-btn cl-menu-btn" aria-controls="cl-menu" aria-expanded="false" :aria-expanded="menu ? 'true' : 'false'" @click="menu = !menu" aria-label="Menu"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <a class="cl-ver" href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md" aria-label="v0.1.0 changelog">v0.1.0</a>
+      <a class="cl-icon-btn" href="https://github.com/kwy404/a11ymedic" aria-label="a11ymedic on GitHub"><svg class="cl-glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg></a>
+      <button type="button" class="cl-icon-btn cl-theme" v-theme-toggle.cycle aria-label="Color theme: follow the system, light or dark" title="Color theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-t="system"><use href="assets/art/icons.svg#system"/></svg><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-t="light"><use href="assets/art/icons.svg#sun"/></svg><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-t="dark"><use href="assets/art/icons.svg#moon"/></svg></button>
+      <button type="button" class="cl-icon-btn cl-menu-btn" aria-controls="cl-menu" aria-expanded="false" :aria-expanded="menu ? 'true' : 'false'" @click="menu = !menu" aria-label="Menu"><svg class="cl-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h11"/></svg></button>
     </div>
   </div>
   <nav id="cl-menu" class="cl-mobile" aria-label="Mobile" style="display:none" v-show="menu" @click="menu = false">
-    <div class="cl-wrap"><a class="cl-nav-link" href="./#checkup">Check-up</a><a class="cl-nav-link" href="./#contrast">Contrast fixer</a><a class="cl-nav-link" href="wcag-cheat-sheet.html">WCAG cheat sheet</a><a class="cl-nav-link" href="./#rules">Rules</a><a class="cl-nav-link" href="guides.html">Guides</a><a class="cl-nav-link" href="./#install">Install</a><a class="cl-nav-link" href="https://github.com/kwy404/a11ymedic">GitHub</a><a class="cl-nav-link" href="https://www.npmjs.com/package/a11ymedic">npm</a></div>
+    <div class="cl-wrap"><a class="cl-nav-link" href="./#checkup"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#stethoscope"/></svg><span>Check-up</span></a><a class="cl-nav-link" href="./#contrast"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#low-vision"/></svg><span>Eye exam</span></a><a class="cl-nav-link" href="wcag-cheat-sheet.html"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#clipboard-check"/></svg><span>WCAG cheat sheet</span></a><a class="cl-nav-link" href="./#rules"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#cabinet"/></svg><span>Rules</span></a><a class="cl-nav-link" href="guides.html" aria-current="page"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg><span>Guides</span></a><a class="cl-nav-link" href="./#install"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#ambulance"/></svg><span>Install</span></a><a class="cl-nav-link" href="https://github.com/kwy404/a11ymedic"><svg class="cl-glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg><span>GitHub</span></a><a class="cl-nav-link" href="https://www.npmjs.com/package/a11ymedic"><svg class="ic ic-nav" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#pill"/></svg><span>npm</span></a></div>
   </nav>
 </header>
   <main id="main">
@@ -60,10 +61,22 @@
     <div class="cl-article-main">
       <nav class="cl-crumbs" aria-label="Breadcrumb"><ol><li><a href="./">a11ymedic</a></li><li><a href="guides.html">Guides</a></li><li><span aria-current="page">Alt text best practices, with examples for every kind of image</span></li></ol></nav>
       <header class="cl-article-head">
-        <p class="cl-eyebrow">Guide</p>
-        <h1>Alt text best practices, with examples for every kind of image</h1>
-        <p class="cl-lead">Alt text is what a screen reader says instead of showing an image. Good alt text is short, specific and written for the context the image sits in. This guide shows how to decide between a description and an empty alt, how to handle images inside links and buttons, and what to do with icons, SVG and charts.</p>
-        <p class="cl-meta">By <a href="https://github.com/kwy404" rel="me noopener">Alexandre Kohler</a>, updated <time datetime="2026-10-13">October 13, 2026</time>, 3 minute read</p>
+        <div class="cl-article-title">
+          <p class="cl-kicker"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</p>
+          <h1>Alt text best practices, with examples for every kind of image</h1>
+          <p class="cl-lead">Alt text is what a screen reader says instead of showing an image. Good alt text is short, specific and written for the context the image sits in. This guide shows how to decide between a description and an empty alt, how to handle images inside links and buttons, and what to do with icons, SVG and charts.</p>
+        </div>
+        <span class="cl-article-art"><svg class="cl-spot" viewBox="0 0 240 180" aria-hidden="true" focusable="false"><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" style="fill:var(--a-blob)"/>
+<g stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--a-ink)">
+<rect x="34" y="36" width="116" height="90" rx="10" style="fill:var(--a-paper)"/>
+<path d="M34 106l30-30 24 22 18-14 44 38v4a10 10 0 0 1-10 10H44a10 10 0 0 1-10-10Z" style="fill:var(--a-tealSoft)"/>
+<circle cx="118" cy="62" r="11" style="fill:var(--a-yellow)"/>
+<path d="M150 104q22 4 30 20" fill="none"/>
+<path d="M166 120h40a6 6 0 0 1 6 6v22a6 6 0 0 1-6 6h-40l-12-17Z" style="fill:var(--a-coralPale)"/><circle cx="168" cy="137" r="3.5" style="fill:var(--a-paper)"/>
+<path d="M176 132h26M176 142h18" />
+<path d="M168 34h44a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10h-18l-12 12V74h-14a10 10 0 0 1-10-10V44a10 10 0 0 1 10-10Z" style="fill:var(--a-paper)"/>
+<path d="M172 48h36M172 60h24" stroke-width="4" style="stroke:var(--a-teal)"/></g></svg></span>
+        <p class="cl-meta"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#prescription"/></svg>By <a href="https://github.com/kwy404" rel="me noopener">Alexandre Kohler</a>, updated <time datetime="2026-10-13">October 13, 2026</time>, 3 minute read</p>
       </header>
       <div class="cl-prose">
 
@@ -144,14 +157,14 @@
 
       </div>
       <section class="cl-guide-faq" aria-labelledby="faq-alt-text-best-practices">
-        <h2 id="faq-alt-text-best-practices">Frequently asked questions</h2>
+        <h2 id="faq-alt-text-best-practices"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#heart-pulse"/></svg>Frequently asked questions</h2>
         <details class="cl-faq"><summary>Should decorative images have alt text?</summary><p>They should have an alt attribute that is empty, written as alt with two quotes and nothing between them. That tells screen readers to skip the image. Leaving the attribute out makes many screen readers read the file name.</p></details>
         <details class="cl-faq"><summary>How long should alt text be?</summary><p>Usually one short sentence, often under 100 characters. If an image needs more, keep the alt short and put the full description in visible text or a caption linked with aria-describedby.</p></details>
         <details class="cl-faq"><summary>Should alt text start with image of?</summary><p>No. Screen readers already announce that the element is an image, so the prefix only adds noise. Start with what the image shows.</p></details>
         <details class="cl-faq"><summary>What alt text should a logo have?</summary><p>The company name. If the logo links to the home page, describe the destination, for example the company name followed by home.</p></details>
       </section>
       <aside class="cl-cta-box" aria-labelledby="cta-alt-text-best-practices">
-        <img src="assets/mascot-head.svg" width="64" height="64" alt="">
+        <img src="assets/mascot-head.svg" width="72" height="72" alt="">
         <div>
           <h2 id="cta-alt-text-best-practices">Run a check-up on your own page</h2>
           <p>Paste your HTML into the <a href="./#checkup">live check-up room</a>, or run <code>npx a11ymedic index.html</code>.</p>
@@ -159,34 +172,46 @@
       </aside>
     </div>
     <aside class="cl-article-side" aria-label="Guide navigation">
-      <nav class="cl-toc" aria-label="On this page"><h2 class="cl-toc-title">On this page</h2><ol><li><a href="#informative-or-decorative">First decide: informative or decorative?</a></li><li><a href="#writing-good-alt">How to write good alt text</a></li><li><a href="#links-and-buttons">Images inside links and buttons</a></li><li><a href="#svg-and-icons">SVG icons and icon fonts</a></li><li><a href="#complex-images">Charts, diagrams and other complex images</a></li><li><a href="#checking-alt-text">Check and fix alt text automatically</a></li></ol></nav>
-      <nav class="cl-related" aria-label="Related guides"><h2 class="cl-toc-title">Related guides</h2><ul><li><a href="aria-label-vs-aria-labelledby.html">aria-label vs aria-labelledby: which one to use and when</a></li><li><a href="website-accessibility-checker.html">A website accessibility checker that explains every fix</a></li><li><a href="wcag-2-2-checklist.html">WCAG 2.2 checklist for developers</a></li><li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li></ul></nav>
+      <nav class="cl-toc" aria-label="On this page"><h2 class="cl-toc-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#chart"/></svg>On this page</h2><ol><li><a href="#informative-or-decorative">First decide: informative or decorative?</a></li><li><a href="#writing-good-alt">How to write good alt text</a></li><li><a href="#links-and-buttons">Images inside links and buttons</a></li><li><a href="#svg-and-icons">SVG icons and icon fonts</a></li><li><a href="#complex-images">Charts, diagrams and other complex images</a></li><li><a href="#checking-alt-text">Check and fix alt text automatically</a></li></ol></nav>
+      <nav class="cl-related" aria-label="Related guides"><h2 class="cl-toc-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Related guides</h2><ul><li><a href="aria-label-vs-aria-labelledby.html">aria-label vs aria-labelledby: which one to use and when</a></li><li><a href="website-accessibility-checker.html">A website accessibility checker that explains every fix</a></li><li><a href="wcag-2-2-checklist.html">WCAG 2.2 checklist for developers</a></li><li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li></ul></nav>
     </aside>
   </div>
 </article>
   </main>
   <footer class="cl-foot">
   <div class="cl-wrap cl-foot-grid">
-    <div class="cl-foot-brand">
-      <a class="cl-brand" href="./"><img src="favicon.svg" width="28" height="28" alt=""><span>a11y<b>medic</b></span></a>
-      <p>An accessibility checker that explains every problem in plain language and writes the exact fix. Free and open source under the MIT license.</p>
-      <p class="cl-made">Made by <strong>Alexandre Kohler</strong> (<a href="https://github.com/kwy404" rel="me noopener">GitHub</a> and <a href="https://www.linkedin.com/in/alexandre-silva-173687256/" rel="me noopener">LinkedIn</a>).</p>
-      <p class="cl-made">Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>.</p>
+    <div class="cl-foot-desk">
+      <img class="cl-foot-patch" src="assets/mascot-head.svg" width="84" height="84" alt="">
+      <div>
+        <p class="cl-foot-hello">Front desk</p>
+        <p class="cl-foot-name">a11y<b>medic</b></p>
+        <p>An accessibility checker that explains every problem in plain language and writes the exact fix. Free and open source under the MIT license.</p>
+        <p class="cl-made">Made by <strong>Alexandre Kohler</strong> (<a href="https://github.com/kwy404" rel="me noopener">GitHub</a> and <a href="https://www.linkedin.com/in/alexandre-silva-173687256/" rel="me noopener">LinkedIn</a>).</p>
+        <p class="cl-made">Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>.</p>
+      </div>
     </div>
-    <nav aria-label="Project">
-      <h2 class="cl-foot-h">Project</h2>
+    <nav aria-label="Clinic">
+      <h2 class="cl-foot-h"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#first-aid"/></svg>Clinic</h2>
       <ul>
-        <li><a href="https://github.com/kwy404/a11ymedic">GitHub repository</a></li>
-        <li><a href="https://www.npmjs.com/package/a11ymedic">npm package</a></li>
-        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md">Changelog</a></li>
-        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/i18n/README.pt-BR.md">Leia em Português</a></li>
+        <li><a href="./#checkup">Live check-up</a></li>
+        <li><a href="./#contrast">Contrast eye exam</a></li>
+        <li><a href="./#rules">Medicine cabinet of rules</a></li>
         <li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li>
         <li><a href="guides.html">All guides</a></li>
       </ul>
     </nav>
+    <nav aria-label="Project">
+      <h2 class="cl-foot-h"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#report"/></svg>Project</h2>
+      <ul>
+        <li><a href="https://github.com/kwy404/a11ymedic">GitHub repository</a></li>
+        <li><a href="https://www.npmjs.com/package/a11ymedic">npm package</a></li>
+        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/CHANGELOG.md">Changelog</a></li>
+        <li><a href="https://github.com/kwy404/a11ymedic/blob/main/i18n/README.pt-BR.md" hreflang="pt-BR" lang="pt-BR">Leia em Português</a></li>
+      </ul>
+    </nav>
     <nav aria-label="More from kwy404">
-      <h2 class="cl-foot-h">More from kwy404</h2>
-      <ul><li><a href="https://kwy404.github.io/monsoon/">Monsoon</a> <span>utility-first CSS with no build step</span></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a> <span>JSX and reactivity in plain HTML</span></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a> <span>find bugs automatically, no tests needed</span></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a> <span>migrate Vue 2 to Vue 3</span></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a> <span>emoji safe string length and truncation</span></li><li><a href="https://kwy404.github.io/numberparrot/">numberparrot</a> <span>parse localized numbers</span></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a> <span>edge case test inputs</span></li></ul>
+      <h2 class="cl-foot-h"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#sparkle"/></svg>More from kwy404</h2>
+      <ul class="cl-more-list"><li><a href="https://kwy404.github.io/monsoon/">Monsoon</a> <span>utility-first CSS with no build step</span></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a> <span>JSX and reactivity in plain HTML</span></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a> <span>find bugs automatically, no tests needed</span></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a> <span>migrate Vue 2 to Vue 3</span></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a> <span>emoji safe string length and truncation</span></li><li><a href="https://kwy404.github.io/numberparrot/">numberparrot</a> <span>parse localized numbers</span></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a> <span>edge case test inputs</span></li></ul>
     </nav>
   </div>
   <div class="cl-wrap cl-foot-legal"><span>MIT license, copyright 2026 Alexandre Kohler.</span><span>a11ymedic diagnoses and suggests fixes. It does not replace testing with disabled people.</span></div>

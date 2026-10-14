@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" width="240" height="180" role="img" aria-labelledby="how-to-fix-color-contrast-t"><title id="how-to-fix-color-contrast-t">A color swatch fan with a low contrast card being lifted to a darker, readable shade, and a contrast dial</title><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" fill="#183b41"/>
+<g stroke="#071417" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<g transform="rotate(-24 70 150)"><rect x="50" y="40" width="40" height="110" rx="8" fill="#e6dcc7"/><rect x="56" y="48" width="28" height="22" rx="4" fill="#6b4440"/></g>
+<g transform="rotate(-8 90 150)"><rect x="70" y="36" width="40" height="114" rx="8" fill="#e6dcc7"/><rect x="76" y="44" width="28" height="22" rx="4" fill="#cf7464"/></g>
+<g transform="rotate(10 110 150)"><rect x="90" y="36" width="40" height="114" rx="8" fill="#e6dcc7"/><rect x="96" y="44" width="28" height="22" rx="4" fill="#f0806d"/><path d="M100 82h20M100 94h14" stroke="#071417"/></g>
+<circle cx="176" cy="74" r="34" fill="#e6dcc7"/><path d="M176 40a34 34 0 0 0 0 68Z" fill="#22a6a3"/><circle cx="176" cy="74" r="34" fill="none"/>
+<path d="M176 74l16-14" stroke-width="4"/><circle cx="176" cy="74" r="5" fill="#f0806d"/>
+<rect x="148" y="122" width="62" height="26" rx="13" fill="#2a5d61"/></g>
+<text x="179" y="140" font-family="'Atkinson Hyperlegible Mono', Consolas, Menlo, monospace" font-size="13" font-weight="700" fill="#071417" text-anchor="middle">4.5:1</text>
+<path class="" d="M214 22C214.96 29.04 214.96 29.04 222 30C214.96 30.96 214.96 30.96 214 38C213.04 30.96 213.04 30.96 206 30C213.04 29.04 213.04 29.04 214 22Z" fill="#e3b552" stroke="#071417" stroke-width="2.5" stroke-linejoin="round"/></svg>

@@ -1,6 +1,8 @@
-// The home page: "the clinic". A live check-up room, a contrast fixer, the rule catalog,
-// install instructions, the API and the FAQ.
-import { code, esc, icons, REPO, VERSION } from "./layout.mjs";
+// The home page: "the clinic". The waiting room (hero), the people every diagnosis names,
+// the live check-up room, the contrast eye exam, the patient journey, four ways to call the
+// medic, the medicine cabinet of rules, the API, the reading room and the FAQ.
+import { icon, inline } from "../art/clinic.mjs";
+import { code, divider, esc, icons, PEOPLE, REPO, VERSION } from "./layout.mjs";
 
 export const HOME_FAQ = [
   {
@@ -30,67 +32,125 @@ export const HOME_FAQ = [
 ];
 
 const SEV = [
-  ["critical", "Critical"],
-  ["serious", "Serious"],
-  ["moderate", "Moderate"],
-  ["minor", "Minor"],
+  ["critical", "Critical", "Treat now"],
+  ["serious", "Serious", "Treat today"],
+  ["moderate", "Moderate", "Book a visit"],
+  ["minor", "Minor", "Keep an eye on"],
 ];
 
-function ruleRows(rules) {
-  return rules
-    .map((r) => {
-      const hay = `${r.id} ${r.title.en} ${r.tags.join(" ")} ${r.wcag.join(" ")}`.toLowerCase().replace(/['"\\]/g, "");
-      return `<tr v-show="ruleVisible('${esc(hay)}', '${r.severity}', rq, rsev)"><td><code>${r.id}</code></td><td>${esc(r.title.en)}</td><td>${r.wcag
-        .map((w) => `<a href="https://www.w3.org/WAI/WCAG22/Understanding/${r.wcagSlugs[w]}.html">${w}</a>`)
-        .join(", ")}</td><td>${r.level}</td><td><span class="cl-pill" data-sev="${r.severity}">${r.severity}</span></td><td>${r.autofix ? "Yes" : ""}</td></tr>`;
-    })
-    .join("\n");
+/** The medicine cabinet: twelve drawers, one per kind of problem. */
+export const DRAWERS = [
+  ["images", "Images", "images", "Alt text for pictures, icons, image maps and embedded objects.", ["image-alt", "image-alt-quality", "input-image-alt", "area-alt", "role-img-alt", "object-alt"]],
+  ["names", "Names", "names", "Every button, link, dialog, widget and frame needs a name people can hear.", ["button-name", "link-name", "link-text-generic", "label-in-name", "aria-dialog-name", "aria-widget-name", "frame-title", "frame-title-unique"]],
+  ["forms", "Forms", "forms", "Labels, autocomplete, grouped radios and paste that works.", ["label", "autocomplete-valid", "input-purpose", "paste-blocked", "radio-group"]],
+  ["contrast", "Contrast", "contrast", "Text that is bright enough against its real background.", ["color-contrast", "color-contrast-enhanced"]],
+  ["keyboard", "Keyboard", "keyboard", "Focus you can see, a sensible tab order and no mouse only controls.", ["tabindex", "focus-visible", "nested-interactive", "keyboard-click-handler", "link-as-button", "bypass", "skip-link"]],
+  ["zoom", "Zoom and touch", "zoom", "Pinch zoom stays on and targets are big enough to hit.", ["meta-viewport", "target-size"]],
+  ["structure", "Structure", "structure", "Titles, headings, landmarks and lists that screen readers can navigate.", ["document-title", "heading-order", "page-has-heading-one", "empty-heading", "landmark-one-main", "landmark-unique", "region", "list", "listitem", "definition-list", "duplicate-id"]],
+  ["language", "Language", "language", "The right lang so words are read with the right voice.", ["html-has-lang", "html-lang-valid", "valid-lang"]],
+  ["media", "Media", "media", "Captions for video and no sound that starts on its own.", ["video-caption", "autoplay-media"]],
+  ["motion", "Motion and timing", "motion", "No blinking, no surprise refreshes, and motion that respects the setting.", ["blink-marquee", "motion-reduced", "meta-refresh"]],
+  ["tables", "Tables", "tables", "Header cells that tie every data cell to its meaning.", ["table-headers", "th-scope-valid", "empty-table-header"]],
+  ["aria", "ARIA", "aria", "Valid roles, attributes and values, and no hidden focusable content.", ["aria-valid-role", "aria-valid-attr", "aria-valid-attr-value", "aria-required-attr", "aria-hidden-focus", "aria-hidden-body", "aria-prohibited-label", "aria-required-parent", "presentation-role-conflict"]],
+];
+
+function cabinet(rules) {
+  const byId = Object.fromEntries(rules.map((r) => [r.id, r]));
+  const placed = new Set(DRAWERS.flatMap((d) => d[4]));
+  const missing = rules.filter((r) => !placed.has(r.id)).map((r) => r.id);
+  if (missing.length) throw new Error(`rules missing from the medicine cabinet: ${missing.join(", ")}`);
+  const data = [];
+  const drawers = DRAWERS.map(([key, label, ic, blurb, ids]) => {
+    const items = ids.map((id) => {
+      const r = byId[id];
+      if (!r) throw new Error(`unknown rule ${id}`);
+      const hay = `${r.id} ${r.title.en} ${r.tags.join(" ")} ${r.wcag.join(" ")} ${key} ${label}`.toLowerCase().replace(/['"\\]/g, "");
+      data.push({ id: r.id, d: key, s: r.severity, h: hay });
+      return `<li class="cl-rule" v-show="ruleVisible('${r.id}', rq, rsev)">
+            <span class="cl-rule-head"><code class="cl-rule-id">${r.id}</code><span class="cl-triage" data-sev="${r.severity}">${r.severity}</span></span>
+            <span class="cl-rule-title">${esc(r.title.en)}</span>
+            <span class="cl-rule-meta">WCAG ${r.wcag.map((w) => `<a href="https://www.w3.org/WAI/WCAG22/Understanding/${r.wcagSlugs[w]}.html">${w}</a>`).join(", ")} <span aria-hidden="true">/</span> Level ${r.level}${r.autofix ? ` <span class="cl-autofix">${icon("bandage", "ic ic-xs")}auto fix</span>` : ""}</span>
+          </li>`;
+    });
+    return `<details class="cl-drawer" data-drawer="${key}" v-show="drawerCount('${key}', rq, rsev) > 0">
+        <summary>
+          <span class="cl-drawer-plate">${icon(ic, "ic ic-lg")}<span class="cl-drawer-name">${label}</span></span>
+          <span class="cl-drawer-blurb">${esc(blurb)}</span>
+          <span class="cl-drawer-count" v-text="drawerCount('${key}', rq, rsev) + (drawerCount('${key}', rq, rsev) === 1 ? ' rule' : ' rules')">${ids.length} ${ids.length === 1 ? "rule" : "rules"}</span>
+          <span class="cl-knob" aria-hidden="true"></span>
+        </summary>
+        <ul class="cl-rule-list">
+          ${items.join("\n          ")}
+        </ul>
+      </details>`;
+  });
+  return { html: drawers.join("\n      "), data };
 }
 
-const wayIcon = (name) =>
-  `<picture class="cl-way-icon"><source srcset="assets/icons/dark/${name}.svg" media="(prefers-color-scheme: dark)"><img src="assets/icons/light/${name}.svg" width="28" height="28" alt=""></picture>`;
+const triageCounts = SEV.map(
+  ([k, label]) => `<li class="cl-tag" data-sev="${k}"><span class="cl-tag-hole" aria-hidden="true"></span><strong v-text="counts.${k}">0</strong><span v-text="t.${k}">${label.toLowerCase()}</span></li>`,
+).join("");
+
+const gauge = `<svg class="cl-gauge" viewBox="0 0 200 116" aria-hidden="true" focusable="false">
+  <g fill="none" stroke-width="16"><path class="g-red" d="M20 100A80 80 0 0 1 75.28 23.92"/><path class="g-orange" d="M75.28 23.92A80 80 0 0 1 136.32 28.72"/><path class="g-yellow" d="M136.32 28.72A80 80 0 0 1 176.08 75.28"/><path class="g-green" d="M176.08 75.28A80 80 0 0 1 180 100"/></g>
+  <path class="g-rim" d="M12 100A88 88 0 0 1 188 100M28 100A72 72 0 0 1 172 100" fill="none" stroke-width="2.5"/>
+  <g class="cl-needle" :style="{ transform: 'rotate(' + (score * 1.8 - 90) + 'deg)' }"><path d="M100 100 97 98 100 30 103 98Z"/></g>
+  <circle class="g-hub" cx="100" cy="100" r="8"/>
+</svg>`;
 
 export function homeBody({ rules, samples, guides }) {
   const bookmarklet = `javascript:(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/a11ymedic@${VERSION}/dist/a11ymedic.js';s.setAttribute('data-overlay','');document.body.appendChild(s)})()`;
+  const cab = cabinet(rules);
   return `
 <section class="cl-hero" aria-labelledby="hero-title">
   <div class="cl-wrap cl-hero-grid">
     <div class="cl-hero-copy">
-      <p class="cl-eyebrow">Free accessibility checker for WCAG 2.2</p>
-      <h1 id="hero-title">The accessibility checker that <span>explains every problem</span> and writes the fix.</h1>
-      <p class="cl-lead">a11ymedic examines your pages with 61 WCAG 2.2 rules, tells you in plain language what is wrong and who it hurts, and hands you the patched HTML. Run it as a page overlay, from the command line, in CI or inside your tests.</p>
+      <p class="cl-nametag">${icon("stethoscope", "ic")}<span>Free accessibility checker for WCAG 2.2</span></p>
+      <h1 id="hero-title">The accessibility checker that <span class="cl-hl">explains every problem</span> and <span class="cl-hl cl-hl-coral">writes the fix.</span></h1>
+      <p class="cl-lead">Bring any page in for a check-up. a11ymedic examines it with 61 WCAG 2.2 rules, tells you in plain language what is wrong and who it hurts, and hands you the patched HTML. It works as a page overlay, on the command line, in CI and inside your tests.</p>
       <div class="cl-hero-cta">
-        <a class="btn btn-primary btn-lg" href="#checkup">Start a check-up ${icons.arrow}</a>
-        <button type="button" class="cl-npx" @click="copyText('npx a11ymedic index.html', 'npx')"><code><span aria-hidden="true">$</span> npx a11ymedic index.html</code><span class="cl-npx-copy" v-text="copied === 'npx' ? 'Copied' : 'Copy'">Copy</span></button>
+        <a class="btn btn-primary btn-lg cl-btn" href="#checkup">${icon("stethoscope", "ic")}Start a check-up</a>
+        <button type="button" class="cl-rx-slip" @click="copyText('npx a11ymedic index.html', 'npx')"><span class="cl-rx-mark" aria-hidden="true">Rx</span><code>npx a11ymedic index.html</code><span class="cl-rx-copy">${icons.copy}<span v-text="copied === 'npx' ? 'Copied' : 'Copy'">Copy</span></span></button>
       </div>
       <ul class="cl-vitals" aria-label="At a glance">
-        <li><strong>61</strong><span>WCAG 2.2 rules</span></li>
-        <li><strong>EN + PT</strong><span>plain language</span></li>
-        <li><strong>OKLCH</strong><span>color fixes</span></li>
-        <li><strong>1 diff</strong><span>safe auto fix</span></li>
+        <li>${icon("cabinet", "ic")}<strong>61</strong><span>WCAG 2.2 rules</span></li>
+        <li>${icon("language", "ic")}<strong>EN + PT</strong><span>plain language</span></li>
+        <li>${icon("contrast", "ic")}<strong>OKLCH</strong><span>color fixes</span></li>
+        <li>${icon("bandage", "ic")}<strong>1 diff</strong><span>safe auto fix</span></li>
       </ul>
     </div>
-    <div class="cl-hero-art">
-      <svg class="cl-ekg" viewBox="0 0 600 120" aria-hidden="true" preserveAspectRatio="none"><path d="M0 70h170l18-40 22 80 20-62 14 22h356"/></svg>
-      <picture>
-        <source srcset="assets/mascot-dark.svg" media="(prefers-color-scheme: dark)">
-        <img class="cl-mascot" src="assets/mascot.svg" width="360" height="360" alt="Patch, the a11ymedic otter paramedic, holding a broken button with a bandage on it">
-      </picture>
-    </div>
+    <figure class="cl-hero-art">
+      ${inline.scene()}
+      <figcaption class="cl-handnote"><span>Patient: one browser window.</span> <span>Symptoms: no alt text, mystery buttons, pale grey text.</span></figcaption>
+    </figure>
   </div>
 </section>
 
+<section id="patients" class="cl-section cl-people-sec" aria-labelledby="people-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head cl-center">
+      <p class="cl-kicker">${icon("heart-pulse", "ic ic-sm")}Who it is for</p>
+      <h2 id="people-title">Every diagnosis names who it hurts</h2>
+      <p>A finding is not a lint warning. Each one says which people hit the barrier, so you know why the fix matters before you write it.</p>
+    </div>
+    <ul class="cl-people">
+      ${Object.entries(PEOPLE).map(([key, [label, line]]) => `<li class="cl-person">${icon(key, "ic ic-xl")}<strong>${label}</strong><span>${line}</span></li>`).join("\n      ")}
+    </ul>
+  </div>
+</section>
+${divider}
 <section id="checkup" class="cl-section cl-checkup" aria-labelledby="checkup-title">
   <div class="cl-wrap">
     <div class="cl-section-head">
-      <p class="cl-eyebrow">Live demo</p>
+      <p class="cl-kicker">${icon("stethoscope", "ic ic-sm")}Live demo</p>
       <h2 id="checkup-title">The check-up room</h2>
-      <p>Pick a patient or paste your own HTML, then run the medic. Numbered pins appear on the page, and the diagnosis chart explains each problem with the exact fix. Press <strong>Treat</strong> to apply a fix to the live page and watch it heal.</p>
+      <p>Pick a patient or paste your own HTML and run the medic. Numbered pins land on the page, the chart explains each problem with the exact fix, and <strong>Treat</strong> applies it to the live page so you can watch the patient recover.</p>
     </div>
     <div class="cl-room">
-      <div class="cl-intake card">
-        <div class="card-body">
-          <h3 class="cl-card-title">Patient intake</h3>
+      <div class="cl-intake cl-clipboard">
+        <span class="cl-clip" aria-hidden="true"></span>
+        <div class="cl-paper">
+          <h3 class="cl-card-title">${icon("report", "ic")}Patient intake</h3>
           <div class="segmented segmented-block" role="radiogroup" aria-label="Patient source">
             <label class="segmented-item"><input type="radio" name="src" value="samples" v-model="tab" checked> Sample patients</label>
             <label class="segmented-item"><input type="radio" name="src" value="paste" v-model="tab"> Paste HTML</label>
@@ -121,34 +181,55 @@ export function homeBody({ rules, samples, guides }) {
               </div>
             </div>
           </div>
-          <button type="button" class="btn btn-primary btn-block cl-run" @click="run()">${icons.play} Run the medic</button>
+          <button type="button" class="btn btn-primary btn-block cl-btn cl-run" @click="run()">${icons.play} Run the medic</button>
           <button type="button" class="btn btn-ghost btn-sm btn-block" @click="selfCheck()">Check this docs page instead</button>
         </div>
       </div>
 
-      <div class="cl-exam">
-        <div class="cl-browser">
-          <div class="cl-browser-bar" aria-hidden="true"><i></i><i></i><i></i><span v-text="patientName">Bakery landing page</span></div>
-          <iframe id="patient" title="Patient page under examination" sandbox="allow-same-origin" loading="lazy"></iframe>
+      <div class="cl-exam" :class="{ 'is-healing': healing }">
+        <div class="cl-bedside">
+          <div class="cl-browser">
+            <div class="cl-browser-bar" aria-hidden="true"><i></i><i></i><i></i><span v-text="patientName">Bakery landing page</span></div>
+            <iframe id="patient" title="Patient page under examination" sandbox="allow-same-origin" loading="lazy"></iframe>
+          </div>
+          <div class="cl-sparkles" aria-hidden="true">${icon("sparkle", "ic")}${icon("sparkle", "ic")}${icon("bandage", "ic")}${icon("sparkle", "ic")}</div>
+        </div>
+        <div class="cl-monitor">
+          <div class="cl-monitor-gauge">
+            ${gauge}
+            <p class="cl-score"><strong v-text="score">0</strong><span>health</span></p>
+          </div>
+          <div class="cl-monitor-read">
+            <div class="cl-moods" :data-mood="mood">
+              <span class="cl-mood" data-m="sick">${inline.patient("sick")}</span>
+              <span class="cl-mood" data-m="ok">${inline.patient("ok")}</span>
+              <span class="cl-mood" data-m="happy">${inline.patient("happy")}</span>
+            </div>
+            <p class="cl-condition"><span class="cl-condition-label">Condition</span><strong v-text="conditionText">Waiting</strong></p>
+            <svg class="cl-trace" :data-mood="mood" viewBox="0 0 220 40" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 22H40L48 8 58 34 66 4 74 28 80 22H130L138 8 148 34 156 4 164 28 170 22H220"/></svg>
+          </div>
         </div>
         <p class="cl-note">The patient page runs in a sandboxed frame with no scripts. Pins are buttons: select one to open its diagnosis.</p>
       </div>
 
-      <section class="cl-chart card" aria-labelledby="chart-title">
-        <div class="card-body">
+      <section class="cl-chart cl-clipboard" aria-labelledby="chart-title">
+        <span class="cl-clip" aria-hidden="true"></span>
+        <div class="cl-paper cl-paper-lined">
           <div class="cl-chart-head">
-            <h3 id="chart-title" class="cl-card-title" v-text="t.chart">Diagnosis chart</h3>
+            <h3 id="chart-title" class="cl-card-title">${icon("chart", "ic")}<span v-text="t.chart">Diagnosis chart</span></h3>
             <span class="cl-chart-meta" v-text="ran ? (total + ' ' + t.problems) : t.notYet">Not examined yet</span>
           </div>
-          <ul class="cl-sev-row" aria-label="Problems by severity">
-            ${SEV.map(([k]) => `<li data-sev="${k}"><strong v-text="counts.${k}">0</strong><span v-text="t.${k}">${k}</span></li>`).join("")}
-          </ul>
+          <ul class="cl-tags" aria-label="Problems by severity">${triageCounts}</ul>
           <div class="cl-treat-all" v-show="ran && total > 0" style="display:none">
-            <button type="button" class="btn btn-sm btn-outline" @click="treatAll(true)" :disabled="safeCount === 0">${icons.bandage}<span v-text="t.treatSafe + ' (' + safeCount + ')'">Treat safe fixes</span></button>
-            <button type="button" class="btn btn-sm btn-ghost" @click="treatAll(false)" v-text="t.treatAll">Treat everything</button>
+            <button type="button" class="btn btn-sm btn-primary cl-btn" @click="treatAll(true)" :disabled="safeCount === 0">${icons.bandage}<span v-text="t.treatSafe + ' (' + safeCount + ')'">Treat safe fixes</span></button>
+            <button type="button" class="btn btn-sm btn-outline" @click="treatAll(false)" v-text="t.treatAll">Treat everything</button>
             <button type="button" class="btn btn-sm btn-ghost" @click="run()" v-text="t.reset">Start over</button>
           </div>
-          <p class="cl-healthy" v-show="ran && total === 0" style="display:none"><img src="assets/mascot-head.svg" width="48" height="48" alt=""><span v-text="t.healthy">Healthy.</span></p>
+          <div class="cl-discharged" v-show="ran && total === 0" style="display:none">
+            ${inline.stamp()}
+            <p v-text="t.healthy">Healthy: no problems found. Patch signs the discharge papers.</p>
+            <button type="button" class="btn btn-sm btn-ghost" @click="run()" v-text="t.reset">Start over</button>
+          </div>
           <p class="cl-healed" role="status" v-text="status"></p>
           <ol class="cl-findings" aria-label="Findings">
             <li v-for="f in items" :key="f.key" class="cl-finding" :data-sev="f.severity" :class="{ 'is-open': open === f.i }" :id="'finding-' + f.i">
@@ -160,15 +241,19 @@ export function homeBody({ rules, samples, guides }) {
                 <h4 v-text="t.why">Why it matters</h4><p v-text="f.explanation"></p>
                 <h4 v-text="t.who">Who is affected</h4><p v-text="f.affects"></p>
                 <h4>WCAG</h4><p><a :href="f.wcagUrl" target="_blank" rel="noopener" v-text="f.wcagLabel"></a></p>
-                <h4 v-text="t.fix">The fix</h4><p v-text="f.summary"></p>
                 <div class="cl-rx">
-                  <div><span class="cl-rx-label" v-text="t.before"></span><div class="cl-rx-code is-before" v-text="f.before"></div></div>
-                  <div><span class="cl-rx-label" v-text="t.after"></span><div class="cl-rx-code is-after" v-text="f.after"></div></div>
-                </div>
-                <div class="cl-rx-actions">
-                  <button type="button" class="btn btn-sm btn-primary" @click="treat(f.i)" v-show="f.treatable">${icons.bandage}<span v-text="t.treat">Treat on the page</span></button>
-                  <button type="button" class="btn btn-sm btn-outline" @click="copyText(f.after, 'fix-' + f.i)" v-text="copied === 'fix-' + f.i ? t.copied : t.copy">Copy fix</button>
-                  <span class="cl-safe" v-show="f.safe" v-text="t.safe"></span>
+                  <p class="cl-rx-head"><span class="cl-rx-mark" aria-hidden="true">Rx</span><span v-text="t.fix">The fix</span></p>
+                  <p class="cl-rx-summary" v-text="f.summary"></p>
+                  <div class="cl-rx-pair">
+                    <div><span class="cl-rx-label" v-text="t.before"></span><div class="cl-rx-code is-before" v-text="f.before"></div></div>
+                    <div><span class="cl-rx-label" v-text="t.after"></span><div class="cl-rx-code is-after" v-text="f.after"></div></div>
+                  </div>
+                  <div class="cl-rx-actions">
+                    <button type="button" class="btn btn-sm btn-primary cl-btn" @click="treat(f.i)" v-show="f.treatable">${icons.bandage}<span v-text="t.treat">Treat on the page</span></button>
+                    <button type="button" class="btn btn-sm btn-outline" @click="copyText(f.after, 'fix-' + f.i)" v-text="copied === 'fix-' + f.i ? t.copied : t.copy">Copy fix</button>
+                    <span class="cl-safe" v-show="f.safe" v-text="t.safe"></span>
+                  </div>
+                  <p class="cl-rx-sign" aria-hidden="true">Dr. Patch</p>
                 </div>
                 <p class="cl-selector"><code v-text="f.selector"></code></p>
               </div>
@@ -180,15 +265,15 @@ export function homeBody({ rules, samples, guides }) {
   </div>
 </section>
 
-<section id="contrast" class="cl-section cl-contrast" aria-labelledby="contrast-title">
+<section id="contrast" class="cl-section cl-eye-sec" aria-labelledby="contrast-title">
   <div class="cl-wrap">
     <div class="cl-section-head">
-      <p class="cl-eyebrow">Contrast fixer</p>
+      <p class="cl-kicker">${icon("low-vision", "ic ic-sm")}Contrast eye exam</p>
       <h2 id="contrast-title">Find the closest accessible color pair</h2>
-      <p>Pick a text color and a background. a11ymedic keeps the hue and moves only the OKLCH lightness until the pair passes, so your brand still looks like your brand. The same math powers the color-contrast fix in every report.</p>
+      <p>Pick a text color and a background and read the chart. a11ymedic keeps the hue and moves only the OKLCH lightness until the pair passes, so your brand still looks like your brand. The same math writes the color-contrast fix in every report.</p>
     </div>
-    <div class="cl-cf">
-      <div class="card cl-cf-inputs"><div class="card-body">
+    <div class="cl-eye">
+      <div class="cl-eye-controls cl-card">
         <div class="cl-cf-field">
           <label for="fg-text">Text color</label>
           <div class="cl-color-row"><input type="color" aria-label="Pick the text color" :value="hexOf(fg)" @input="fg = $event.target.value"><input id="fg-text" class="input" v-model="fg" spellcheck="false" autocomplete="off"></div>
@@ -197,7 +282,7 @@ export function homeBody({ rules, samples, guides }) {
           <label for="bg-text">Background color</label>
           <div class="cl-color-row"><input type="color" aria-label="Pick the background color" :value="hexOf(bg)" @input="bg = $event.target.value"><input id="bg-text" class="input" v-model="bg" spellcheck="false" autocomplete="off"></div>
         </div>
-        <button type="button" class="btn btn-sm btn-ghost" @click="swap()">Swap colors</button>
+        <button type="button" class="btn btn-sm btn-outline" @click="swap()">Swap colors</button>
         <div class="cl-cf-field">
           <label for="cf-target">Target</label>
           <select id="cf-target" class="select" v-model="target">
@@ -206,13 +291,15 @@ export function homeBody({ rules, samples, guides }) {
             <option value="7">AAA, normal text (7:1)</option>
           </select>
         </div>
-      </div></div>
-      <div class="cl-cf-result">
-        <div class="cl-cf-preview" data-a11ymedic-ignore :style="{ color: fg, background: bg }">
+      </div>
+      <div class="cl-eye-chart" :class="{ 'is-focusing': focusing }">
+        <div class="cl-eye-card" data-a11ymedic-ignore :style="{ color: fg, background: bg }">
+          <p class="cl-eye-e" aria-hidden="true">E</p>
+          <p class="cl-eye-r2" aria-hidden="true">A 1 1 Y</p>
           <p class="cl-cf-big">Large text, 24px</p>
-          <p>Normal body text at 16px. The quick brown otter jumps over the lazy bug.</p>
+          <p class="cl-eye-small">Normal body text at 16px. The quick brown otter jumps over the lazy bug.</p>
         </div>
-        <div class="cl-cf-score" aria-live="polite">
+        <div class="cl-eye-reading" aria-live="polite">
           <p class="cl-ratio"><strong v-text="valid ? ratioText : '?'">4.5</strong><span>:1 contrast</span></p>
           <ul class="cl-checks">
             <li :data-ok="aaNormal ? 'yes' : 'no'"><span v-text="aaNormal ? 'Pass' : 'Fail'"></span> AA normal text</li>
@@ -221,79 +308,81 @@ export function homeBody({ rules, samples, guides }) {
           </ul>
           <p class="cl-cf-error" v-show="!valid">Type a CSS color: #0f8b8d, rgb(), hsl(), oklch() or a name.</p>
         </div>
-        <div class="cl-cf-options" v-show="valid">
-          <div class="cl-cf-option" v-show="optFg">
-            <h3>Change the text</h3>
-            <div class="cl-cf-swatch" :style="{ color: optFg ? optFg.foreground : '', background: optFg ? optFg.background : '' }">Aa</div>
-            <p><code v-text="optFg ? optFg.foreground : ''"></code> on <code v-text="optFg ? optFg.background : ''"></code>, <strong v-text="optFg ? optFg.ratio : ''"></strong>:1</p>
-            <button type="button" class="btn btn-sm btn-outline" @click="fg = optFg.foreground">Use this text color</button>
-          </div>
-          <div class="cl-cf-option" v-show="optBg">
-            <h3>Change the background</h3>
-            <div class="cl-cf-swatch" :style="{ color: optBg ? optBg.foreground : '', background: optBg ? optBg.background : '' }">Aa</div>
-            <p><code v-text="optBg ? optBg.foreground : ''"></code> on <code v-text="optBg ? optBg.background : ''"></code>, <strong v-text="optBg ? optBg.ratio : ''"></strong>:1</p>
-            <button type="button" class="btn btn-sm btn-outline" @click="bg = optBg.background">Use this background</button>
-          </div>
-          <div class="cl-cf-option" v-show="optBoth">
-            <h3>Change both</h3>
-            <div class="cl-cf-swatch" :style="{ color: optBoth ? optBoth.foreground : '', background: optBoth ? optBoth.background : '' }">Aa</div>
-            <p><code v-text="optBoth ? optBoth.foreground : ''"></code> on <code v-text="optBoth ? optBoth.background : ''"></code>, <strong v-text="optBoth ? optBoth.ratio : ''"></strong>:1</p>
-            <button type="button" class="btn btn-sm btn-outline" @click="fg = optBoth.foreground; bg = optBoth.background">Use this pair</button>
-          </div>
-          <p class="cl-cf-pass" v-show="passes">This pair already passes the target. Nothing to fix.</p>
+      </div>
+      <div class="cl-lenses" v-show="valid">
+        <p class="cl-lenses-title">${icon("prescription", "ic")}Prescription lenses</p>
+        <div class="cl-lens" v-show="optFg">
+          <h3>Change the text</h3>
+          <div class="cl-lens-glass" :style="{ color: optFg ? optFg.foreground : '', background: optFg ? optFg.background : '' }">Aa</div>
+          <p><code v-text="optFg ? optFg.foreground : ''"></code> on <code v-text="optFg ? optFg.background : ''"></code>, <strong v-text="optFg ? optFg.ratio : ''"></strong>:1</p>
+          <button type="button" class="btn btn-sm btn-outline" @click="useLens(optFg)">Use this text color</button>
         </div>
+        <div class="cl-lens" v-show="optBg">
+          <h3>Change the background</h3>
+          <div class="cl-lens-glass" :style="{ color: optBg ? optBg.foreground : '', background: optBg ? optBg.background : '' }">Aa</div>
+          <p><code v-text="optBg ? optBg.foreground : ''"></code> on <code v-text="optBg ? optBg.background : ''"></code>, <strong v-text="optBg ? optBg.ratio : ''"></strong>:1</p>
+          <button type="button" class="btn btn-sm btn-outline" @click="useLens(optBg)">Use this background</button>
+        </div>
+        <div class="cl-lens" v-show="optBoth">
+          <h3>Change both</h3>
+          <div class="cl-lens-glass" :style="{ color: optBoth ? optBoth.foreground : '', background: optBoth ? optBoth.background : '' }">Aa</div>
+          <p><code v-text="optBoth ? optBoth.foreground : ''"></code> on <code v-text="optBoth ? optBoth.background : ''"></code>, <strong v-text="optBoth ? optBoth.ratio : ''"></strong>:1</p>
+          <button type="button" class="btn btn-sm btn-outline" @click="useLens(optBoth)">Use this pair</button>
+        </div>
+        <p class="cl-cf-pass" v-show="passes">${icon("sparkle", "ic ic-sm")}Perfect vision: this pair already passes the target.</p>
       </div>
     </div>
-    <p class="cl-more">Read the guide: <a href="how-to-fix-color-contrast.html">How to fix color contrast</a>.</p>
+    <p class="cl-more">Read the guide: <a href="how-to-fix-color-contrast.html">How to fix color contrast without losing your brand</a>.</p>
   </div>
 </section>
-
+${divider}
 <section id="how" class="cl-section" aria-labelledby="how-title">
   <div class="cl-wrap">
-    <div class="cl-section-head">
-      <p class="cl-eyebrow">How it works</p>
+    <div class="cl-section-head cl-center">
+      <p class="cl-kicker">${icon("ambulance", "ic ic-sm")}How it works</p>
       <h2 id="how-title">Exam, diagnosis, treatment</h2>
     </div>
-    <ol class="cl-steps">
-      <li><picture><source srcset="assets/icons/dark/stethoscope.svg" media="(prefers-color-scheme: dark)"><img src="assets/icons/light/stethoscope.svg" width="40" height="40" alt=""></picture><h3>1. Exam</h3><p>An engine written from scratch runs 61 rules on a real DOM. In the browser it reads computed styles and real boxes. On Node it parses HTML with jsdom, cascades your CSS itself (specificity, variables, inheritance) and keeps line numbers.</p></li>
-      <li><picture><source srcset="assets/icons/dark/report.svg" media="(prefers-color-scheme: dark)"><img src="assets/icons/light/report.svg" width="40" height="40" alt=""></picture><h3>2. Diagnosis</h3><p>Every finding says what is wrong with this exact element, why it matters, who is affected and which WCAG 2.2 criterion it breaks, in English and Portuguese, with the selector and the HTML snippet.</p></li>
-      <li><picture><source srcset="assets/icons/dark/fix.svg" media="(prefers-color-scheme: dark)"><img src="assets/icons/light/fix.svg" width="40" height="40" alt=""></picture><h3>3. Treatment</h3><p>Each finding comes with patched code: the missing alt, aria-label or label for, a contrast safe color picked in OKLCH. Safe fixes apply in one command with a diff preview, and they are idempotent.</p></li>
+    <ol class="cl-journey">
+      <li><span class="cl-station">${icon("stethoscope", "ic")}</span><h3><span>1</span> Exam</h3><p>An engine written from scratch runs 61 rules on a real DOM. In the browser it reads computed styles and real boxes. On Node it parses HTML with jsdom, cascades your CSS itself (specificity, variables, inheritance) and keeps line numbers.</p></li>
+      <li><span class="cl-station">${icon("chart", "ic")}</span><h3><span>2</span> Diagnosis</h3><p>Every finding says what is wrong with this exact element, why it matters, who is affected and which WCAG 2.2 criterion it breaks, in English and Portuguese, with the selector and the HTML snippet.</p></li>
+      <li><span class="cl-station">${icon("bandage", "ic")}</span><h3><span>3</span> Treatment</h3><p>Each finding comes with patched code: the missing alt, aria-label or label for, a contrast safe color picked in OKLCH. Safe fixes apply in one command with a diff preview, and running them twice changes nothing.</p></li>
     </ol>
   </div>
 </section>
 
-<section id="install" class="cl-section" aria-labelledby="install-title">
+<section id="install" class="cl-section cl-install" aria-labelledby="install-title">
   <div class="cl-wrap">
     <div class="cl-section-head">
-      <p class="cl-eyebrow">Quick start</p>
+      <p class="cl-kicker">${icon("ambulance", "ic ic-sm")}Quick start</p>
       <h2 id="install-title">Four ways to call the medic</h2>
+      <p>Same rules, same explanations and the same fixes wherever you run it.</p>
     </div>
-    <div class="cl-ways">
-      <article class="card"><div class="card-body">
-        <h3>${wayIcon("overlay-pin")} On any page: script tag or bookmarklet</h3>
+    <div class="cl-folders">
+      <article class="cl-folder" data-tone="coral"><p class="cl-folder-tab">${icon("pin", "ic ic-sm")}House call</p><div class="cl-folder-body">
+        <h3>On any page: script tag or bookmarklet</h3>
         <p>Add one script tag in development. Numbered pins mark each problem and a keyboard accessible side panel explains it. <kbd class="kbd kbd-sm">Alt</kbd> + <kbd class="kbd kbd-sm">Shift</kbd> + <kbd class="kbd kbd-sm">A</kbd> toggles it.</p>
         ${code("html", "index.html", `<script src="https://cdn.jsdelivr.net/npm/a11ymedic@${VERSION}/dist/a11ymedic.js" data-overlay></script>\n<!-- Portuguese: data-overlay="pt" -->`)}
-        <p>Or drag this bookmarklet to your bookmarks bar and press it on any site: <a class="cl-bookmarklet" data-a11ymedic-ignore href="${esc(bookmarklet)}">a11ymedic check-up</a></p>
+        <p>Or drag this bookmarklet to your bookmarks bar and press it on any site: <a class="cl-bookmarklet" data-a11ymedic-ignore href="${esc(bookmarklet)}">${icon("first-aid", "ic ic-sm")}a11ymedic check-up</a></p>
       </div></article>
-      <article class="card"><div class="card-body">
-        <h3>${wayIcon("cli")} Command line: files, globs and URLs</h3>
+      <article class="cl-folder" data-tone="teal"><p class="cl-folder-tab">${icon("terminal", "ic ic-sm")}Walk-in clinic</p><div class="cl-folder-body">
+        <h3>Command line: files, globs and URLs</h3>
         <p>Check built HTML, a folder or a live URL. With Playwright or Puppeteer installed, URLs are checked in a headless browser; without them the HTML is fetched and checked statically.</p>
         ${code("sh", "Terminal", `npx a11ymedic "dist/**/*.html"\nnpx a11ymedic https://example.com --format html -o report.html\nnpx a11ymedic fix "src/**/*.html"          # preview safe fixes as a diff\nnpx a11ymedic fix "src/**/*.html" --write  # apply them`)}
       </div></article>
-      <article class="card"><div class="card-body">
-        <h3>${wayIcon("ci")} CI: fail the build on serious problems</h3>
+      <article class="cl-folder" data-tone="yellow"><p class="cl-folder-tab">${icon("pipeline", "ic ic-sm")}Daily rounds</p><div class="cl-folder-body">
+        <h3>CI: fail the build on serious problems</h3>
         <p>On GitHub Actions a11ymedic prints annotations on the changed lines and writes a job summary on its own.</p>
         ${code("yaml", ".github/workflows/a11y.yml", `name: Accessibility\non: [push, pull_request]\njobs:\n  a11y:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 22\n      - run: npm ci && npm run build\n      - run: npx a11ymedic "dist/**/*.html" --fail-on serious`)}
       </div></article>
-      <article class="card"><div class="card-body">
-        <h3>${wayIcon("report")} Tests: Vitest and Jest</h3>
+      <article class="cl-folder" data-tone="green"><p class="cl-folder-tab">${icon("test-tube", "ic ic-sm")}Lab tests</p><div class="cl-folder-body">
+        <h3>Tests: Vitest and Jest</h3>
         <p>Audit rendered components and get a readable failure with the fix for each problem.</p>
         ${code("ts", "button.test.ts", `import { audit } from "a11ymedic";\nimport "a11ymedic/vitest"; // Jest: setupFilesAfterEnv: ["a11ymedic/jest"]\n\ntest("the toolbar is accessible", async () => {\n  document.body.innerHTML = renderToolbar();\n  expect(await audit(document.body)).toHaveNoViolations();\n});`)}
       </div></article>
     </div>
-    <h3 class="cl-subhead">Install from npm</h3>
+    <h3 class="cl-subhead">${icon("pill", "ic")}Install from npm</h3>
     ${code("sh", "Terminal", `npm install --save-dev a11ymedic`, true)}
-    <h3 class="cl-subhead">With your framework</h3>
+    <h3 class="cl-subhead">${icon("test-tube", "ic")}With your framework</h3>
     <div class="cl-fw">
       ${code("tsx", "React: Toolbar.test.tsx", `import { render } from "@testing-library/react";\nimport { audit } from "a11ymedic";\nimport "a11ymedic/vitest";\n\ntest("Toolbar", async () => {\n  const { container } = render(<Toolbar />);\n  expect(await audit(container)).toHaveNoViolations({ severity: "serious" });\n});`)}
       ${code("ts", "Vue: Card.spec.ts", `import { mount } from "@vue/test-utils";\nimport { audit } from "a11ymedic";\nimport "a11ymedic/vitest";\n\nit("Card", async () => {\n  const wrapper = mount(Card, { props: { title: "Plans" }, attachTo: document.body });\n  expect(await audit(wrapper.element)).toHaveNoViolations();\n});`)}
@@ -302,78 +391,90 @@ export function homeBody({ rules, samples, guides }) {
     </div>
   </div>
 </section>
-
-<section id="rules" class="cl-section" aria-labelledby="rules-title">
+${divider}
+<section id="rules" class="cl-section cl-cabinet-sec" aria-labelledby="rules-title">
   <div class="cl-wrap">
     <div class="cl-section-head">
-      <p class="cl-eyebrow">Rule catalog</p>
+      <p class="cl-kicker">${icon("cabinet", "ic ic-sm")}Rule catalog</p>
       <h2 id="rules-title">61 rules mapped to WCAG 2.2</h2>
-      <p>Every rule has a passing and a failing test fixture. The ones marked auto fix can be applied by <code>a11ymedic fix --write</code>; the others come with a suggested patch to review.</p>
+      <p>The medicine cabinet, sorted into twelve drawers. Every rule has a passing and a failing test fixture. The ones with a bandage are applied by <code>a11ymedic fix --write</code>; the others come with a suggested patch to review.</p>
     </div>
-    <div class="cl-rule-tools">
-      <div><label for="rq">Filter rules</label><input id="rq" class="input" type="search" v-model="rq" placeholder="contrast, aria, 1.4.3, forms" autocomplete="off"></div>
-      <div><label for="rsev">Severity</label><select id="rsev" class="select" v-model="rsev"><option value="all">All</option>${SEV.map(([k, l]) => `<option value="${k}">${l}</option>`).join("")}</select></div>
+    <div class="cl-cabinet">
+      <div class="cl-cabinet-sign"><span class="cl-cross" aria-hidden="true"></span><span>Medicine cabinet</span></div>
+      <div class="cl-rule-tools">
+        <div><label for="rq">Search the cabinet</label><input id="rq" class="input" type="search" v-model="rq" placeholder="contrast, aria, 1.4.3, forms" autocomplete="off"></div>
+        <div><label for="rsev">Triage</label><select id="rsev" class="select" v-model="rsev"><option value="all">All severities</option>${SEV.map(([k, l, hint]) => `<option value="${k}">${l}: ${hint.toLowerCase()}</option>`).join("")}</select></div>
+        <p class="cl-rule-total" aria-live="polite"><strong v-text="drawerTotal(rq, rsev)">61</strong> of 61 rules</p>
+      </div>
+      <div class="cl-drawers">
+      ${cab.html}
+      </div>
+      <p class="cl-empty" v-show="drawerTotal(rq, rsev) === 0" style="display:none">${icon("magnifier", "ic")}Nothing in the cabinet matches. Try a WCAG number like 1.4.3 or a word like label.</p>
+      <script type="application/json" id="rule-data">${JSON.stringify(cab.data)}</script>
     </div>
-    <div class="cl-table-wrap" tabindex="0" role="region" aria-label="Rule catalog table">
-      <table class="table cl-rules">
-        <caption class="sr-only">a11ymedic rules with WCAG criterion, level, severity and auto fix support</caption>
-        <thead><tr><th scope="col">Rule</th><th scope="col">What it finds</th><th scope="col">WCAG</th><th scope="col">Level</th><th scope="col">Severity</th><th scope="col">Auto fix</th></tr></thead>
-        <tbody>
-${ruleRows(rules)}
-        </tbody>
-      </table>
-    </div>
+    <ul class="cl-triage-key" aria-label="Severity key">
+      ${SEV.map(([k, l, hint]) => `<li><span class="cl-triage" data-sev="${k}">${l}</span> ${hint}</li>`).join("\n      ")}
+    </ul>
   </div>
 </section>
 
 <section id="api" class="cl-section" aria-labelledby="api-title">
   <div class="cl-wrap">
     <div class="cl-section-head">
-      <p class="cl-eyebrow">API</p>
+      <p class="cl-kicker">${icon("terminal", "ic ic-sm")}API</p>
       <h2 id="api-title">A small API for scripts and tests</h2>
     </div>
     <div class="cl-api">
       ${code("ts", "audit.ts", `import { audit, fixHtml, suggestColors, formatText } from "a11ymedic";\n\nconst result = await audit('<img src="team.jpg">', { level: "AA", lang: "en" });\nconst [finding] = result.findings;\nfinding.rule;         // "image-alt"\nfinding.severity;     // "critical"\nfinding.message.pt;   // plain language, English and Portuguese\nfinding.wcag[0].url;  // https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html\nfinding.fix.after;    // '<img src="team.jpg" alt="Team">'\n\nconsole.log(formatText(result));\n\nconst { output, applied } = await fixHtml(html);   // safe fixes only\nsuggestColors("#999999", "#ffffff").foreground;     // "#767676"`)}
-      <table class="table cl-api-table">
-        <caption class="sr-only">Main functions</caption>
-        <thead><tr><th scope="col">Function</th><th scope="col">What it does</th></tr></thead>
-        <tbody>
-          <tr><td><code>audit(html | document | element, options?)</code></td><td>Runs the rules. Returns findings (most severe first), human checks and counts.</td></tr>
-          <tr><td><code>auditDocument(root, options?)</code></td><td>The same, synchronous, for a live DOM.</td></tr>
-          <tr><td><code>fixHtml(html, options?)</code></td><td>Applies safe fixes to source text and keeps formatting. Idempotent.</td></tr>
-          <tr><td><code>applyFix(finding)</code></td><td>Applies one fix to the live DOM.</td></tr>
-          <tr><td><code>contrastRatio(fg, bg)</code>, <code>suggestColors(fg, bg, { ratio })</code></td><td>WCAG contrast and the closest passing pair in OKLCH.</td></tr>
-          <tr><td><code>accessibleName(el)</code>, <code>getRole(el)</code></td><td>Accessible name and role, as assistive technology sees them.</td></tr>
-          <tr><td><code>formatText</code>, <code>toJSON</code>, <code>toMarkdown</code>, <code>toHtml</code>, <code>githubAnnotations</code>, <code>githubSummary</code></td><td>Reports.</td></tr>
-          <tr><td><code>overlay(options?)</code>, <code>drawPins(doc, findings)</code></td><td>Browser build only: the pins and panel.</td></tr>
-        </tbody>
-      </table>
+      <div class="cl-table-wrap cl-card" tabindex="0" role="region" aria-label="Main functions">
+        <table class="table cl-api-table">
+          <caption class="sr-only">Main functions</caption>
+          <thead><tr><th scope="col">Function</th><th scope="col">What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>audit(html | document | element, options?)</code></td><td>Runs the rules. Returns findings (most severe first), human checks and counts.</td></tr>
+            <tr><td><code>auditDocument(root, options?)</code></td><td>The same, synchronous, for a live DOM.</td></tr>
+            <tr><td><code>fixHtml(html, options?)</code></td><td>Applies safe fixes to source text and keeps formatting. Idempotent.</td></tr>
+            <tr><td><code>applyFix(finding)</code></td><td>Applies one fix to the live DOM.</td></tr>
+            <tr><td><code>contrastRatio(fg, bg)</code>, <code>suggestColors(fg, bg, { ratio })</code></td><td>WCAG contrast and the closest passing pair in OKLCH.</td></tr>
+            <tr><td><code>accessibleName(el)</code>, <code>getRole(el)</code></td><td>Accessible name and role, as assistive technology sees them.</td></tr>
+            <tr><td><code>formatText</code>, <code>toJSON</code>, <code>toMarkdown</code>, <code>toHtml</code>, <code>githubAnnotations</code>, <code>githubSummary</code></td><td>Reports.</td></tr>
+            <tr><td><code>overlay(options?)</code>, <code>drawPins(doc, findings)</code></td><td>Browser build only: the pins and panel.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <p class="cl-more">Full reference with every option: <a href="${REPO}#api">README on GitHub</a>.</p>
   </div>
 </section>
-
+${divider}
 <section id="guides" class="cl-section" aria-labelledby="guides-title">
   <div class="cl-wrap">
     <div class="cl-section-head">
-      <p class="cl-eyebrow">Guides</p>
+      <p class="cl-kicker">${icon("book", "ic ic-sm")}The reading room</p>
       <h2 id="guides-title">Accessibility, explained by the medic</h2>
+      <p>Short guides with the code to copy. Pick a pamphlet from the rack.</p>
     </div>
-    <ul class="cl-guides">
-      ${guides.map((g) => `<li><a href="${g.slug}.html"><strong>${esc(g.h1)}</strong><span>${esc(g.description)}</span></a></li>`).join("\n      ")}
-      <li><a href="wcag-cheat-sheet.html"><strong>WCAG 2.2 cheat sheet in plain language</strong><span>Every A and AA success criterion in one or two sentences, with the a11ymedic rules that check it.</span></a></li>
-    </ul>
+    ${pamphlets(guides)}
   </div>
 </section>
 
 <section id="faq" class="cl-section" aria-labelledby="faq-title">
   <div class="cl-wrap cl-narrow">
-    <div class="cl-section-head">
-      <p class="cl-eyebrow">FAQ</p>
+    <div class="cl-section-head cl-center">
+      <p class="cl-kicker">${icon("heart-pulse", "ic ic-sm")}FAQ</p>
       <h2 id="faq-title">Questions people ask the medic</h2>
     </div>
     ${HOME_FAQ.map((f) => `<details class="cl-faq"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("\n    ")}
   </div>
 </section>
 `;
+}
+
+/** The guide rack: one pamphlet per guide with its spot illustration, plus the cheat sheet. */
+export function pamphlets(guides, heading = "h3") {
+  const cheat = `<li><a class="cl-pamphlet" href="wcag-cheat-sheet.html"><span class="cl-pamphlet-art cl-pour-art">${["eye", "hand", "lightbulb", "blocks"].map((n) => icon(n, "ic")).join("")}</span><span class="cl-pamphlet-kicker">${icon("clipboard-check", "ic ic-xs")}Cheat sheet</span><${heading} class="cl-pamphlet-title">WCAG 2.2 cheat sheet in plain language</${heading}><span class="cl-pamphlet-text">Every A and AA success criterion in one or two sentences, with the a11ymedic rules that check it.</span></a></li>`;
+  return `<ul class="cl-pamphlets">
+      ${guides.map((g) => `<li><a class="cl-pamphlet" href="${g.slug}.html"><span class="cl-pamphlet-art">${inline.spot(g.slug)}</span><span class="cl-pamphlet-kicker">${icon("book", "ic ic-xs")}Guide</span><${heading} class="cl-pamphlet-title">${esc(g.h1)}</${heading}><span class="cl-pamphlet-text">${esc(g.description)}</span></a></li>`).join("\n      ")}
+      ${cheat}
+    </ul>`;
 }

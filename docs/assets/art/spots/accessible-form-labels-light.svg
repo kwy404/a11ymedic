@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" width="240" height="180" role="img" aria-labelledby="accessible-form-labels-t"><title id="accessible-form-labels-t">A sign up form where a name tag sticker is being stuck onto a text field so it finally has a label</title><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" fill="#f3e3c6"/>
+<g stroke="#1d3a40" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<rect x="40" y="28" width="124" height="128" rx="12" fill="#fffdf7"/>
+<path d="M56 50h40" stroke-width="4"/>
+<rect x="56" y="60" width="92" height="22" rx="7" fill="#d3f0ea"/>
+<rect x="56" y="98" width="92" height="22" rx="7" fill="#fffdf7" stroke-dasharray="6 6"/>
+<rect x="56" y="132" width="52" height="14" rx="7" fill="#ff7a66"/>
+<path d="M66 71v.1" stroke-width="4"/>
+<g transform="rotate(-12 170 100)"><rect x="132" y="80" width="78" height="44" rx="8" fill="#fffdf7"/><path d="M132 96V88a8 8 0 0 1 8-8h62a8 8 0 0 1 8 8v8Z" fill="#ff7a66"/><path d="M146 110h48" stroke="#0f8b8d" stroke-width="4"/></g></g>
+<path d="M112 100q-4 10 6 14" fill="none" stroke="#1d3a40" stroke-width="2.5" stroke-dasharray="2 5" stroke-linecap="round"/>
+<path class="" d="M208 47C209.08 54.92 209.08 54.92 217 56C209.08 57.08 209.08 57.08 208 65C206.92 57.08 206.92 57.08 199 56C206.92 54.92 206.92 54.92 208 47Z" fill="#f7c65a" stroke="#1d3a40" stroke-width="2.5" stroke-linejoin="round"/><path class="" d="M30 121C30.84 127.16 30.84 127.16 37 128C30.84 128.84 30.84 128.84 30 135C29.16 128.84 29.16 128.84 23 128C29.16 127.16 29.16 127.16 30 121Z" fill="#7fd3c8" stroke="#1d3a40" stroke-width="2.5" stroke-linejoin="round"/></svg>

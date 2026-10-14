@@ -1,0 +1,9 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 120" width="260" height="120" role="img" aria-labelledby="stamp-t"><title id="stamp-t">Discharged: the page is healthy</title>
+<g transform="rotate(-7 130 60)" fill="none" stroke="#c4412d" stroke-linecap="round" stroke-linejoin="round">
+<rect x="12" y="16" width="236" height="88" rx="16" stroke-width="5"/>
+<rect x="22" y="26" width="216" height="68" rx="10" stroke-width="2"/>
+<text x="130" y="72" fill="#c4412d" stroke="none" font-family="Fredoka, 'Arial Rounded MT Bold', 'Trebuchet MS', 'Segoe UI', sans-serif" font-size="34" font-weight="700" textLength="184" lengthAdjust="spacingAndGlyphs" text-anchor="middle">DISCHARGED</text>
+<text x="130" y="88" fill="#c4412d" stroke="none" font-family="'Atkinson Hyperlegible Mono', Consolas, Menlo, monospace" font-size="10" font-weight="700" textLength="120" lengthAdjust="spacingAndGlyphs" text-anchor="middle">A11YMEDIC CLINIC</text>
+<path d="M40 44h40M180 44h40" stroke-width="2.5"/>
+<path d="M126 36h8v-6M130 30v12" stroke-width="0"/>
+</g></svg>

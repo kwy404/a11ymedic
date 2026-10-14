@@ -1,4 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="target-size-title">
-<title id="target-size-title">Target size</title>
-<g fill="none" stroke="#E8F6F5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="13" height="13" rx="3"/><circle cx="9.5" cy="9.5" r="2" fill="#FF7A66" stroke="#FF7A66"/><path d="M3 20.5h13M5 18.5 3 20.5l2 2M14 18.5l2 2-2 2M20.5 3v13M18.5 5l2-2 2 2M18.5 14l2 2 2-2" stroke="#2EC4B6"/></g>
-</svg>

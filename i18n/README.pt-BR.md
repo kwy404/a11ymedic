@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/a11ymedic@main/assets/banner-dark.svg">
-    <img src="https://cdn.jsdelivr.net/gh/kwy404/a11ymedic@main/assets/banner.svg" width="820" alt="Banner do a11ymedic: Patch, a lontra paramédica, ao lado das palavras encontre problemas de acessibilidade, receba a correção exata">
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/a11ymedic@main/docs/assets/art/banner-dark.svg">
+    <img src="https://cdn.jsdelivr.net/gh/kwy404/a11ymedic@main/docs/assets/art/banner-light.svg" width="860" alt="a11ymedic, a clínica de acessibilidade para sites: Patch, a lontra paramédica, cuida de uma janela de navegador doente numa maca, ao lado das palavras find accessibility problems, get the exact fix">
   </picture>
 </p>
 
@@ -200,6 +200,8 @@ O a11ymedic calcula o fundo efetivo (cores com alfa, `opacity` dos ancestrais, c
 ## Autor
 
 Criado por **Alexandre Kohler** ([GitHub](https://github.com/kwy404) e [LinkedIn](https://www.linkedin.com/in/alexandre-silva-173687256/)).
+
+O [site de documentação](https://kwy404.github.io/a11ymedic/) é feito com [Monsoon](https://kwy404.github.io/monsoon/), e as partes interativas com [Voodoo.js](https://kwy404.github.io/Voodoo.js/).
 
 ## Licença
 

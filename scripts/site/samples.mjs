@@ -188,9 +188,52 @@ body{background:#0f172a;color:#e2e8f0}
 </body>
 </html>`;
 
+const healthy = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crumb and Co. bakery, after the check-up</title>
+<style>${base}
+body{background:#fffaf3;color:#3b2a1a}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:#fff;padding:8px}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid #eadcc8}
+.logo{font-weight:800;color:#8a3b12;text-decoration:none;font-size:20px}
+nav a{color:#5b3a1e;margin-left:16px}
+main{padding:28px 20px}
+h1{font-size:34px;margin:0 0 8px;color:#3b2a1a}
+p{color:#5b4632;max-width:520px}
+.cta{display:inline-block;margin-top:12px;background:#8a3b12;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700}
+.cta:focus-visible,nav a:focus-visible{outline:3px solid #0f8b8d;outline-offset:3px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+figure{margin:0;background:#fff;border-radius:16px;padding:12px}
+figcaption{font-weight:700;margin-top:8px}
+footer{padding:16px 20px;color:#5b4632;border-top:1px solid #eadcc8}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<a class="logo" href="/">Crumb &amp; Co.</a>
+<nav aria-label="Main"><a href="/menu">Our menu</a><a href="/visit">Visit the bakery</a></nav>
+</header>
+<main id="main">
+<h1>Fresh bread, every morning</h1>
+<p>Sourdough, cakes and croissants baked before sunrise, with a label on every loaf.</p>
+<a class="cta" href="/order">Order bread for tomorrow</a>
+<div class="grid">
+<figure><img src="${art("#fde2e4", "#e07a8a", "cake")}" alt="A strawberry cake with one candle"><figcaption>Strawberry cake</figcaption></figure>
+<figure><img src="${art("#e3efe3", "#5a8a5a", "team")}" alt="Our three bakers smiling"><figcaption>Meet the bakers</figcaption></figure>
+</div>
+</main>
+<footer><p>Open every day from 7 to 19.</p></footer>
+</body>
+</html>`;
+
 export const SAMPLES = [
   { id: "bakery", name: "Bakery landing page", pt: "Página de padaria", blurb: "Pretty, but quiet text, mystery buttons and images nobody can hear.", html: bakery },
   { id: "signup", name: "Sign-up form", pt: "Formulário de cadastro", blurb: "Placeholders as labels, a div pretending to be a button.", html: signup },
   { id: "news", name: "News article", pt: "Artigo de notícia", blurb: "Scrolling text, a table without headers, an untitled frame.", html: news },
   { id: "dashboard", name: "Analytics dashboard", pt: "Painel de análise", blurb: "ARIA typos, hidden links that still take focus, a nameless dialog.", html: dashboard },
+  { id: "healthy", name: "Healthy bakery", pt: "Padaria saudável", blurb: "The bakery after treatment. Run it to see a discharge.", html: healthy },
 ];

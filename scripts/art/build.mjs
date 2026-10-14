@@ -1,8 +1,8 @@
-// Builds the a11ymedic art: Patch the otter paramedic (full body, dark variant,
-// head), the favicon, the README banners and the icon set. Every file is plain,
-// hand written SVG with fixed colors, so it renders the same on GitHub, npm and
-// the docs site. Run with `node scripts/art/build.mjs`; scripts/art/render.sh
-// runs it before rendering the PNG previews.
+// Builds Patch the otter paramedic (full body, dark variant, head) and the favicon.
+// Every file is plain, hand written SVG with fixed colors, so it renders the same on
+// GitHub, npm and the docs site. The clinic scene, spots, icon family and banners live
+// in scripts/art/clinic.mjs, which draws Patch with patchGroup() from this file.
+// scripts/art/render.sh runs both before rendering the PNG previews.
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -33,7 +33,6 @@ export const C = {
   mutedLight: "#9FC9C6",
 };
 
-const SANS = "Segoe UI, Helvetica, Arial, sans-serif";
 
 // Patch ---------------------------------------------------------------------------
 // Drawn in a 400 x 400 box. `p` prefixes the ids so several copies can live in one
@@ -218,137 +217,6 @@ function faviconSvg() {
 `;
 }
 
-// Banners -------------------------------------------------------------------------
-
-function plus(x, y, s, color, opacity = 1) {
-  const a = s / 2;
-  const b = s / 6;
-  return `<path d="M${x - b} ${y - a}H${x + b}V${y - b}H${x + a}V${y + b}H${x + b}V${y + a}H${x - b}V${y + b}H${x - a}V${y - b}H${x - b}Z" fill="${color}" fill-opacity="${opacity}"/>`;
-}
-
-function bannerSvg(dark) {
-  const p = dark ? "banner-dark" : "banner";
-  const bg = dark ? C.bgDark : C.bgLight;
-  const text = dark ? C.textLight : C.textDark;
-  const muted = dark ? C.mutedLight : C.mutedDark;
-  const teal = dark ? C.tealLight : C.teal;
-  const blob = dark ? "#10323A" : "#DDF3F0";
-  const chipBg = dark ? "#123840" : C.white;
-  const chipLine = dark ? "#1F5660" : "#BFE6E1";
-  const chips = [["WCAG 2.2 rules", 452, 196, teal], ["Plain language", 662, 196, teal], ["Exact fixes", 872, 160, C.coral]];
-  const chip = ([label, x, w, dot]) =>
-    `<g transform="translate(${x} 284)"><rect width="${w}" height="44" rx="22" fill="${chipBg}" stroke="${chipLine}" stroke-width="2"/>` +
-    `<circle cx="24" cy="22" r="6" fill="${dot}"/>` +
-    `<text x="40" y="29" font-family="${SANS}" font-size="19" font-weight="600" fill="${text}">${label}</text></g>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" width="1280" height="400" role="img" aria-labelledby="${p}-title">
-<title id="${p}-title">a11ymedic: Find accessibility problems. Get the exact fix.</title>
-<defs>${patchGroupDefs(p, dark)}<clipPath id="${p}-frame"><rect width="1280" height="400" rx="24"/></clipPath></defs>
-<g clip-path="url(#${p}-frame)">
-<rect width="1280" height="400" fill="${bg}"/>
-<circle cx="230" cy="214" r="168" fill="${blob}"/>
-<circle cx="1220" cy="-10" r="150" fill="${blob}"/>
-<path d="M452 362H1060L1076 334L1094 384L1114 306L1132 362H1280" fill="none" stroke="${teal}" stroke-opacity=".28" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-${plus(1128, 116, 30, C.coral, 0.9)}${plus(1222, 250, 18, teal, 0.7)}${plus(1176, 44, 16, teal, 0.6)}
-<g transform="translate(46 20) scale(0.9)">${patchGroup(p, dark)}</g>
-<text x="446" y="168" font-family="${SANS}" font-size="124" font-weight="700" letter-spacing="-3" fill="${text}">a11y<tspan fill="${teal}">medic</tspan></text>
-<text x="452" y="236" font-family="${SANS}" font-size="36" font-weight="600" fill="${muted}">Find accessibility problems. <tspan fill="${dark ? C.coral : C.coralDark}">Get the exact fix.</tspan></text>
-${chips.map(chip).join("")}
-</g>
-</svg>
-`;
-}
-
-// Icons ---------------------------------------------------------------------------
-// 24 x 24, stroke 2, round caps and joins. `k` holds the palette: ink for the main
-// line, teal and coral for one accent each, bg for knockouts.
-
-export const ICON_LIGHT = { ink: C.ink, teal: C.teal, coral: C.coralDark, bg: C.white };
-export const ICON_DARK = { ink: C.textLight, teal: C.tealLight, coral: C.coral, bg: C.bgDark };
-
-export const ICONS = {
-  contrast: {
-    about: "Color contrast: a circle split into a solid half and an open half",
-    draw: (k) => `<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18Z" fill="${k.teal}" stroke="${k.teal}"/><circle cx="12" cy="12" r="9"/>`,
-  },
-  "image-alt": {
-    about: "Image alt text: a picture frame with a sun and hills plus a text label tag",
-    draw: (k) => `<path d="M14 16.5H4.5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v6"/><circle cx="7.5" cy="7.5" r="1.5" fill="${k.coral}" stroke="${k.coral}"/><path d="m2.5 13.5 4.5-4 3.5 3 2-1.5"/><rect x="13.5" y="14" width="8" height="6.5" rx="1.5" stroke="${k.teal}"/><path d="M16 17.3h3" stroke="${k.teal}"/>`,
-  },
-  "form-label": {
-    about: "Form label: a label line sitting above a text field with a cursor",
-    draw: (k) => `<path d="M4 5.5h8" stroke="${k.teal}"/><rect x="3" y="10" width="18" height="9" rx="2"/><path d="M7.5 12.5v4" stroke="${k.coral}"/>`,
-  },
-  "keyboard-focus": {
-    about: "Keyboard focus: a key with a tab arrow wrapped in a visible focus ring",
-    draw: (k) => `<rect x="2" y="4.5" width="20" height="15" rx="4.5" stroke="${k.teal}"/><rect x="6" y="8.5" width="12" height="7" rx="2"/><path d="M9.5 12h4.5M12.5 10.5 14 12l-1.5 1.5" stroke="${k.coral}"/>`,
-  },
-  aria: {
-    about: "ARIA: angle brackets around an equals sign, for roles and attributes",
-    draw: (k) => `<path d="m7.5 6.5-5 5.5 5 5.5M16.5 6.5l5 5.5-5 5.5"/><path d="M10 10h4" stroke="${k.teal}"/><path d="M10 14h4" stroke="${k.coral}"/>`,
-  },
-  headings: {
-    about: "Headings: a letter H next to three steps of a heading outline",
-    draw: (k) => `<path d="M3.5 5v14M11.5 5v14M3.5 12h8"/><path d="M15.5 7h5" stroke="${k.teal}"/><path d="M17 12h3.5M18.5 17h2" stroke="${k.coral}"/>`,
-  },
-  landmarks: {
-    about: "Landmarks: a page layout split into header, navigation and main regions",
-    draw: (k) => `<rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M3 8.5h18" stroke="${k.teal}"/><path d="M9 8.5V21"/><path d="M12.5 13h5M12.5 16.5h3" stroke="${k.coral}"/>`,
-  },
-  "target-size": {
-    about: "Target size: a tap target with a touch point and width and height arrows",
-    draw: (k) => `<rect x="3" y="3" width="13" height="13" rx="3"/><circle cx="9.5" cy="9.5" r="2" fill="${k.coral}" stroke="${k.coral}"/><path d="M3 20.5h13M5 18.5 3 20.5l2 2M14 18.5l2 2-2 2M20.5 3v13M18.5 5l2-2 2 2M18.5 14l2 2 2-2" stroke="${k.teal}"/>`,
-  },
-  motion: {
-    about: "Motion: a moving ball with speed lines, for animation and reduced motion",
-    draw: (k) => `<circle cx="15.5" cy="12" r="5.5"/><path d="M2.5 9h6M4.5 12h4M2.5 15h6" stroke="${k.teal}"/><path d="M13.5 9.5a3 3 0 0 1 3-.5" stroke="${k.coral}"/>`,
-  },
-  media: {
-    about: "Media: a video frame with a play button and caption lines",
-    draw: (k) => `<rect x="2.5" y="4" width="19" height="16" rx="3"/><path d="M10 7.5v5l4.5-2.5Z" fill="${k.coral}" stroke="${k.coral}"/><path d="M6.5 16.5h4M13 16.5h4.5" stroke="${k.teal}"/>`,
-  },
-  table: {
-    about: "Table: a data grid with a highlighted header row and header column",
-    draw: (k) => `<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18" stroke="${k.teal}"/><path d="M9 9v11" stroke="${k.coral}"/><path d="M9 14.5h12M15 9v11"/>`,
-  },
-  language: {
-    about: "Language: a globe with meridians, for the page language attribute",
-    draw: (k) => `<circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17" stroke="${k.teal}"/><path d="M12 3c-3.2 3.4-3.2 14.6 0 18M12 3c3.2 3.4 3.2 14.6 0 18"/>`,
-  },
-  fix: {
-    about: "Fix: a diagonal bandage with a padded center",
-    draw: (k) => `<rect x="1.5" y="8" width="21" height="8" rx="4" transform="rotate(-45 12 12)"/><rect x="9" y="9" width="6" height="6" rx="1" transform="rotate(-45 12 12)" fill="${k.coral}" fill-opacity=".25" stroke="${k.coral}"/><path d="M6.2 15.2h.01M8.8 17.8h.01M15.2 6.2h.01M17.8 8.8h.01" stroke="${k.teal}" stroke-width="2.2"/>`,
-  },
-  report: {
-    about: "Report: a medical clipboard with a check mark and a result line",
-    draw: (k) => `<rect x="4.5" y="4" width="15" height="17.5" rx="2.5"/><rect x="8.5" y="2.5" width="7" height="3.5" rx="1.2" fill="${k.bg}"/><path d="m8.5 12 2.2 2.2 4.8-4.7" stroke="${k.teal}"/><path d="M8.5 17.5h7" stroke="${k.coral}"/>`,
-  },
-  ci: {
-    about: "CI: two circular arrows around a check mark, for checks in a pipeline",
-    draw: (k) => `<path d="M20 12a8 8 0 0 1-13.7 5.6M4 12a8 8 0 0 1 13.7-5.6"/><path d="M18 3v4h-4M6 21v-4h4" stroke="${k.coral}"/><path d="m8.8 12 2.2 2.2 4.2-4.2" stroke="${k.teal}"/>`,
-  },
-  "overlay-pin": {
-    about: "Overlay pin: a numbered map pin, like the markers the browser overlay drops on a page",
-    draw: (k) => `<path d="M12 21.5s-7.5-6.3-7.5-12a7.5 7.5 0 0 1 15 0c0 5.7-7.5 12-7.5 12Z" fill="${k.coral}" stroke="${k.coral}"/><path d="M12 21.5s-7.5-6.3-7.5-12a7.5 7.5 0 0 1 15 0c0 5.7-7.5 12-7.5 12Z"/><path d="M10.5 7.2 12.5 6v7.5M10.5 13.5h4" stroke="${k.bg}" stroke-width="1.8"/>`,
-  },
-  cli: {
-    about: "CLI: a terminal window with a prompt chevron and a cursor line",
-    draw: (k) => `<rect x="2.5" y="4" width="19" height="16" rx="2.5"/><path d="m6.5 9.5 3 2.5-3 2.5" stroke="${k.teal}"/><path d="M12 15h5" stroke="${k.coral}"/>`,
-  },
-  stethoscope: {
-    about: "Stethoscope: ear tips, a tube and a chest piece, for the diagnosis step",
-    draw: (k) => `<path d="M5 2.5h-1v6a5 5 0 0 0 10 0v-6h-1"/><path d="M9 13.5v1.5a5.5 5.5 0 0 0 11 0v-3.5"/><circle cx="20" cy="9.5" r="2" fill="${k.coral}" fill-opacity=".25" stroke="${k.teal}"/>`,
-  },
-};
-
-function iconSvg(name, k) {
-  const { about, draw } = ICONS[name];
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="${name}-title">
-<title id="${name}-title">${about.split(":")[0]}</title>
-<g fill="none" stroke="${k.ink}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${draw(k)}</g>
-</svg>
-`;
-}
-
 // Write ---------------------------------------------------------------------------
 
 function write(rel, content) {
@@ -363,15 +231,9 @@ export function buildAll() {
   write("assets/mascot-head.svg", headSvg());
   write("assets/favicon.svg", faviconSvg());
   write("docs/favicon.svg", faviconSvg());
-  write("assets/banner.svg", bannerSvg(false));
-  write("assets/banner-dark.svg", bannerSvg(true));
-  for (const name of Object.keys(ICONS)) {
-    write(`assets/icons/light/${name}.svg`, iconSvg(name, ICON_LIGHT));
-    write(`assets/icons/dark/${name}.svg`, iconSvg(name, ICON_DARK));
-  }
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   buildAll();
-  console.log(`wrote mascot, head, favicon, banners and ${Object.keys(ICONS).length * 2} icons`);
+  console.log("wrote the mascot, the head and the favicon");
 }

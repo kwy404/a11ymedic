@@ -3,9 +3,10 @@
 // <pre data-lang> blocks and highlighted afterwards by scripts/highlight-docs.mjs.
 //
 //   npm run build && node scripts/build-docs.mjs && node scripts/highlight-docs.mjs
-import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { AUTHOR, REPO, SITE, VERSION, breadcrumbs, esc, faqLd, page } from "./site/layout.mjs";
-import { HOME_FAQ, homeBody } from "./site/home.mjs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { icon, inline, writeArt } from "./art/clinic.mjs";
+import { AUTHOR, PEOPLE, REPO, SITE, VERSION, breadcrumbs, esc, faqLd, page } from "./site/layout.mjs";
+import { HOME_FAQ, homeBody, pamphlets } from "./site/home.mjs";
 import { SAMPLES } from "./site/samples.mjs";
 const { GUIDES } = await import("./site/guides.mjs").catch(() => ({ GUIDES: [] }));
 const { CRITERIA, PRINCIPLES } = await import("./site/wcag.mjs").catch(() => ({ CRITERIA: [], PRINCIPLES: [] }));
@@ -17,13 +18,14 @@ const out = (file, html) => {
   console.log(`wrote docs/${file}`);
 };
 
-mkdirSync("docs/assets/icons", { recursive: true });
+mkdirSync("docs/assets", { recursive: true });
 
-// Assets: the browser build, the mascot and the icons.
+// Assets: the browser build, the mascot, and the clinic art (scene, spots, icons, art.css).
 copyFileSync("dist/a11ymedic.js", "docs/a11ymedic.js");
 for (const f of ["mascot.svg", "mascot-dark.svg", "mascot-head.svg"]) copyFileSync(`assets/${f}`, `docs/assets/${f}`);
-cpSync("assets/icons", "docs/assets/icons", { recursive: true });
+rmSync("docs/assets/icons", { recursive: true, force: true });
 copyFileSync("assets/favicon.svg", "docs/favicon.svg");
+writeArt();
 
 // Understanding page slugs for every criterion on the cheat sheet.
 const SLUGS = Object.fromEntries(
@@ -89,7 +91,7 @@ const guideBySlug = Object.fromEntries(GUIDES.map((g) => [g.slug, g]));
 
 function toc(body) {
   const items = [...body.matchAll(/<h2 id="([^"]+)">([\s\S]*?)<\/h2>/g)].map(([, id, text]) => `<li><a href="#${id}">${text.replace(/<[^>]+>/g, "")}</a></li>`);
-  return items.length ? `<nav class="cl-toc" aria-label="On this page"><h2 class="cl-toc-title">On this page</h2><ol>${items.join("")}</ol></nav>` : "";
+  return items.length ? `<nav class="cl-toc" aria-label="On this page"><h2 class="cl-toc-title">${icon("chart", "ic ic-sm")}On this page</h2><ol>${items.join("")}</ol></nav>` : "";
 }
 
 for (const g of GUIDES) {
@@ -101,20 +103,23 @@ for (const g of GUIDES) {
     <div class="cl-article-main">
       <nav class="cl-crumbs" aria-label="Breadcrumb"><ol><li><a href="./">a11ymedic</a></li><li><a href="guides.html">Guides</a></li><li><span aria-current="page">${esc(g.h1)}</span></li></ol></nav>
       <header class="cl-article-head">
-        <p class="cl-eyebrow">Guide</p>
-        <h1>${esc(g.h1)}</h1>
-        <p class="cl-lead">${esc(g.lead)}</p>
-        <p class="cl-meta">By <a href="https://github.com/kwy404" rel="me noopener">Alexandre Kohler</a>, updated <time datetime="${TODAY}">October 13, 2026</time>, ${Math.max(3, Math.round(words / 220))} minute read</p>
+        <div class="cl-article-title">
+          <p class="cl-kicker">${icon("book", "ic ic-sm")}Guide</p>
+          <h1>${esc(g.h1)}</h1>
+          <p class="cl-lead">${esc(g.lead)}</p>
+        </div>
+        <span class="cl-article-art">${inline.spot(g.slug)}</span>
+        <p class="cl-meta">${icon("prescription", "ic ic-sm")}By <a href="https://github.com/kwy404" rel="me noopener">Alexandre Kohler</a>, updated <time datetime="${TODAY}">October 13, 2026</time>, ${Math.max(3, Math.round(words / 220))} minute read</p>
       </header>
       <div class="cl-prose">
 ${g.body}
       </div>
       <section class="cl-guide-faq" aria-labelledby="faq-${g.slug}">
-        <h2 id="faq-${g.slug}">Frequently asked questions</h2>
+        <h2 id="faq-${g.slug}">${icon("heart-pulse", "ic")}Frequently asked questions</h2>
         ${g.faq.map((f) => `<details class="cl-faq"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("\n        ")}
       </section>
       <aside class="cl-cta-box" aria-labelledby="cta-${g.slug}">
-        <img src="assets/mascot-head.svg" width="64" height="64" alt="">
+        <img src="assets/mascot-head.svg" width="72" height="72" alt="">
         <div>
           <h2 id="cta-${g.slug}">Run a check-up on your own page</h2>
           <p>Paste your HTML into the <a href="./#checkup">live check-up room</a>, or run <code>npx a11ymedic index.html</code>.</p>
@@ -123,7 +128,7 @@ ${g.body}
     </div>
     <aside class="cl-article-side" aria-label="Guide navigation">
       ${toc(g.body)}
-      <nav class="cl-related" aria-label="Related guides"><h2 class="cl-toc-title">Related guides</h2><ul>${related.map((r) => `<li><a href="${r.slug}.html">${esc(r.h1)}</a></li>`).join("")}<li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li></ul></nav>
+      <nav class="cl-related" aria-label="Related guides"><h2 class="cl-toc-title">${icon("book", "ic ic-sm")}Related guides</h2><ul>${related.map((r) => `<li><a href="${r.slug}.html">${esc(r.h1)}</a></li>`).join("")}<li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li></ul></nav>
     </aside>
   </div>
 </article>`;
@@ -187,14 +192,11 @@ out(
   <div class="cl-wrap">
     <nav class="cl-crumbs" aria-label="Breadcrumb"><ol><li><a href="./">a11ymedic</a></li><li><span aria-current="page">Guides</span></li></ol></nav>
     <div class="cl-section-head">
-      <p class="cl-eyebrow">Guides</p>
+      <p class="cl-kicker">${icon("book", "ic ic-sm")}The reading room</p>
       <h1 id="hub-title">Web accessibility guides</h1>
-      <p>Short, practical guides for developers who want to ship accessible pages: what each rule means, who it helps and the exact code to fix it.</p>
+      <p>Practical guides for developers who want to ship accessible pages: what each rule means, who it helps and the exact code that fixes it. Every guide links back to the live check-up so you can try the fix on the spot.</p>
     </div>
-    <ul class="cl-guides">
-      ${GUIDES.map((g) => `<li><a href="${g.slug}.html"><strong>${esc(g.h1)}</strong><span>${esc(g.description)}</span></a></li>`).join("\n      ")}
-      <li><a href="wcag-cheat-sheet.html"><strong>WCAG 2.2 cheat sheet in plain language</strong><span>Every A and AA success criterion in one or two sentences, with the a11ymedic rules that check it.</span></a></li>
-    </ul>
+    ${pamphlets(GUIDES, "h2")}
   </div>
 </section>`,
   }),
@@ -202,21 +204,34 @@ out(
 
 // ------------------------------------------------------------------ cheat sheet
 const ruleTitle = Object.fromEntries(rules.map((r) => [r.id, r.title.en]));
+const POUR = { 1: "eye", 2: "hand", 3: "lightbulb", 4: "blocks" };
+// Who each success criterion helps most, for the "Helps" row on every card.
+const HELPS = Object.fromEntries(
+  `1.1.1 screen-reader low-vision cognitive|1.2.1 deaf screen-reader|1.2.2 deaf|1.2.3 screen-reader low-vision|1.2.4 deaf|1.2.5 screen-reader low-vision|1.3.1 screen-reader|1.3.2 screen-reader|1.3.3 screen-reader low-vision color-blind|1.3.4 motor|1.3.5 cognitive motor|1.4.1 color-blind low-vision|1.4.2 screen-reader cognitive|1.4.3 low-vision color-blind|1.4.4 low-vision|1.4.5 low-vision cognitive|1.4.6 low-vision color-blind|1.4.10 low-vision|1.4.11 low-vision color-blind|1.4.12 low-vision cognitive|1.4.13 low-vision cognitive|2.1.1 keyboard-only screen-reader motor|2.1.2 keyboard-only|2.1.4 keyboard-only motor|2.2.1 cognitive motor|2.2.2 cognitive|2.3.1 cognitive|2.3.3 cognitive|2.4.1 keyboard-only screen-reader|2.4.2 screen-reader cognitive|2.4.3 keyboard-only screen-reader|2.4.4 screen-reader cognitive|2.4.5 cognitive low-vision|2.4.6 cognitive screen-reader|2.4.7 keyboard-only low-vision|2.4.11 keyboard-only low-vision|2.5.1 motor|2.5.2 motor|2.5.3 motor screen-reader|2.5.4 motor|2.5.7 motor|2.5.8 motor low-vision|3.1.1 screen-reader cognitive|3.1.2 screen-reader|3.2.1 cognitive keyboard-only|3.2.2 cognitive screen-reader|3.2.3 cognitive low-vision|3.2.4 cognitive screen-reader|3.2.6 cognitive|3.3.1 screen-reader cognitive color-blind|3.3.2 cognitive screen-reader|3.3.3 cognitive|3.3.4 cognitive motor|3.3.7 cognitive motor|3.3.8 cognitive|4.1.2 screen-reader keyboard-only|4.1.3 screen-reader`
+    .split("|")
+    .map((x) => {
+      const [id, ...who] = x.split(" ");
+      return [id, who];
+    }),
+);
 const cheatRows = PRINCIPLES.map((p) => {
   const items = CRITERIA.filter((c) => c.principle === p.id)
     .map((c) => {
-      const hay = `${c.id} ${c.name} ${c.plain} ${(c.rules ?? []).join(" ")}`.toLowerCase().replace(/['"\\]/g, "");
+      const hay = `${c.id} ${c.name} ${c.plain} ${(c.rules ?? []).join(" ")} ${(HELPS[c.id] ?? []).map((h) => PEOPLE[h][0]).join(" ")}`.toLowerCase().replace(/['"\\]/g, "");
+      const helps = HELPS[c.id] ?? ["screen-reader"];
       return `<article class="cl-sc" id="sc-${c.id.replace(/\./g, "-")}" v-show="scVisible('${esc(hay)}', '${c.level}', wq, wlevel)">
-        <header><span class="cl-sc-id">${c.id}</span><h3>${esc(c.name)}</h3><span class="cl-pill" data-level="${c.level}">Level ${c.level}</span>${c.isNew ? '<span class="cl-pill" data-new="1">New in 2.2</span>' : ""}</header>
+        <header><span class="cl-sc-id">${c.id}</span><span class="cl-pill" data-level="${c.level}">Level ${c.level}</span>${c.isNew ? '<span class="cl-pill" data-new="1">New in 2.2</span>' : ""}</header>
+        <h3>${esc(c.name)}</h3>
         <p>${esc(c.plain)}</p>
-        <p class="cl-sc-example"><strong>Fails when:</strong> ${esc(c.example)}</p>
-        ${c.rules?.length ? `<p class="cl-sc-rules"><strong>a11ymedic checks:</strong> ${c.rules.map((r) => `<code title="${esc(ruleTitle[r] ?? "")}">${r}</code>`).join(" ")}</p>` : `<p class="cl-sc-rules"><strong>Check by hand:</strong> ${esc(c.manual)}</p>`}
+        <p class="cl-sc-example"><strong>${icon("thermometer", "ic ic-xs")}Fails when:</strong> ${esc(c.example)}</p>
+        ${c.rules?.length ? `<p class="cl-sc-rules"><strong>${icon("prescription", "ic ic-xs")}a11ymedic checks:</strong> ${c.rules.map((r) => `<code title="${esc(ruleTitle[r] ?? "")}">${r}</code>`).join(" ")}</p>` : `<p class="cl-sc-rules"><strong>${icon("magnifier", "ic ic-xs")}Check by hand:</strong> ${esc(c.manual)}</p>`}
         ${c.rules?.length && c.manual ? `<p class="cl-sc-manual"><strong>Also check by hand:</strong> ${esc(c.manual)}</p>` : ""}
+        <p class="cl-helps"><span class="cl-helps-label">Helps</span>${helps.map((h) => `<span class="cl-help">${icon(h, "ic ic-xs")}${PEOPLE[h][0]}</span>`).join("")}</p>
         <p class="cl-sc-link"><a href="${understanding(c.id)}">Understanding ${c.id} ${esc(c.name)} on w3.org</a></p>
       </article>`;
     })
     .join("\n");
-  return `<section class="cl-principle" aria-labelledby="p-${p.id}"><h2 id="p-${p.id}">${p.id}. ${esc(p.name)}</h2><p class="cl-principle-plain">${esc(p.plain)}</p>${items}</section>`;
+  return `<section class="cl-principle" aria-labelledby="p-${p.id}"><header class="cl-principle-head"><span class="cl-principle-badge">${icon(POUR[p.id], "ic")}</span><div><h2 id="p-${p.id}">${p.id}. ${esc(p.name)}</h2><p class="cl-principle-plain">${esc(p.plain)}</p></div></header><div class="cl-sc-grid">${items}</div></section>`;
 }).join("\n");
 const automated = CRITERIA.filter((c) => c.rules?.length).length;
 out(
@@ -250,12 +265,15 @@ out(
   <div class="cl-wrap">
     <nav class="cl-crumbs" aria-label="Breadcrumb"><ol><li><a href="./">a11ymedic</a></li><li><span aria-current="page">WCAG 2.2 cheat sheet</span></li></ol></nav>
     <div class="cl-section-head">
-      <p class="cl-eyebrow">Cheat sheet</p>
+      <p class="cl-kicker">${icon("clipboard-check", "ic ic-sm")}Cheat sheet</p>
       <h1 id="cheat-title">WCAG 2.2 in plain language</h1>
-      <p>All ${CRITERIA.filter((c) => c.level !== "AAA").length} success criteria a site needs for level AA (plus the two AAA ones a11ymedic can test), each in a sentence or two, with a typical failure. ${automated} of them have automated a11ymedic checks; the rest need a person, and the tip says how.</p>
+      <p>All ${CRITERIA.filter((c) => c.level !== "AAA").length} success criteria a site needs for level AA (plus the two AAA ones a11ymedic can test), each in a sentence or two, with a typical failure and the people it helps most. ${automated} of them have automated a11ymedic checks; the rest need a person, and the tip says how.</p>
     </div>
+    <ol class="cl-pour" aria-label="The four principles">
+      ${PRINCIPLES.map((p) => `<li><a href="#p-${p.id}"><span class="cl-principle-badge">${icon(POUR[p.id], "ic")}</span><strong>${esc(p.name)}</strong><span>${CRITERIA.filter((c) => c.principle === p.id).length} criteria</span></a></li>`).join("\n      ")}
+    </ol>
     <div class="cl-rule-tools cl-sticky-tools">
-      <div><label for="wq">Search criteria</label><input id="wq" class="input" type="search" v-model="wq" placeholder="contrast, keyboard, 2.5.8, captions" autocomplete="off"></div>
+      <div><label for="wq">Search criteria</label><input id="wq" class="input" type="search" v-model="wq" placeholder="contrast, keyboard, 2.5.8, deaf" autocomplete="off"></div>
       <div><label for="wlevel">Level</label><select id="wlevel" class="select" v-model="wlevel"><option value="all">All</option><option value="A">A</option><option value="AA">AA</option><option value="AAA">AAA</option></select></div>
     </div>
     ${cheatRows}
@@ -275,13 +293,10 @@ out(
     body: `
 <section class="cl-section cl-404" aria-labelledby="nf-title">
   <div class="cl-wrap cl-narrow">
-    <picture>
-      <source srcset="assets/mascot-dark.svg" media="(prefers-color-scheme: dark)">
-      <img src="assets/mascot.svg" width="220" height="220" alt="Patch the otter medic, holding a broken button with a bandage">
-    </picture>
-    <p class="cl-eyebrow">Error 404</p>
-    <h1 id="nf-title">This page is not in our records</h1>
-    <p>Patch looked everywhere. The link may be broken or the page may have moved. Here is where to go next:</p>
+    ${inline.spot("not-found", "cl-404-art")}
+    <p class="cl-kicker">${icon("ambulance", "ic ic-sm")}Error 404</p>
+    <h1 id="nf-title">This patient is not in our records</h1>
+    <p>Patch checked every bed in the clinic. The link may be broken or the page may have moved. Here is where to go next:</p>
     <ul class="cl-404-links">
       <li><a class="btn btn-primary" href="./">Back to the clinic</a></li>
       <li><a class="btn btn-outline" href="./#checkup">Run a check-up</a></li>

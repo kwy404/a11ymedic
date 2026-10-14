@@ -3,70 +3,50 @@
 <head>
 <meta charset="utf-8">
 <title>a11ymedic open graph image</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Caveat:wght@700&family=Fredoka:wght@600;700&display=swap">
 <style>
+  /* Rendered to docs/og.png (1200 x 630, light) and assets/social-preview.png (1280 x 640,
+     dark, with #dark) by scripts/art/render.sh. */
+  :root { --paper: #fbf5ea; --card: #fffdf8; --ink: #1d3a40; --muted: #4f6266; --teal: #0a6b6d; --coral: #a63b28; --drop: #e3cfab; --teal-soft: #d3f0ea; --coral-soft: #ffe3dc; }
+  .dark { --paper: #102a2f; --card: #15353b; --ink: #f3ead9; --muted: #b9cbc7; --teal: #5fd6cb; --coral: #ff9a87; --drop: #06171a; --teal-soft: #1b4a4f; --coral-soft: #4a2e2b; }
   html, body { margin: 0; padding: 0; }
-  body {
-    width: 1200px; height: 630px; overflow: hidden; position: relative; box-sizing: border-box;
-    background: #F1FAF9; color: #12343B;
-    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-    display: flex; align-items: center; gap: 30px; padding: 0 48px 0 30px;
-  }
-  .blob { position: absolute; border-radius: 50%; background: #DDF3F0; }
-  .blob.a { width: 500px; height: 500px; left: 4px; top: 66px; }
-  .blob.b { width: 280px; height: 280px; right: -80px; top: -110px; }
-  .pulse { position: absolute; left: 0; bottom: 30px; }
-  .plus { position: absolute; }
-  .mascot { position: relative; flex: none; width: 470px; height: 470px; }
-  .mascot img { display: block; width: 470px; height: 470px; }
-  .text { position: relative; flex: 1; min-width: 0; }
-  h1 { margin: 0; font-size: 98px; line-height: 1; font-weight: 700; letter-spacing: -2.5px; }
-  h1 span { color: #0F8B8D; }
-  .tag { margin: 14px 0 0; font-size: 29px; line-height: 1.25; font-weight: 600; color: #46666C; }
-  .tag b { color: #E35E4B; font-weight: 600; }
-  .card {
-    margin-top: 28px; background: #FFFFFF; border: 2px solid #BFE6E1; border-radius: 20px;
-    padding: 18px 22px 20px; box-shadow: 0 16px 36px rgba(18, 52, 59, .10);
-  }
-  .head { display: flex; align-items: center; gap: 12px; }
-  .head svg { flex: none; }
-  .head strong { font-size: 24px; font-weight: 700; }
-  .rule {
-    margin-left: auto; font-family: Consolas, "Cascadia Mono", Menlo, monospace; font-size: 16px;
-    color: #46666C; border: 2px solid #BFE6E1; border-radius: 999px; padding: 3px 12px;
-  }
-  .why { margin: 8px 0 12px; font-size: 18px; color: #46666C; }
-  .code {
-    font-family: Consolas, "Cascadia Mono", Menlo, monospace; font-size: 17.5px; line-height: 1.3;
-    border-radius: 10px; padding: 7px 12px; white-space: pre; margin-top: 8px;
-  }
-  .del { background: #FFE9E5; color: #9B3A2C; }
-  .add { background: #DDF5F1; color: #0B5456; }
-  .code i { font-style: normal; font-weight: 700; display: inline-block; width: 20px; }
-  .del i { color: #E35E4B; }
-  .add i { color: #0F8B8D; }
-  .add em { font-style: normal; color: #12343B; font-weight: 700; }
+  body { width: 100vw; height: 100vh; overflow: hidden; box-sizing: border-box; display: flex; align-items: center; gap: 40px; padding: 0 44px 0 60px; background: var(--paper); color: var(--ink); font-family: "Atkinson Hyperlegible Next", "Segoe UI", sans-serif;
+    background-image: radial-gradient(700px 420px at 92% 0%, rgb(255 122 102 / 0.16), transparent 70%), radial-gradient(600px 400px at 0% 100%, rgb(15 139 141 / 0.13), transparent 70%); }
+  .text { flex: 1; min-width: 0; }
+  .kicker { display: inline-block; margin: 0; padding: 7px 16px; border: 3px solid var(--ink); border-radius: 14px 14px 14px 4px; background: var(--card); box-shadow: 4px 5px 0 var(--drop); font: 600 20px Fredoka, sans-serif; transform: rotate(-2deg); }
+  h1 { margin: 22px 0 6px; font: 700 112px/0.95 Fredoka, sans-serif; letter-spacing: -2px; }
+  h1 span { color: var(--teal); }
+  .tag { margin: 0 0 24px; font-size: 26px; font-weight: 700; color: var(--muted); }
+  .tag b { color: var(--coral); }
+  .rx { border: 3px solid var(--ink); border-radius: 12px 12px 18px 18px; background: var(--card); box-shadow: 5px 6px 0 var(--drop); overflow: hidden; }
+  .rx-head { display: flex; align-items: center; gap: 12px; padding: 6px 16px; background: var(--teal-soft); border-bottom: 3px dashed var(--ink); font: 600 21px Fredoka, sans-serif; }
+  .rx-head i { font: 700 34px/1 Caveat, cursive; color: var(--coral); }
+  .rx-head span { margin-left: auto; font: 600 15px "Atkinson Hyperlegible Mono", monospace; padding: 2px 10px; border: 2px solid currentColor; border-radius: 999px; color: var(--coral); background: var(--coral-soft); }
+  .code { margin: 10px 14px; padding: 7px 12px; border-radius: 10px; font: 15px/1.3 "Atkinson Hyperlegible Mono", monospace; white-space: pre; overflow: hidden; border-left: 6px solid; background: var(--paper); }
+  .del { border-color: #e5484d; }
+  .add { border-color: #46b464; }
+  .add em { font-style: normal; font-weight: 700; color: var(--teal); }
+  .art { flex: none; width: 560px; }
+  .art img { display: block; width: 100%; height: auto; border-radius: 30px; box-shadow: 8px 10px 0 var(--drop); }
 </style>
 </head>
 <body>
-  <div class="blob a"></div>
-  <div class="blob b"></div>
-  <svg class="pulse" width="1200" height="70" viewBox="0 0 1200 70" aria-hidden="true"><path d="M0 46H530L548 18L568 64L590 4L610 46H1200" fill="none" stroke="#0F8B8D" stroke-opacity=".22" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  <svg class="plus" style="right: 64px; top: 56px" width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><path d="M10 0H20V10H30V20H20V30H10V20H0V10H10Z" fill="#FF7A66" fill-opacity=".9"/></svg>
-  <svg class="plus" style="right: 140px; top: 34px" width="16" height="16" viewBox="0 0 30 30" aria-hidden="true"><path d="M10 0H20V10H30V20H20V30H10V20H0V10H10Z" fill="#0F8B8D" fill-opacity=".6"/></svg>
-  <div class="mascot"><img src="../../assets/mascot.svg" alt="Patch, the a11ymedic otter paramedic"></div>
   <div class="text">
+    <p class="kicker">The accessibility clinic for websites</p>
     <h1>a11y<span>medic</span></h1>
     <p class="tag">Find accessibility problems. <b>Get the exact fix.</b></p>
-    <div class="card">
-      <div class="head">
-        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#12343B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h-1v6a5 5 0 0 0 10 0v-6h-1"/><path d="M9 13.5v1.5a5.5 5.5 0 0 0 11 0v-3.5"/><circle cx="20" cy="9.5" r="2" fill="#E35E4B" fill-opacity=".25" stroke="#0F8B8D"/></g></svg>
-        <strong>Image without alt text</strong>
-        <span class="rule">image-alt</span>
-      </div>
-      <p class="why">Screen readers can only say "team.jpg". Describe what the image shows.</p>
-      <div class="code del"><i>-</i>&lt;img src="team.jpg"&gt;</div>
-      <div class="code add"><i>+</i>&lt;img src="team.jpg" <em>alt="Our team at the 2026 meetup"</em>&gt;</div>
+    <div class="rx">
+      <div class="rx-head"><i>Rx</i>Image without alt text<span>critical</span></div>
+      <div class="code del">&lt;img src="team.jpg"&gt;</div>
+      <div class="code add">&lt;img src="team.jpg" <em>alt="Our bakers at work"</em>&gt;</div>
     </div>
   </div>
+  <div class="art"><img id="scene" src="../../docs/assets/art/clinic-light.svg" alt="Patch the otter paramedic treating a sick browser window in his clinic"></div>
+  <script>
+    if (location.hash === "#dark") {
+      document.documentElement.classList.add("dark");
+      document.getElementById("scene").src = "../../docs/assets/art/clinic-dark.svg";
+    }
+  </script>
 </body>
 </html>

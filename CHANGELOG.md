@@ -4,6 +4,11 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+### Changed
+
+- Documentation site redesigned as an illustrated clinic: a hero scene of Patch the otter paramedic treating a sick browser window, a family of 52 duotone icons, nine spot illustrations, a medicine cabinet of rules, a contrast eye exam, a health gauge with a discharge stamp in the live check-up, and a WCAG cheat sheet that names the people each criterion helps. All art is SVG with light and dark variants in `docs/assets/art/`, drawn by `scripts/art/clinic.mjs`.
+- The README banner and icons use the new art.
+
 ## [0.1.0] - 2026-10-13
 
 ### Added

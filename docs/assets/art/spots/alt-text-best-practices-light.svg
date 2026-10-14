@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" width="240" height="180" role="img" aria-labelledby="alt-text-best-practices-t"><title id="alt-text-best-practices-t">A framed photo of hills and a sun with a label tag that describes it, and a speech bubble reading it aloud</title><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" fill="#f3e3c6"/>
+<g stroke="#1d3a40" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<rect x="34" y="36" width="116" height="90" rx="10" fill="#fffdf7"/>
+<path d="M34 106l30-30 24 22 18-14 44 38v4a10 10 0 0 1-10 10H44a10 10 0 0 1-10-10Z" fill="#7fd3c8"/>
+<circle cx="118" cy="62" r="11" fill="#f7c65a"/>
+<path d="M150 104q22 4 30 20" fill="none"/>
+<path d="M166 120h40a6 6 0 0 1 6 6v22a6 6 0 0 1-6 6h-40l-12-17Z" fill="#ffe3dc"/><circle cx="168" cy="137" r="3.5" fill="#fffdf7"/>
+<path d="M176 132h26M176 142h18" />
+<path d="M168 34h44a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10h-18l-12 12V74h-14a10 10 0 0 1-10-10V44a10 10 0 0 1 10-10Z" fill="#fffdf7"/>
+<path d="M172 48h36M172 60h24" stroke="#0f8b8d" stroke-width="4"/></g></svg>

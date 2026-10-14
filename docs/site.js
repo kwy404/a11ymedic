@@ -19,7 +19,9 @@ const T = {
     treatSafe: "Treat safe fixes",
     treatAll: "Treat everything",
     reset: "Start over",
-    healthy: "Healthy: no problems found. Patch approves.",
+    healthy: "Healthy: no problems found. Patch signs the discharge papers.",
+    waiting: "Waiting",
+    conditions: ["Critical", "Serious", "Stable", "Recovering", "Healthy"],
     why: "Why it matters",
     who: "Who is affected",
     fix: "The fix",
@@ -45,7 +47,9 @@ const T = {
     treatSafe: "Tratar correções seguras",
     treatAll: "Tratar tudo",
     reset: "Recomeçar",
-    healthy: "Saudável: nenhum problema encontrado. Patch aprova.",
+    healthy: "Saudável: nenhum problema encontrado. Patch assina a alta.",
+    waiting: "Aguardando",
+    conditions: ["Crítico", "Grave", "Estável", "Em recuperação", "Saudável"],
     why: "Por que importa",
     who: "Quem é afetado",
     fix: "A correção",
@@ -62,12 +66,35 @@ const T = {
   },
 };
 
+// The medicine cabinet: one entry per rule with its drawer, severity and search text.
+let RULES = null;
+function rules() {
+  if (!RULES) {
+    try {
+      RULES = JSON.parse(document.getElementById("rule-data")?.textContent ?? "[]");
+    } catch {
+      RULES = [];
+    }
+  }
+  return RULES;
+}
+const matches = (r, q, sev) => {
+  if (sev !== "all" && sev !== r.s) return false;
+  const words = String(q ?? "").toLowerCase().trim().split(/\s+/).filter(Boolean);
+  return words.every((w) => r.h.includes(w));
+};
+
 /** Pure helpers the templates may call. */
 const globals = {
-  ruleVisible(hay, severity, q, sev) {
-    if (sev !== "all" && sev !== severity) return false;
-    const words = String(q ?? "").toLowerCase().trim().split(/\s+/).filter(Boolean);
-    return words.every((w) => hay.includes(w));
+  ruleVisible(id, q, sev) {
+    const r = rules().find((x) => x.id === id);
+    return r ? matches(r, q, sev) : true;
+  },
+  drawerCount(drawer, q, sev) {
+    return rules().filter((r) => r.d === drawer && matches(r, q, sev)).length;
+  },
+  drawerTotal(q, sev) {
+    return rules().filter((r) => matches(r, q, sev)).length;
   },
   scVisible(hay, level, q, lvl) {
     if (lvl !== "all" && lvl !== level) return false;
@@ -106,6 +133,11 @@ if (V) {
     counts: { critical: 0, serious: 0, moderate: 0, minor: 0 },
     status: "",
     patientName: "Bakery landing page",
+    score: 0,
+    mood: "sick",
+    conditionText: T.en.waiting,
+    healing: false,
+    focusing: false,
     // contrast fixer
     fg: "#8a9ba8",
     bg: "#ffffff",
@@ -154,6 +186,7 @@ if (V) {
       examine();
       S.open = -1;
       S.status = S.t.treated(f.title[S.lang], raw.length);
+      pulse("healing", 1300);
     },
     treatAll(safeOnly) {
       let applied = 0;
@@ -165,6 +198,7 @@ if (V) {
       }
       S.open = -1;
       S.status = S.t.treatedMany(applied, raw.length);
+      if (applied) pulse("healing", 1300);
     },
     selfCheck() {
       A.overlay({ lang: S.lang });
@@ -174,7 +208,36 @@ if (V) {
       S.fg = S.bg;
       S.bg = fg;
     },
+    useLens(option) {
+      if (!option) return;
+      S.fg = option.foreground;
+      S.bg = option.background;
+      pulse("focusing", 900);
+    },
   });
+
+  /** Sets a flag for `ms` so CSS can play a one shot animation (skipped with reduced motion). */
+  const timers = {};
+  function pulse(flag, ms) {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    clearTimeout(timers[flag]);
+    S[flag] = false;
+    requestAnimationFrame(() => {
+      S[flag] = true;
+      timers[flag] = setTimeout(() => (S[flag] = false), ms);
+    });
+  }
+
+  /** Health score from 0 to 100: every finding costs points by severity. */
+  function vitals() {
+    const c = S.counts;
+    const penalty = c.critical * 10 + c.serious * 6 + c.moderate * 3 + c.minor;
+    const score = S.ran ? Math.round(100 * Math.exp(-penalty / 90)) : 0;
+    S.score = score;
+    S.mood = !S.ran ? "sick" : score >= 100 ? "happy" : score >= 65 ? "ok" : "sick";
+    const names = S.t.conditions;
+    S.conditionText = !S.ran ? S.t.waiting : score >= 100 ? names[4] : score >= 90 ? names[3] : score >= 65 ? names[2] : score >= 40 ? names[1] : names[0];
+  }
 
   /** Rebuilds the reactive view of the findings and redraws the pins. */
   function view() {
@@ -205,6 +268,7 @@ if (V) {
     S.counts = counts;
     S.total = raw.length;
     S.safeCount = raw.filter((f) => f.fix.safe).length;
+    vitals();
     if (doc) {
       pins?.remove();
       pins = A.drawPins(doc, raw, {
@@ -298,6 +362,21 @@ if (V) {
     });
     // Examine the first patient as soon as the page is idle, so the room is never empty.
     (window.requestIdleCallback ?? setTimeout)(() => examineFresh());
+  }
+
+  // Open every drawer of the medicine cabinet while a search or a triage filter is active.
+  const drawers = [...document.querySelectorAll(".cl-drawer")];
+  if (drawers.length) {
+    let auto = false;
+    V.watch(
+      () => [S.rq, S.rsev],
+      () => {
+        const filtering = String(S.rq).trim() !== "" || S.rsev !== "all";
+        if (filtering && !auto) drawers.forEach((d) => (d.open = true));
+        if (!filtering && auto) drawers.forEach((d) => (d.open = false));
+        auto = filtering;
+      },
+    );
   }
 
   addEventListener("keydown", (event) => {

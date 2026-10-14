@@ -1,4 +1,6 @@
-// Page chrome for the docs site: head (SEO, theme, fonts, Monsoon, Voodoo), header and footer.
+// Page chrome for the docs site, "the a11ymedic clinic": head (SEO, theme, fonts, Monsoon,
+// Voodoo), the clinic sign header and the front desk footer.
+import { icon } from "../art/clinic.mjs";
 
 export const SITE = "https://kwy404.github.io/a11ymedic/";
 export const REPO = "https://github.com/kwy404/a11ymedic";
@@ -16,45 +18,45 @@ export const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
 export const code = (lang, title, source, mini = false) =>
   `<pre ${mini ? 'data-mini="1" ' : ""}data-lang="${lang}" data-title="${esc(title)}"><code>${esc(source.replace(/^\n/, "").replace(/\s+$/, ""))}</code></pre>`;
 
-const ICON = (d, extra = "") => `<svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"${extra}>${d}</svg>`;
+const LINE = (d) =>
+  `<svg class="cl-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${d}</svg>`;
 export const icons = {
-  github: `<svg class="cl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg>`,
-  system: ICON('<rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/>', ' data-t="system"'),
-  sun: ICON('<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/>', ' data-t="light"'),
-  moon: ICON('<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/>', ' data-t="dark"'),
-  menu: ICON('<path d="M4 7h16M4 12h16M4 17h16"/>'),
-  copy: ICON('<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>'),
-  check: ICON('<path d="m5 12.5 4.5 4.5L19 7.5"/>'),
-  arrow: ICON('<path d="M5 12h14M13 6l6 6-6 6"/>'),
-  play: ICON('<path d="M7 5v14l12-7z"/>'),
-  plus: ICON('<path d="M12 5v14M5 12h14"/>'),
-  bandage: ICON('<rect x="2.5" y="8" width="19" height="8" rx="4" transform="rotate(-35 12 12)"/><path d="M10.5 10.5h.01M13.5 13.5h.01M13.5 10.5h.01M10.5 13.5h.01"/>'),
+  github: `<svg class="cl-glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg>`,
+  menu: LINE('<path d="M4 7h16M4 12h16M4 17h11"/>'),
+  arrow: LINE('<path d="M5 12h14M13 6l6 6-6 6"/>'),
+  play: LINE('<path d="M7 5v14l12-7z" fill="currentColor"/>'),
+  check: LINE('<path d="m5 12.5 4.5 4.5L19 7.5"/>'),
+  copy: icon("copy", "ic ic-sm"),
+  bandage: icon("bandage", "ic ic-sm"),
 };
 
+const themeIcon = (name, t) => `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-t="${t}"><use href="assets/art/icons.svg#${name}"/></svg>`;
+
 const NAV = [
-  ["./#checkup", "Check-up", "checkup"],
-  ["./#contrast", "Contrast fixer", "contrast"],
-  ["wcag-cheat-sheet.html", "WCAG cheat sheet", "wcag"],
-  ["./#rules", "Rules", "rules"],
-  ["guides.html", "Guides", "guides"],
-  ["./#install", "Install", "install"],
+  ["./#checkup", "Check-up", "checkup", "stethoscope"],
+  ["./#contrast", "Eye exam", "contrast", "low-vision"],
+  ["wcag-cheat-sheet.html", "WCAG cheat sheet", "wcag", "clipboard-check"],
+  ["./#rules", "Rules", "rules", "cabinet"],
+  ["guides.html", "Guides", "guides", "book"],
+  ["./#install", "Install", "install", "ambulance"],
 ];
 
 export function header(active) {
-  const links = NAV.map(([href, label, key]) => `<a class="cl-nav-link" href="${href}"${key === active ? ' aria-current="page"' : ""}>${label}</a>`).join("");
+  const link = ([href, label, key, ic]) =>
+    `<a class="cl-nav-link" href="${href}"${key === active ? ' aria-current="page"' : ""}>${icon(ic, "ic ic-nav")}<span>${label}</span></a>`;
   return `<header class="cl-top">
   <div class="cl-wrap cl-top-row">
-    <a class="cl-brand" href="./" aria-label="a11ymedic home"><img src="favicon.svg" width="32" height="32" alt=""><span>a11y<b>medic</b></span></a>
-    <a class="badge badge-sm badge-outline cl-ver" href="${REPO}/blob/main/CHANGELOG.md" aria-label="v${VERSION} changelog">v${VERSION}</a>
-    <nav class="cl-nav" aria-label="Main">${links}</nav>
+    <a class="cl-brand" href="./"><img src="favicon.svg" width="40" height="40" alt=""><span class="cl-brand-text"><span class="cl-brand-name">a11y<b>medic</b></span><span class="cl-brand-sub">accessibility clinic</span></span></a>
+    <nav class="cl-nav" aria-label="Main">${NAV.map(link).join("")}</nav>
     <div class="cl-top-end">
+      <a class="cl-ver" href="${REPO}/blob/main/CHANGELOG.md" aria-label="v${VERSION} changelog">v${VERSION}</a>
       <a class="cl-icon-btn" href="${REPO}" aria-label="a11ymedic on GitHub">${icons.github}</a>
-      <button type="button" class="cl-icon-btn cl-theme" v-theme-toggle.cycle aria-label="Color theme: follow the system, light or dark" title="Color theme">${icons.system}${icons.sun}${icons.moon}</button>
+      <button type="button" class="cl-icon-btn cl-theme" v-theme-toggle.cycle aria-label="Color theme: follow the system, light or dark" title="Color theme">${themeIcon("system", "system")}${themeIcon("sun", "light")}${themeIcon("moon", "dark")}</button>
       <button type="button" class="cl-icon-btn cl-menu-btn" aria-controls="cl-menu" aria-expanded="false" :aria-expanded="menu ? 'true' : 'false'" @click="menu = !menu" aria-label="Menu">${icons.menu}</button>
     </div>
   </div>
   <nav id="cl-menu" class="cl-mobile" aria-label="Mobile" style="display:none" v-show="menu" @click="menu = false">
-    <div class="cl-wrap">${NAV.map(([href, label]) => `<a class="cl-nav-link" href="${href}">${label}</a>`).join("")}<a class="cl-nav-link" href="${REPO}">GitHub</a><a class="cl-nav-link" href="https://www.npmjs.com/package/a11ymedic">npm</a></div>
+    <div class="cl-wrap">${NAV.map(link).join("")}<a class="cl-nav-link" href="${REPO}">${icons.github}<span>GitHub</span></a><a class="cl-nav-link" href="https://www.npmjs.com/package/a11ymedic">${icon("pill", "ic ic-nav")}<span>npm</span></a></div>
   </nav>
 </header>`;
 }
@@ -72,26 +74,38 @@ const MORE = [
 export function footer() {
   return `<footer class="cl-foot">
   <div class="cl-wrap cl-foot-grid">
-    <div class="cl-foot-brand">
-      <a class="cl-brand" href="./"><img src="favicon.svg" width="28" height="28" alt=""><span>a11y<b>medic</b></span></a>
-      <p>An accessibility checker that explains every problem in plain language and writes the exact fix. Free and open source under the MIT license.</p>
-      <p class="cl-made">Made by <strong>Alexandre Kohler</strong> (<a href="https://github.com/kwy404" rel="me noopener">GitHub</a> and <a href="https://www.linkedin.com/in/alexandre-silva-173687256/" rel="me noopener">LinkedIn</a>).</p>
-      <p class="cl-made">Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>.</p>
+    <div class="cl-foot-desk">
+      <img class="cl-foot-patch" src="assets/mascot-head.svg" width="84" height="84" alt="">
+      <div>
+        <p class="cl-foot-hello">Front desk</p>
+        <p class="cl-foot-name">a11y<b>medic</b></p>
+        <p>An accessibility checker that explains every problem in plain language and writes the exact fix. Free and open source under the MIT license.</p>
+        <p class="cl-made">Made by <strong>Alexandre Kohler</strong> (<a href="https://github.com/kwy404" rel="me noopener">GitHub</a> and <a href="https://www.linkedin.com/in/alexandre-silva-173687256/" rel="me noopener">LinkedIn</a>).</p>
+        <p class="cl-made">Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>.</p>
+      </div>
     </div>
-    <nav aria-label="Project">
-      <h2 class="cl-foot-h">Project</h2>
+    <nav aria-label="Clinic">
+      <h2 class="cl-foot-h">${icon("first-aid", "ic ic-sm")}Clinic</h2>
       <ul>
-        <li><a href="${REPO}">GitHub repository</a></li>
-        <li><a href="https://www.npmjs.com/package/a11ymedic">npm package</a></li>
-        <li><a href="${REPO}/blob/main/CHANGELOG.md">Changelog</a></li>
-        <li><a href="${REPO}/blob/main/i18n/README.pt-BR.md">Leia em Português</a></li>
+        <li><a href="./#checkup">Live check-up</a></li>
+        <li><a href="./#contrast">Contrast eye exam</a></li>
+        <li><a href="./#rules">Medicine cabinet of rules</a></li>
         <li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li>
         <li><a href="guides.html">All guides</a></li>
       </ul>
     </nav>
+    <nav aria-label="Project">
+      <h2 class="cl-foot-h">${icon("report", "ic ic-sm")}Project</h2>
+      <ul>
+        <li><a href="${REPO}">GitHub repository</a></li>
+        <li><a href="https://www.npmjs.com/package/a11ymedic">npm package</a></li>
+        <li><a href="${REPO}/blob/main/CHANGELOG.md">Changelog</a></li>
+        <li><a href="${REPO}/blob/main/i18n/README.pt-BR.md" hreflang="pt-BR" lang="pt-BR">Leia em Português</a></li>
+      </ul>
+    </nav>
     <nav aria-label="More from kwy404">
-      <h2 class="cl-foot-h">More from kwy404</h2>
-      <ul>${MORE.map(([name, url, what]) => `<li><a href="${url}">${name}</a> <span>${what}</span></li>`).join("")}</ul>
+      <h2 class="cl-foot-h">${icon("sparkle", "ic ic-sm")}More from kwy404</h2>
+      <ul class="cl-more-list">${MORE.map(([name, url, what]) => `<li><a href="${url}">${name}</a> <span>${what}</span></li>`).join("")}</ul>
     </nav>
   </div>
   <div class="cl-wrap cl-foot-legal"><span>MIT license, copyright 2026 Alexandre Kohler.</span><span>a11ymedic diagnoses and suggests fixes. It does not replace testing with disabled people.</span></div>
@@ -104,7 +118,7 @@ export function footer() {
 export function page({ title, description, path, body, jsonld, active = "", scripts = "", ogAlt }) {
   const url = SITE + path;
   const image = `${SITE}og.png`;
-  const alt = ogAlt ?? "a11ymedic: an accessibility checker with plain language explanations and exact fixes, with Patch the otter medic";
+  const alt = ogAlt ?? "a11ymedic: the accessibility clinic for websites, with Patch the otter paramedic treating a sick browser window";
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -117,8 +131,8 @@ export function page({ title, description, path, body, jsonld, active = "", scri
   <link rel="canonical" href="${url}">
   <meta name="author" content="Alexandre Kohler">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <meta name="theme-color" content="#f3faf9" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0b1f24" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#fbf5ea" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#102a2f" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="${path ? "article" : "website"}">
   <meta property="og:site_name" content="a11ymedic">
   <meta property="og:title" content="${esc(title)}">
@@ -137,8 +151,9 @@ export function page({ title, description, path, body, jsonld, active = "", scri
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400&family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+  <link rel="stylesheet" href="art.css">
   <link rel="stylesheet" href="site.css">
   <script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
 ${scripts}  <script type="module" src="site.js"></script>
@@ -168,3 +183,17 @@ export function faqLd(faq) {
     mainEntity: faq.map(({ q, a }) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
   };
 }
+
+/** A hand drawn divider: a wavy line that turns into a heartbeat in the middle. */
+export const divider = `<div class="cl-divider" aria-hidden="true"><svg viewBox="0 0 1200 40" preserveAspectRatio="none" focusable="false"><path d="M0 22c40-8 80 8 120 0s80-8 120 0 80 8 120 0 80-8 120 0 60 6 80 0l14-16 16 30 14-24 10 10c20 4 60-6 100 0s80 8 120 0 80-8 120 0 80 8 120 0 80-8 120 0"/></svg></div>`;
+
+/** People an accessibility barrier affects, with the icon from the clinic icon family. */
+export const PEOPLE = {
+  "screen-reader": ["Screen reader users", "Hear the page read aloud and move by headings, links and landmarks."],
+  "low-vision": ["Low vision", "Zoom to 200 percent and beyond, and need strong contrast to read."],
+  "color-blind": ["Color blindness", "Cannot tell some colors apart, so color alone says nothing."],
+  "keyboard-only": ["Keyboard only", "Tab, Enter and arrows instead of a mouse, so focus must show."],
+  cognitive: ["Cognitive and learning", "Need clear labels, steady layouts and time to read."],
+  motor: ["Motor and dexterity", "Tremors or a switch device make tiny targets and drags hard."],
+  deaf: ["Deaf and hard of hearing", "Rely on captions and transcripts for anything spoken."],
+};

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" width="240" height="180" role="img" aria-labelledby="accessibility-overlay-vs-real-fixes-t"><title id="accessibility-overlay-vs-real-fixes-t">On the left a cracked page hidden under a glossy overlay sheet; on the right the same page repaired at the source with stitches and a check mark</title><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" fill="#183b41"/>
+<g stroke="#071417" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<rect x="22" y="40" width="84" height="104" rx="9" fill="#e6dcc7"/>
+<path d="M50 40l10 26-12 16 14 18-8 22 6 22" fill="none" stroke="#f0806d" stroke-width="3.5"/>
+<path d="M28 52h88v80q-30-8-50 10H28Z" fill="#0c2135" fill-opacity=".75"/>
+<path d="M116 132q-30-8-50 10 4-18 20-24" fill="#e6dcc7"/>
+<path d="M40 62l12 12" stroke="#e6dcc7" stroke-width="4"/>
+<rect x="134" y="40" width="84" height="104" rx="9" fill="#e6dcc7"/>
+<path d="M162 40l10 26-12 16 14 18-8 22 6 22" fill="none" stroke="#3f9c95" stroke-width="3.5"/>
+<path d="M158 60l12-4M162 80l12 4M164 100l12-6M160 120l12 6" stroke-width="2.5"/>
+<circle cx="200" cy="128" r="14" fill="#22a6a3"/><path d="m193 128 5 5 9-9" stroke="#e6dcc7" stroke-width="3.5"/></g>
+<path d="M120 92h10" stroke="#071417" stroke-width="3" stroke-linecap="round"/><path d="m126 86 6 6-6 6" fill="none" stroke="#071417" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>

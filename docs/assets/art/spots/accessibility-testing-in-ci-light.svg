@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" width="240" height="180" role="img" aria-labelledby="accessibility-testing-in-ci-t"><title id="accessibility-testing-in-ci-t">Pages riding a conveyor belt under a scanner arch with a stethoscope, one coming out with a bandage</title><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" fill="#f3e3c6"/>
+<g stroke="#1d3a40" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<rect x="18" y="122" width="204" height="18" rx="9" fill="#c4d6d4"/>
+<circle cx="38" cy="131" r="4.5" fill="#fffdf7"/><circle cx="80" cy="131" r="4.5" fill="#fffdf7"/><circle cx="160" cy="131" r="4.5" fill="#fffdf7"/><circle cx="202" cy="131" r="4.5" fill="#fffdf7"/>
+<path d="M92 122V48a28 28 0 0 1 56 0V122" fill="none" stroke-width="5"/>
+<path d="M92 122V48a28 28 0 0 1 56 0V122" fill="none" stroke="#7fd3c8" stroke-width="2"/>
+<circle cx="120" cy="34" r="9" fill="#ff7a66"/>
+<path d="M120 43v18" /><circle cx="120" cy="66" r="7" fill="#0f8b8d"/>
+<g transform="rotate(-4 50 100)"><rect x="30" y="80" width="40" height="42" rx="7" fill="#fffdf7"/><path d="M38 92h16M38 102h24" stroke-width="2.5"/></g>
+<rect x="100" y="84" width="40" height="38" rx="7" fill="#fffdf7"/><path d="M108 96h16M108 106h24" stroke-width="2.5"/>
+<g transform="rotate(5 190 100)"><rect x="170" y="80" width="40" height="42" rx="7" fill="#fffdf7"/><path d="m180 102 6 6 12-12" stroke="#0f8b8d" stroke-width="4"/></g></g>
+<g transform="translate(118 112) rotate(-20)"><rect x="-15" y="-4.8" width="30" height="9.6" rx="4.363636363636363" fill="#f9c89e" stroke="#1d3a40" stroke-width="2.5"/><rect x="-4.285714285714286" y="-2.8" width="8.571428571428571" height="5.6" rx="2" fill="#eda27a"/><g fill="#1d3a40" fill-opacity=".45"><circle cx="-10" cy="-1.5999999999999999" r="1.3"/><circle cx="-10" cy="1.5999999999999999" r="1.3"/><circle cx="10" cy="-1.5999999999999999" r="1.3"/><circle cx="10" cy="1.5999999999999999" r="1.3"/></g></g>
+<path d="M214 152h-60" stroke="#1d3a40" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 9"/></svg>
