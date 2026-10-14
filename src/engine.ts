@@ -135,6 +135,61 @@ export function previewFix(el: Element, ops: FixOp[], target: Element = el): str
   return before + snippet(root, 400);
 }
 
+/**
+ * Applies a finding's fix to the live DOM (the element it was found on, or its fix target).
+ * Useful in browsers and tests to see a page "heal"; to patch files use fixHtml.
+ * Returns false when the finding has no machine readable fix.
+ */
+export function applyFix(finding: Finding): boolean {
+  const start = finding.fixTarget ?? finding.element;
+  const ops = finding.fix.ops;
+  if (!start || !ops?.length || !start.isConnected) return false;
+  let node: Element = start;
+  for (const op of ops) {
+    switch (op.op) {
+      case "set-attr":
+        node.setAttribute(op.name, op.value);
+        break;
+      case "remove-attr":
+        node.removeAttribute(op.name);
+        break;
+      case "rename-attr": {
+        const value = node.getAttribute(op.name);
+        node.removeAttribute(op.name);
+        if (value !== null) node.setAttribute(op.to, value);
+        break;
+      }
+      case "prepend":
+        node.insertAdjacentHTML("afterbegin", op.html);
+        break;
+      case "append":
+        node.insertAdjacentHTML("beforeend", op.html);
+        break;
+      case "insert-before":
+        node.insertAdjacentHTML("beforebegin", op.html);
+        break;
+      case "rename-tag": {
+        const renamed: Element = node.ownerDocument.createElement(op.tag);
+        for (const a of Array.from(node.attributes)) renamed.setAttribute(a.name, a.value);
+        while (node.firstChild) renamed.appendChild(node.firstChild);
+        node.replaceWith(renamed);
+        node = renamed;
+        break;
+      }
+      case "replace": {
+        const tpl = node.ownerDocument.createElement("template");
+        tpl.innerHTML = op.html;
+        node.replaceWith(tpl.content);
+        return true;
+      }
+      case "remove":
+        node.remove();
+        return true;
+    }
+  }
+  return true;
+}
+
 const levelRank: Record<Level, number> = { A: 1, AA: 2, AAA: 3 };
 
 export function collectCss(doc: Document, extra: string[] = []): CssSource[] {

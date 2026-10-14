@@ -1,7 +1,7 @@
 {
   "name": "a11ymedic",
   "version": "0.1.0",
-  "description": "Accessibility checker that explains every problem in plain language and gives the exact fix: 45 WCAG 2.2 rules (color contrast with accessible color suggestions, alt text, labels, ARIA, headings, focus, target size), a browser overlay, a CLI with safe auto fix, CI annotations and test matchers.",
+  "description": "Accessibility checker that explains every problem in plain language and gives the exact fix: 61 WCAG 2.2 rules (color contrast with accessible color suggestions, alt text, labels, ARIA, headings, focus, target size), a browser overlay, a CLI with safe auto fix, CI annotations and test matchers.",
   "keywords": [
     "accessibility",
     "a11y",
@@ -132,8 +132,10 @@
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
     "size": "node scripts/size.mjs",
-    "docs": "node scripts/build-docs.mjs && node scripts/highlight-docs.mjs",
-    "prepublishOnly": "npm run build && npm test"
+    "docs": "npm run build && node scripts/build-docs.mjs && node scripts/highlight-docs.mjs",
+    "prepublishOnly": "npm run build && npm test",
+    "docs:check": "node dist/cli.js \"docs/**/*.html\" --fail-on serious --quiet",
+    "art": "bash scripts/art/render.sh"
   },
   "dependencies": {
     "jsdom": "^26.1.0"

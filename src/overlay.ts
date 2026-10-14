@@ -113,8 +113,9 @@ export function drawPins(doc: Document, findings: Finding[], options: { lang?: L
       const r = g.el.getBoundingClientRect();
       const visible = r.width > 0 || r.height > 0;
       b.hidden = !visible;
-      b.style.left = `${r.left + win.scrollX}px`;
-      b.style.top = `${r.top + win.scrollY}px`;
+      // Keep pins of elements at the very top or left edge inside the viewport.
+      b.style.left = `${Math.max(10, r.left + win.scrollX)}px`;
+      b.style.top = `${Math.max(22, r.top + win.scrollY)}px`;
     }
     if (current !== null) highlight(current);
   };

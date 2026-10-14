@@ -163,3 +163,30 @@ describe("previewFix", () => {
     expect(previewFix(el, [{ op: "set-attr", name: "lang", value: "en" }], span)).toContain('<span lang="en">Hi</span>');
   });
 });
+
+describe("applyFix (live DOM)", () => {
+  it("heals the document in place", async () => {
+    const { document } = await parseHtml('<!doctype html><html lang="en"><head><title>x</title></head><body><main><h1>x</h1><img src="team.jpg"><div tabindex="4">a</div><input type="text" name="email"><span aria-labeledby="t">s</span><p id="t">t</p><a onclick="go()">Go</a></main></body></html>');
+    const { applyFix, auditDocument } = await import("../src/index");
+    const before = auditDocument(document);
+    expect(before.findings.length).toBeGreaterThan(4);
+    for (const f of before.findings) expect(applyFix(f)).toBe(true);
+    const after = auditDocument(document);
+    expect(after.findings.map((f) => f.rule)).not.toContain("image-alt");
+    expect(after.findings.map((f) => f.rule)).not.toContain("tabindex");
+    expect(after.findings.map((f) => f.rule)).not.toContain("label");
+    expect(after.findings.map((f) => f.rule)).not.toContain("aria-valid-attr");
+    expect(document.querySelector("label")!.textContent).toBe("Email");
+    expect(document.querySelector("button[type=button]")!.textContent).toBe("Go");
+  });
+
+  it("returns false without ops or after the element left the page", async () => {
+    const { audit, applyFix } = await import("../src/index");
+    const r = await audit('<main><h1>x</h1><ul><div>a</div></ul></main>');
+    const list = r.findings.find((f) => f.rule === "list")!;
+    expect(applyFix(list)).toBe(false);
+    const r2 = await audit('<img src="a.png">');
+    r2.findings[0]!.element!.remove();
+    expect(applyFix(r2.findings[0]!)).toBe(false);
+  });
+});

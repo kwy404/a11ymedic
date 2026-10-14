@@ -1,4 +1,4 @@
-import { collectCss, runAudit } from "./engine";
+import { collectCss, runAudit, applyFix } from "./engine";
 import { Dom } from "./dom";
 import { StaticStyles, ComputedStyles } from "./style";
 import { parseCss } from "./css";
@@ -27,7 +27,7 @@ export { parseColor, contrastRatio, relativeLuminance, suggestColors, toHex, toO
 export { formatText, toJSON, toMarkdown, toHtml, githubAnnotations, githubSummary, summarize } from "./report";
 export { parseHtml } from "./parse";
 export { fixHtml, applyFixes, type FixResult } from "./fix";
-export { RULES, ruleList };
+export { RULES, ruleList, applyFix };
 export { Dom, StaticStyles, ComputedStyles, parseCss };
 
 /**

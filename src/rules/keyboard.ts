@@ -74,7 +74,8 @@ function staticSize(ctx: RuleContext, el: Element, axis: "width" | "height"): nu
   const em = s.fontSize(el);
   const read = (p: string): number => {
     const v = s.get(el, p);
-    return v ? evalLength(v, em) : NaN;
+    // Percentages depend on the containing block, which static analysis does not know.
+    return v && !v.includes("%") ? evalLength(v, em) : NaN;
   };
   let size = read(axis);
   const min = read(`min-${axis}`);

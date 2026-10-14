@@ -4,6 +4,7 @@ import type { Text } from "../types";
 
 /** "first_name", "firstName", "team-photo_2024.jpg" become "First name", "First name", "Team photo 2024". */
 export function humanize(raw: string): string {
+  if (/^\s*(data|blob|javascript):/i.test(raw)) return "";
   let s = raw.replace(/\?.*$/, "").replace(/#.*$/, "");
   s = s.split("/").filter(Boolean).pop() ?? s;
   s = s.replace(/\.(jpe?g|png|gif|svg|webp|avif|bmp|ico|html?|php|aspx?)$/i, "");
