@@ -154,10 +154,14 @@ function makeRule(enhanced: boolean): Rule {
         const s = suggestColors(m.foreground, m.background, { ratio: required });
         const fgHex = toHex({ ...m.foreground, a: 1 });
         const bgHex = toHex({ ...m.background, a: 1 });
+        const both = s.changed === "both";
         const changeFg = s.changed !== "background";
-        const style = mergeStyle(el.getAttribute("style"), changeFg ? { color: s.foreground } : { "background-color": s.background });
+        const set: Record<string, string> = both ? { color: s.foreground, "background-color": s.background } : changeFg ? { color: s.foreground } : { "background-color": s.background };
+        const style = mergeStyle(el.getAttribute("style"), set);
         const sizeNote = m.large ? t("large text", "texto grande") : t("normal text", "texto normal");
         const other = changeFg ? s.backgroundOption : s.foregroundOption;
+        const r = formatRatio(s.ratio);
+        const rPt = r.replace(".", ",");
         ctx.report({
           el,
           message: t(
@@ -165,15 +169,20 @@ function makeRule(enhanced: boolean): Rule {
             `O contraste é ${formatRatio(m.ratio).replace(".", ",")}:1 (${fgHex} sobre ${bgHex}${m.gradient ? ", pior ponto de um degradê" : ""}). ${sizeNote.pt.charAt(0).toUpperCase() + sizeNote.pt.slice(1)} precisa de ${String(required).replace(".", ",")}:1.`,
           ),
           fix: {
-            summary: changeFg
+            summary: both
               ? t(
-                  `Change the text color to ${s.foreground} (${formatRatio(s.ratio)}:1), the closest color with the same hue that passes.${other ? ` Or keep the text and use the background ${other.background}.` : ""}`,
-                  `Mude a cor do texto para ${s.foreground} (${formatRatio(s.ratio).replace(".", ",")}:1), a cor mais próxima com o mesmo matiz que passa.${other ? ` Ou mantenha o texto e use o fundo ${other.background}.` : ""}`,
+                  `No text color alone reaches ${required}:1 on this background. Use ${s.foreground} on ${s.background} (${r}:1).`,
+                  `Nenhuma cor de texto sozinha chega a ${String(required).replace(".", ",")}:1 neste fundo. Use ${s.foreground} sobre ${s.background} (${rPt}:1).`,
                 )
-              : t(
-                  `Change the background to ${s.background} (${formatRatio(s.ratio)}:1), the closest shade that passes.${other ? ` Or change the text color to ${other.foreground}.` : ""}`,
-                  `Mude o fundo para ${s.background} (${formatRatio(s.ratio).replace(".", ",")}:1), o tom mais próximo que passa.${other ? ` Ou mude a cor do texto para ${other.foreground}.` : ""}`,
-                ),
+              : changeFg
+                ? t(
+                    `Change the text color to ${s.foreground} (${r}:1), the closest color with the same hue that passes.${other ? ` Or keep the text and use the background ${other.background}.` : ""}`,
+                    `Mude a cor do texto para ${s.foreground} (${rPt}:1), a cor mais próxima com o mesmo matiz que passa.${other ? ` Ou mantenha o texto e use o fundo ${other.background}.` : ""}`,
+                  )
+                : t(
+                    `Change the background to ${s.background} (${r}:1), the closest shade that passes.${other ? ` Or change the text color to ${other.foreground}.` : ""}`,
+                    `Mude o fundo para ${s.background} (${rPt}:1), o tom mais próximo que passa.${other ? ` Ou mude a cor do texto para ${other.foreground}.` : ""}`,
+                  ),
             ops: [{ op: "set-attr", name: "style", value: style }],
             safe: false,
           },

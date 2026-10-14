@@ -377,8 +377,8 @@ export interface ColorOption {
 }
 
 export interface ColorSuggestion extends ColorOption {
-  /** Which color the recommended option changes. */
-  changed: "foreground" | "background" | "none";
+  /** Which color the recommended option changes ("both" when neither alone can reach the target). */
+  changed: "foreground" | "background" | "both" | "none";
   /** The best option that changes only the text color, if one exists. */
   foregroundOption: ColorOption | null;
   /** The best option that changes only the background color, if one exists. */
@@ -420,12 +420,19 @@ export function suggestColors(
   else if (fgOption) pick = "foreground";
   else if (bgOption) pick = "background";
   else {
-    // Unreachable for targets up to 21, kept as a defensive fallback: black or white text.
+    // Neither color alone can reach the target (for example 7:1 on a mid tone): push the text to
+    // black or white, whichever is closer to working, then move the background the other way.
     const black = contrastRatio(BLACK, bg);
     const white = contrastRatio(WHITE, bg);
-    const fallback = black >= white ? BLACK : WHITE;
-    const option = { foreground: toHex(fallback), background: toHex(bg), ratio: Math.max(black, white), distance: deltaE(fallback, fg) };
-    return { ...option, changed: "foreground", foregroundOption: option, backgroundOption: null };
+    const extreme = black >= white ? BLACK : WHITE;
+    const background = closestPassing(bg, extreme, target) ?? (extreme === BLACK ? WHITE : BLACK);
+    const option = {
+      foreground: toHex(extreme),
+      background: toHex(background),
+      ratio: contrastRatio(extreme, background),
+      distance: deltaE(extreme, fg) + deltaE(background, bg),
+    };
+    return { ...option, changed: "both", foregroundOption: null, backgroundOption: null };
   }
   const chosen = (pick === "foreground" ? fgOption : bgOption)!;
   return { ...chosen, changed: pick, foregroundOption: fgOption, backgroundOption: bgOption };

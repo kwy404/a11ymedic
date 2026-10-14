@@ -24,12 +24,12 @@ export function unifiedDiff(a: string, b: string, file = "file", context = 2): s
       ops.push({ t: " ", s: xm[i]!, ai: pre + i, bi: pre + j });
       i++;
       j++;
-    } else if (j < m && (i >= n || dp[i]![j + 1]! >= dp[i + 1]![j]!)) {
-      ops.push({ t: "+", s: ym[j]!, ai: pre + i, bi: pre + j });
-      j++;
-    } else {
+    } else if (i < n && (j >= m || dp[i + 1]![j]! >= dp[i]![j + 1]!)) {
       ops.push({ t: "-", s: xm[i]!, ai: pre + i, bi: pre + j });
       i++;
+    } else {
+      ops.push({ t: "+", s: ym[j]!, ai: pre + i, bi: pre + j });
+      j++;
     }
   }
   for (let k = 0; k < suf; k++) ops.push({ t: " ", s: x[x.length - suf + k]!, ai: x.length - suf + k, bi: y.length - suf + k });

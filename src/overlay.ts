@@ -272,7 +272,7 @@ ${result.incomplete.length ? `<p class="review">${ui.review}: ${result.incomplet
     pins?.highlight(selected);
     if (selected !== null) {
       const el = result.findings[selected]?.element;
-      el?.scrollIntoView?.({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      el?.scrollIntoView?.({ block: "center", behavior: typeof matchMedia === "function" && !matchMedia("(prefers-reduced-motion: reduce)").matches ? "smooth" : "auto" });
       const head = root.querySelector<HTMLElement>(`.head[data-i="${selected}"]`);
       head?.focus();
       head?.scrollIntoView?.({ block: "nearest" });

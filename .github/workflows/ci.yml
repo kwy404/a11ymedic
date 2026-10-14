@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run typecheck
+      # ESLint 9 and typescript-eslint 8 pull in dependencies that need Node 20 or newer,
+      # so ESLint runs on the newer jobs. The character and wording check runs everywhere.
+      - run: npm run lint
+        if: matrix.node != 18
+      - run: npm run lint:chars
+      - run: npm test
+      - run: npm run size
+      # Dogfooding: the docs site must stay healthy.
+      - run: node dist/cli.js "docs/**/*.html" --fail-on serious --quiet
