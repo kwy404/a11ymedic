@@ -1,4 +1,6 @@
+import { score, type Score } from "./score";
 import { SEVERITIES, severityRank, type AuditResult, type Finding, type Lang, type Severity } from "./types";
+import { VERSION } from "./version";
 
 export interface ReportOptions {
   lang?: Lang;
@@ -6,6 +8,8 @@ export interface ReportOptions {
   color?: boolean;
   /** Show at most this many instances per rule in text output. Default 20. */
   maxPerRule?: number;
+  /** Date printed on the HTML report. Default today. */
+  date?: Date | string;
 }
 
 const L = (lang: Lang | undefined, en: string, pt: string): string => (lang === "pt" ? pt : en);
@@ -48,7 +52,7 @@ export function formatText(input: AuditResult | AuditResult[], options: ReportOp
   const out: string[] = [];
   for (const r of results) {
     out.push("");
-    out.push(c("bold", `${r.source ?? L(lang, "document", "documento")}`) + c("gray", `  ${r.title ? `"${r.title}"  ` : ""}${r.findings.length} ${L(lang, "finding(s)", "problema(s)")}, ${r.styles === "static" ? L(lang, "static CSS analysis", "análise estática de CSS") : L(lang, "browser styles", "estilos do navegador")}`));
+    out.push(c("bold", `${r.source ?? L(lang, "document", "documento")}`) + c("gray", `  ${r.title ? `"${r.title}"  ` : ""}${r.findings.length} ${L(lang, "finding(s)", "problema(s)")}, ${L(lang, "score", "nota")} ${score(r).value}/100, ${r.styles === "static" ? L(lang, "static CSS analysis", "análise estática de CSS") : L(lang, "browser styles", "estilos do navegador")}`));
     if (!r.findings.length) {
       out.push(c("green", `  ${L(lang, "Healthy: no problems found.", "Saudável: nenhum problema encontrado.")}`));
     }
@@ -92,6 +96,9 @@ export function formatText(input: AuditResult | AuditResult[], options: ReportOp
       (results.length > 1 ? ` ${L(lang, "in", "em")} ${results.length} ${L(lang, "documents", "documentos")}` : "") +
       (fixable ? c("green", `, ${fixable} ${L(lang, "fixable with `a11ymedic fix --write`", "corrigíveis com `a11ymedic fix --write`")}`) : ""),
   );
+  const overall = score(results);
+  const gradeColor = overall.grade === "healthy" ? "green" : overall.grade === "fair" ? "yellow" : "red";
+  out.push(`${L(lang, "Health score", "Nota de saúde")}: ${c(gradeColor, c("bold", `${overall.value}/100`))} (${overall.label[lang ?? "en"]})`);
   return out.join("\n") + "\n";
 }
 
@@ -139,11 +146,14 @@ export function toMarkdown(input: AuditResult | AuditResult[], options: ReportOp
   const out: string[] = [];
   out.push(`# ${L(lang, "Accessibility report", "Relatório de acessibilidade")}`);
   out.push("");
+  const overall = score(results);
   out.push(`${L(lang, "Checked", "Verificados")}: ${results.length} ${L(lang, "document(s)", "documento(s)")}. ${L(lang, "Result", "Resultado")}: **${summarize(total, lang)}**.`);
   out.push("");
-  out.push(`| ${L(lang, "Document", "Documento")} | critical | serious | moderate | minor |`);
-  out.push("| --- | ---: | ---: | ---: | ---: |");
-  for (const r of results) out.push(`| ${(r.source ?? r.title) || "document"} | ${r.counts.critical} | ${r.counts.serious} | ${r.counts.moderate} | ${r.counts.minor} |`);
+  out.push(`${L(lang, "Health score", "Nota de saúde")}: **${overall.value}/100** (${overall.label[lang]}).`);
+  out.push("");
+  out.push(`| ${L(lang, "Document", "Documento")} | critical | serious | moderate | minor | ${L(lang, "score", "nota")} |`);
+  out.push("| --- | ---: | ---: | ---: | ---: | ---: |");
+  for (const r of results) out.push(`| ${(r.source ?? r.title) || "document"} | ${r.counts.critical} | ${r.counts.serious} | ${r.counts.moderate} | ${r.counts.minor} | ${score(r).value} |`);
   for (const r of results) {
     if (!r.findings.length) continue;
     out.push("");
@@ -184,14 +194,82 @@ export function toMarkdown(input: AuditResult | AuditResult[], options: ReportOp
 
 const esc = (s: string): string => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-/** A self contained, accessible HTML report with light and dark themes. */
+/** The date shown on reports, as YYYY-MM-DD. */
+const dayOf = (date: Date | string | undefined): string => {
+  if (typeof date === "string") return date;
+  return (date ?? new Date()).toISOString().slice(0, 10);
+};
+
+const GAUGE_R = 52;
+const GAUGE_C = (2 * Math.PI * GAUGE_R).toFixed(1);
+
+/** A score ring: an SVG arc with the number in the middle, named for screen readers. */
+export function scoreGauge(s: Score, lang: Lang = "en", size: "big" | "small" = "big"): string {
+  const label = L(lang, `Health score ${s.value} out of 100: ${s.label.en}`, `Nota de saúde ${s.value} de 100: ${s.label.pt}`);
+  const dash = ((s.value / 100) * Number(GAUGE_C)).toFixed(1);
+  return `<div class="gauge gauge-${size} g-${s.grade}" role="img" aria-label="${esc(label)}"><svg viewBox="0 0 120 120" aria-hidden="true" focusable="false"><circle class="track" cx="60" cy="60" r="${GAUGE_R}"/><circle class="arc" cx="60" cy="60" r="${GAUGE_R}" stroke-dasharray="${dash} ${GAUGE_C}" transform="rotate(-90 60 60)"/></svg><span class="num" aria-hidden="true">${s.value}</span></div>`;
+}
+
+const REPORT_CSS = `
+:root{--bg:#f6fbfb;--card:#fff;--text:#12343b;--muted:#46666c;--line:#bfe6e1;--teal:#0a6b6d;--coral:#b4402f;--code:#eef7f6;--critical:#8a1c5c;--serious:#b4261a;--moderate:#8a5a00;--minor:#0a5c7a;--track:#dcefed}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1f24;--card:#10323a;--text:#e8f6f5;--muted:#9fc9c6;--line:#1f5660;--teal:#5fd6cb;--coral:#ff9a8a;--code:#0b262c;--critical:#ff8fcf;--serious:#ff9a8a;--moderate:#ffd27a;--minor:#8fd8ff;--track:#1f4a52}}
+*{box-sizing:border-box}body{margin:0;font:16px/1.55 system-ui,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 64px}h1{margin:.1em 0;font-size:1.8rem}a{color:var(--teal)}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.brand{margin:0;font-weight:700;color:var(--teal);letter-spacing:.04em}.meta{margin:0;color:var(--muted)}
+.print{font:inherit;font-weight:600;color:var(--bg);background:var(--teal);border:0;border-radius:10px;padding:10px 16px;min-height:44px;cursor:pointer}
+.print:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+.overview{display:flex;flex-wrap:wrap;align-items:center;gap:20px;margin:20px 0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.overview p{margin:.2em 0}.grade{font-size:1.4rem;font-weight:700}
+.gauge{position:relative;flex:none;display:grid;place-items:center}.gauge svg{width:100%;height:100%}
+.gauge-big{width:132px;height:132px}.gauge-small{width:64px;height:64px}
+.gauge circle{fill:none;stroke-width:12}.gauge .track{stroke:var(--track)}.gauge .arc{stroke:var(--g);stroke-linecap:round}
+.gauge .num{position:absolute;font-weight:800;color:var(--g)}.gauge-big .num{font-size:2.4rem}.gauge-small .num{font-size:1.1rem}
+.g-healthy{--g:var(--teal)}.g-fair{--g:var(--moderate)}.g-unwell{--g:var(--serious)}.g-urgent{--g:var(--critical)}
+.totals{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:8px 0 0;list-style:none}.totals li{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 12px}
+table{border-collapse:collapse;width:100%;margin:16px 0;background:var(--card)}caption{text-align:left;font-weight:700;padding:4px 0}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:right}th[scope=row],thead th:first-child{text-align:left}
+.doc{margin-top:36px}.doc-head{display:flex;align-items:center;gap:14px}.doc-head h2{margin:0;font-size:1.3rem;word-break:break-word}.summary{margin:0;color:var(--muted)}
+.rule{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:12px;padding:16px;margin:16px 0}
+.sev-critical{border-left-color:var(--critical)}.sev-serious{border-left-color:var(--serious)}.sev-moderate{border-left-color:var(--moderate)}.sev-minor{border-left-color:var(--minor)}
+.badge{display:inline-block;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border:1px solid currentColor;border-radius:6px;padding:0 6px;vertical-align:middle}
+.sev-critical .badge{color:var(--critical)}.sev-serious .badge{color:var(--serious)}.sev-moderate .badge{color:var(--moderate)}.sev-minor .badge{color:var(--minor)}
+.count{color:var(--muted);font-weight:400}.wcag,.loc{color:var(--muted);font-size:.9rem}.findings{padding-left:20px}.finding{margin:14px 0}
+.code{display:grid;grid-template-columns:1fr 1fr;gap:8px}@media (max-width:700px){.code{grid-template-columns:1fr}}
+.label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}pre{margin:2px 0 0;background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+code{font:13px/1.5 ui-monospace,Consolas,monospace}.safe{color:var(--teal);font-size:.85rem;border:1px solid var(--line);border-radius:6px;padding:0 6px}.healthy{color:var(--teal);font-weight:600}
+.review{margin:12px 0;color:var(--muted)}.review summary{cursor:pointer;font-weight:600}
+footer{margin-top:40px;border-top:1px solid var(--line);padding-top:12px;color:var(--muted);font-size:.9rem}
+@media (prefers-reduced-motion:no-preference){.gauge .arc{animation:a11ymedic-fill .9s ease-out both}}
+@keyframes a11ymedic-fill{from{stroke-dasharray:0 ${GAUGE_C}}}
+@media print{
+:root{--bg:#fff;--card:#fff;--text:#111;--muted:#444;--line:#bbb;--teal:#0a5557;--code:#f4f4f4;--critical:#8a1c5c;--serious:#a3221a;--moderate:#6e4700;--minor:#0a4c66;--track:#e4e4e4}
+@page{margin:14mm}
+body{font-size:11pt;line-height:1.45;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+main{max-width:none;padding:0}.print{display:none}.gauge .arc{animation:none}
+.rule{padding:10px 12px;margin:10px 0}
+h2,h3{break-after:avoid}.finding,.code,.doc-head,.overview,tr{break-inside:avoid}
+.code{grid-template-columns:1fr 1fr}pre{overflow:visible}
+.wcag a{color:inherit;text-decoration:none}.wcag a::after{content:" (" attr(href) ")";font-size:8pt;word-break:break-all}
+}
+`;
+
+/**
+ * A self contained, accessible HTML report with light and dark themes, a 0 to 100 health score
+ * and a print layout: open it in a browser and print it or save it as PDF.
+ */
 export function toHtml(input: AuditResult | AuditResult[], options: ReportOptions = {}): string {
   const results = Array.isArray(input) ? input : [input];
   const lang = options.lang ?? "en";
   const total = mergeCounts(results);
   const n = results.reduce((a, r) => a + r.findings.length, 0);
+  const fixable = results.reduce((a, r) => a + r.findings.filter((f) => f.fix.safe).length, 0);
+  const overall = score(results);
+  const day = dayOf(options.date);
+  const docName = (r: AuditResult): string => (r.source ?? r.title) || L(lang, "Document", "Documento");
   const sections = results
-    .map((r) => {
+    .map((r, ri) => {
+      const id = `d${ri}`;
       const groups = groupByRule(r.findings)
         .map((group) => {
           const f0 = group[0]!;
@@ -205,8 +283,8 @@ export function toHtml(input: AuditResult | AuditResult[], options: ReportOption
 </li>`,
             )
             .join("\n");
-          return `<section class="rule sev-${f0.severity}" aria-labelledby="${esc(r.source ?? "doc")}-${f0.rule}">
-<h3 id="${esc(r.source ?? "doc")}-${f0.rule}"><span class="badge">${sevName(f0.severity, lang)}</span> ${esc(f0.title[lang])} <span class="count">${group.length}</span></h3>
+          return `<section class="rule sev-${f0.severity}" aria-labelledby="${id}-${f0.rule}">
+<h3 id="${id}-${f0.rule}"><span class="badge">${sevName(f0.severity, lang)}</span> ${esc(f0.title[lang])} <span class="count">${group.length}</span></h3>
 <p>${esc(f0.explanation[lang])}</p>
 <p><strong>${L(lang, "Who is affected", "Quem é afetado")}:</strong> ${esc(f0.affects[lang])}</p>
 <p class="wcag">WCAG ${f0.wcag.map((w) => `<a href="${w.url}">${w.id} ${esc(lang === "pt" ? w.namePt : w.name)}</a> (${w.level})`).join(", ")} &middot; <code>${f0.rule}</code></p>
@@ -214,38 +292,62 @@ export function toHtml(input: AuditResult | AuditResult[], options: ReportOption
 </section>`;
         })
         .join("\n");
-      return `<section class="doc"><h2>${esc((r.source ?? r.title) || "Document")}</h2><p class="summary">${esc(summarize(r.counts, lang))}</p>${groups || `<p class="healthy">${L(lang, "Healthy: no problems found.", "Saudável: nenhum problema encontrado.")}</p>`}</section>`;
+      const s = score(r);
+      const review = r.incomplete.length
+        ? `<details class="review"><summary>${L(lang, "Needs a human check", "Precisa de verificação humana")} (${r.incomplete.length})</summary><ul>${r.incomplete
+            .map((i) => `<li>${esc(i.message[lang])} <code>${esc(i.line ? `${r.source ?? L(lang, "line", "linha")}:${i.line}` : i.selector)}</code></li>`)
+            .join("")}</ul></details>`
+        : "";
+      return `<section class="doc" aria-labelledby="${id}">
+<div class="doc-head">${scoreGauge(s, lang, "small")}<div><h2 id="${id}">${esc(docName(r))}</h2><p class="summary">${esc(s.label[lang])}: ${esc(summarize(r.counts, lang))}</p></div></div>
+${groups || `<p class="healthy">${L(lang, "Healthy: no problems found.", "Saudável: nenhum problema encontrado.")}</p>`}
+${review}
+</section>`;
     })
     .join("\n");
+  const table =
+    results.length > 1
+      ? `<table class="docs"><caption>${L(lang, "Documents checked", "Documentos verificados")}</caption>
+<thead><tr><th scope="col">${L(lang, "Document", "Documento")}</th><th scope="col">${L(lang, "Score", "Nota")}</th>${SEVERITIES.map((sv) => `<th scope="col">${sevName(sv, lang)}</th>`).join("")}</tr></thead>
+<tbody>${results.map((r, ri) => `<tr><th scope="row"><a href="#d${ri}">${esc(docName(r))}</a></th><td>${score(r).value}</td>${SEVERITIES.map((sv) => `<td>${r.counts[sv]}</td>`).join("")}</tr>`).join("")}</tbody>
+</table>`
+      : "";
+  const title = L(lang, "Accessibility report", "Relatório de acessibilidade");
   return `<!doctype html>
 <html lang="${lang === "pt" ? "pt-BR" : "en"}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${L(lang, "Accessibility report", "Relatório de acessibilidade")} (a11ymedic)</title>
-<style>
-:root{--bg:#f6fbfb;--card:#fff;--text:#12343b;--muted:#46666c;--line:#bfe6e1;--teal:#0a6b6d;--coral:#b4402f;--code:#eef7f6;--critical:#8a1c5c;--serious:#b4261a;--moderate:#8a5a00;--minor:#0a5c7a}
-@media (prefers-color-scheme:dark){:root{--bg:#0b1f24;--card:#10323a;--text:#e8f6f5;--muted:#9fc9c6;--line:#1f5660;--teal:#5fd6cb;--coral:#ff9a8a;--code:#0b262c;--critical:#ff8fcf;--serious:#ff9a8a;--moderate:#ffd27a;--minor:#8fd8ff}}
-*{box-sizing:border-box}body{margin:0;font:16px/1.55 system-ui,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
-main{max-width:1000px;margin:0 auto;padding:24px 16px 64px}h1{margin:.2em 0;font-size:1.8rem}a{color:var(--teal)}
-.totals{display:flex;flex-wrap:wrap;gap:8px;padding:0;list-style:none}.totals li{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
-.doc{margin-top:32px}.rule{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:12px;padding:16px;margin:16px 0}
-.sev-critical{border-left-color:var(--critical)}.sev-serious{border-left-color:var(--serious)}.sev-moderate{border-left-color:var(--moderate)}.sev-minor{border-left-color:var(--minor)}
-.badge{display:inline-block;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border:1px solid currentColor;border-radius:6px;padding:0 6px;vertical-align:middle}
-.sev-critical .badge{color:var(--critical)}.sev-serious .badge{color:var(--serious)}.sev-moderate .badge{color:var(--moderate)}.sev-minor .badge{color:var(--minor)}
-.count{color:var(--muted);font-weight:400}.wcag,.loc{color:var(--muted);font-size:.9rem}.findings{padding-left:20px}.finding{margin:14px 0}
-.code{display:grid;grid-template-columns:1fr 1fr;gap:8px}@media (max-width:700px){.code{grid-template-columns:1fr}}
-.label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}pre{margin:2px 0 0;background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word}
-code{font:13px/1.5 ui-monospace,Consolas,monospace}.safe{color:var(--teal);font-size:.85rem;border:1px solid var(--line);border-radius:6px;padding:0 6px}.healthy{color:var(--teal);font-weight:600}
-</style>
+<title>${title} (a11ymedic)</title>
+<style>${REPORT_CSS}</style>
 </head>
 <body>
 <main>
-<p>a11ymedic</p>
-<h1>${L(lang, "Accessibility report", "Relatório de acessibilidade")}</h1>
-<p>${n} ${L(lang, "problem(s) in", "problema(s) em")} ${results.length} ${L(lang, "document(s)", "documento(s)")}.</p>
-<ul class="totals">${SEVERITIES.map((s) => `<li>${total[s]} ${sevName(s, lang)}</li>`).join("")}</ul>
+<header class="top">
+<div><p class="brand">a11ymedic</p><h1>${title}</h1><p class="meta">${L(lang, "Checked on", "Verificado em")} <time datetime="${esc(day)}">${esc(day)}</time> &middot; ${results.length} ${L(lang, "document(s)", "documento(s)")}</p></div>
+<button type="button" class="print" onclick="window.print()">${L(lang, "Print or save as PDF", "Imprimir ou salvar em PDF")}</button>
+</header>
+<section class="overview" aria-label="${L(lang, "Summary", "Resumo")}">
+${scoreGauge(overall, lang)}
+<div><p class="grade">${esc(overall.label[lang])}</p>
+<p>${n} ${L(lang, "problem(s) in", "problema(s) em")} ${results.length} ${L(lang, "document(s)", "documento(s)")}${fixable ? `, ${fixable} ${L(lang, "fixable with", "corrigíveis com")} <code>a11ymedic fix --write</code>` : ""}.</p>
+<ul class="totals">${SEVERITIES.map((sv) => `<li>${total[sv]} ${sevName(sv, lang)}</li>`).join("")}</ul></div>
+</section>
+${table}
 ${sections}
+<footer>
+<p>${L(
+    lang,
+    "How the score works: every failing rule takes points by severity (critical 12, serious 7, moderate 3, minor 1), up to double when it repeats. 100 means no automated findings.",
+    "Como a nota funciona: cada regra com problema tira pontos pela gravidade (crítico 12, grave 7, moderado 3, leve 1), até o dobro quando se repete. 100 significa nenhum problema encontrado automaticamente.",
+  )}</p>
+<p>${L(
+    lang,
+    "Automated checks find many common problems but not all of them. Test with a keyboard and a screen reader too.",
+    "Verificações automáticas encontram muitos problemas comuns, mas não todos. Teste também com teclado e leitor de tela.",
+  )}</p>
+<p>${L(lang, "Generated by", "Gerado por")} <a href="https://kwy404.github.io/a11ymedic/">a11ymedic</a> ${VERSION}.</p>
+</footer>
 </main>
 </body>
 </html>
@@ -281,12 +383,12 @@ export function githubSummary(input: AuditResult | AuditResult[], options: Repor
   const total = mergeCounts(results);
   const n = results.reduce((a, r) => a + r.findings.length, 0);
   const out: string[] = [];
-  out.push(`## a11ymedic: ${n === 0 ? L(lang, "healthy", "saudável") : summarize(total, lang)}`);
+  out.push(`## a11ymedic: ${n === 0 ? L(lang, "healthy", "saudável") : summarize(total, lang)} (${L(lang, "score", "nota")} ${score(results).value}/100)`);
   out.push("");
-  out.push(`| ${L(lang, "Document", "Documento")} | critical | serious | moderate | minor | ${L(lang, "auto fixable", "corrigível")} |`);
-  out.push("| --- | ---: | ---: | ---: | ---: | ---: |");
+  out.push(`| ${L(lang, "Document", "Documento")} | critical | serious | moderate | minor | ${L(lang, "auto fixable", "corrigível")} | ${L(lang, "score", "nota")} |`);
+  out.push("| --- | ---: | ---: | ---: | ---: | ---: | ---: |");
   for (const r of results) {
-    out.push(`| ${(r.source ?? r.title) || "document"} | ${r.counts.critical} | ${r.counts.serious} | ${r.counts.moderate} | ${r.counts.minor} | ${r.findings.filter((f) => f.fix.safe).length} |`);
+    out.push(`| ${(r.source ?? r.title) || "document"} | ${r.counts.critical} | ${r.counts.serious} | ${r.counts.moderate} | ${r.counts.minor} | ${r.findings.filter((f) => f.fix.safe).length} | ${score(r).value} |`);
   }
   const rules = new Map<string, { title: string; count: number; severity: Severity; url: string }>();
   for (const r of results) {
