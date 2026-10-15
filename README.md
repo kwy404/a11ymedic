@@ -70,7 +70,7 @@ result.findings[0].fix.after; // '<button aria-label="Delete"><svg class="icon-t
 **Script tag**, for development builds:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/a11ymedic@0.1.0/dist/a11ymedic.js" data-overlay></script>
+<script src="https://cdn.jsdelivr.net/npm/a11ymedic@0.2.0/dist/a11ymedic.js" data-overlay></script>
 <!-- data-overlay="pt" for Portuguese, or data-button for a floating "Check this page" button -->
 ```
 

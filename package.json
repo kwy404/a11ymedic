@@ -1,6 +1,6 @@
 {
   "name": "a11ymedic",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Accessibility checker that explains each problem in plain language and gives the exact fix.",
   "keywords": [
     "accessibility",

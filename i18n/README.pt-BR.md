@@ -57,7 +57,7 @@ result.findings[0].fix.after;  // '<button aria-label="Delete"><svg class="icon-
 **Tag script**, para builds de desenvolvimento:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/a11ymedic@0.1.0/dist/a11ymedic.js" data-overlay="pt"></script>
+<script src="https://cdn.jsdelivr.net/npm/a11ymedic@0.2.0/dist/a11ymedic.js" data-overlay="pt"></script>
 <!-- ou data-button="pt" para um botão flutuante "Verificar esta página" -->
 ```
 

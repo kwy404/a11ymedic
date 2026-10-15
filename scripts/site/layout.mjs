@@ -4,7 +4,7 @@ import { icon } from "../art/clinic.mjs";
 
 export const SITE = "https://kwy404.github.io/a11ymedic/";
 export const REPO = "https://github.com/kwy404/a11ymedic";
-export const VERSION = "0.1.0";
+export const VERSION = "0.2.0";
 export const AUTHOR = {
   "@type": "Person",
   name: "Alexandre Kohler",
