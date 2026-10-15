@@ -197,4 +197,64 @@ describe("CLI", () => {
   it("does not leave report folders behind unless asked", () => {
     expect(existsSync(join(dir, "out"))).toBe(true);
   });
+
+  it("prints the health score and gates on --min-score", async () => {
+    const a = io();
+    await main(["src/bad.html", "--no-color"], a);
+    expect(a.out).toMatch(/score \d+\/100/);
+    expect(a.out).toMatch(/Health score: \d+\/100 \(/);
+    const quiet = io();
+    await main(["src/bad.html", "-q"], quiet);
+    expect(quiet.out).toMatch(/^3 problem\(s\) in 1 document\(s\), score 77\/100\n$/);
+    // Alone, --min-score replaces the default --fail-on minor.
+    const pass = io();
+    expect(await main(["src/bad.html", "--min-score", "75", "-q"], pass)).toBe(0);
+    const fail = io();
+    expect(await main(["src/bad.html", "--min-score", "80", "-q"], fail)).toBe(1);
+    expect(fail.out).toContain("1 document(s) below the minimum score 80: src/bad.html (77)");
+    const both = io();
+    expect(await main(["src/bad.html", "--min-score", "75", "--fail-on", "critical", "-q"], both)).toBe(1);
+    const pt = io();
+    await main(["src/bad.html", "--min-score", "90", "-q", "--lang", "pt"], pt);
+    expect(pt.out).toContain("abaixo da nota mínima 90");
+    for (const bad of ["101", "-1", "abc", "9.5"]) {
+      const e = io();
+      expect(await main(["src/bad.html", "--min-score", bad], e), bad).toBe(2);
+      expect(e.err).toContain("--min-score");
+    }
+  });
+
+  it("keeps a score history file and shows the change since the last run", async () => {
+    const file = join(dir, "src", "history.html");
+    writeFileSync(file, '<!doctype html><html lang="en"><head><title>H</title></head><body><main><h1>H</h1><img src="a.png"><img src="b.png"></main></body></html>');
+    const first = io();
+    await main(["src/history.html", "--history", "reports/history.json", "-q"], first);
+    expect(first.out).toContain("Score history (reports/history.json):\n  src/history.html: 84/100 (first run)");
+    writeFileSync(file, '<!doctype html><html lang="en"><head><title>H</title></head><body><main><h1>H</h1><img src="a.png" alt="A"><img src="b.png" alt="B"></main></body></html>');
+    const second = io();
+    await main(["src/history.html", "--history", "reports/history.json", "-q"], second);
+    expect(second.out).toMatch(/src\/history\.html: 100\/100 \(up 16 since \d{4}-\d{2}-\d{2}\)/);
+    const saved = JSON.parse(readFileSync(join(dir, "reports", "history.json"), "utf8"));
+    expect(Object.keys(saved)).toEqual(["src/history.html"]);
+    expect(saved["src/history.html"].map((e: { score: number }) => e.score)).toEqual([84, 100]);
+    const same = io();
+    await main(["src/history.html", "--history", "reports/history.json", "--format", "json", "--lang", "pt"], same);
+    expect(same.out.startsWith("{")).toBe(true);
+    expect(same.err).toMatch(/Histórico de notas[^]*subiu 16 desde/);
+    writeFileSync(join(dir, "broken.json"), "{oops");
+    const broken = io();
+    expect(await main(["src/history.html", "--history", "broken.json"], broken)).toBe(2);
+    expect(broken.err).toContain("not a valid history file");
+    const missing = io();
+    expect(await main(["src/history.html", "--history"], missing)).toBe(2);
+  });
+
+  it("prints a bookmarklet", async () => {
+    const a = io();
+    expect(await main(["bookmarklet"], a)).toBe(0);
+    expect(a.out).toMatch(/^javascript:\(function\(\)\{.*a11ymedic@0\.1\.0\/dist\/a11ymedic\.js.*\}\)\(\)\n$/);
+    const pt = io();
+    await main(["bookmarklet", "--lang", "pt"], pt);
+    expect(pt.out).toContain("a.toggleOverlay({lang:'pt'})");
+  });
 });

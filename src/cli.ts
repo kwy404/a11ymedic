@@ -6,9 +6,12 @@ import { runAudit } from "./engine";
 import { fixHtml } from "./fix";
 import { expandGlobs } from "./node/glob";
 import { unifiedDiff } from "./node/diff";
+import { bookmarklet } from "./bookmarklet";
+import { recordScore, type HistoryStorage } from "./history";
 import { parseHtml } from "./parse";
 import { formatText, githubAnnotations, githubSummary, toHtml, toJSON, toMarkdown } from "./report";
 import { RULES } from "./rules";
+import { score } from "./score";
 import { SEVERITIES, severityRank, type AuditOptions, type AuditResult, type Lang, type Level, type Severity } from "./types";
 
 import { VERSION } from "./version";
@@ -37,6 +40,9 @@ interface Flags {
   color: boolean;
   quiet: boolean;
   defaultLang?: string | undefined;
+  failOnSet: boolean;
+  minScore?: number;
+  history?: string | undefined;
 }
 
 const HELP = `a11ymedic ${VERSION}: find accessibility problems and get the exact fix.
@@ -45,6 +51,7 @@ Usage
   a11ymedic <files, globs, directories or URLs...> [options]
   a11ymedic fix <files or globs...> [--write]
   a11ymedic rules [--lang pt]
+  a11ymedic bookmarklet [--lang pt]
 
 Examples
   npx a11ymedic index.html
@@ -52,12 +59,17 @@ Examples
   npx a11ymedic https://example.com --format html -o report.html
   npx a11ymedic fix "src/**/*.html"            preview the safe fixes as a diff
   npx a11ymedic fix "src/**/*.html" --write    apply them
+  npx a11ymedic "dist/**/*.html" --min-score 90 --history .a11ymedic-history.json
 
 Options
   -f, --format <text|json|html|md|github>  Report format (default: text)
   -o, --output <file>                     Write the report to a file
       --fail-on <severity|none>           Exit with 1 when a finding is at least this severe
                                           (critical, serious, moderate, minor; default: minor)
+      --min-score <0-100>                 Exit with 1 when a document scores below this
+                                          (alone, it replaces the default --fail-on minor)
+      --history <file>                    Keep the score of each document in a JSON file
+                                          and print how it changed since the last run
       --level <A|AA|AAA>                  Highest WCAG level to check (default: AA)
       --lang <en|pt>                      Language of the report (default: en)
       --rules <ids>                       Only run these rules (comma separated)
@@ -75,7 +87,7 @@ Options
   -h, --help                              Print this help`;
 
 function parseArgs(argv: string[]): { command: string; targets: string[]; flags: Flags; error?: string } {
-  const flags: Flags = { format: "text", failOn: "minor", level: "AA", lang: "en", exclude: [], browser: "auto", write: false, github: undefined, color: true, quiet: false };
+  const flags: Flags = { format: "text", failOn: "minor", failOnSet: false, level: "AA", lang: "en", exclude: [], browser: "auto", write: false, github: undefined, color: true, quiet: false };
   const targets: string[] = [];
   let command = "check";
   const list = (v: string | undefined): string[] => (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
@@ -105,6 +117,20 @@ function parseArgs(argv: string[]): { command: string; targets: string[]; flags:
         const v = (value() ?? "").toLowerCase();
         if (v !== "none" && !SEVERITIES.includes(v as Severity)) return { command, targets, flags, error: `--fail-on must be one of ${SEVERITIES.join(", ")} or none.` };
         flags.failOn = v as Severity | "none";
+        flags.failOnSet = true;
+        break;
+      }
+      case "--min-score": {
+        const raw = value() ?? "";
+        const v = Number(raw);
+        if (!/^\d+$/.test(raw.trim()) || v < 0 || v > 100) return { command, targets, flags, error: "--min-score must be a whole number from 0 to 100." };
+        flags.minScore = v;
+        break;
+      }
+      case "--history": {
+        const v = value();
+        if (!v || v.startsWith("-")) return { command, targets, flags, error: "--history needs a file name, for example --history .a11ymedic-history.json." };
+        flags.history = v;
         break;
       }
       case "--level": {
@@ -155,7 +181,7 @@ function parseArgs(argv: string[]): { command: string; targets: string[]; flags:
         break;
       default:
         if (arg.startsWith("-") && arg !== "-") return { command, targets, flags, error: `Unknown option ${arg}.` };
-        if (targets.length === 0 && command === "check" && (arg === "fix" || arg === "rules" || arg === "check")) command = arg;
+        if (targets.length === 0 && command === "check" && (arg === "fix" || arg === "rules" || arg === "check" || arg === "bookmarklet")) command = arg;
         else targets.push(arg);
     }
   }
@@ -273,6 +299,35 @@ function shouldFail(results: AuditResult[], failOn: Severity | "none"): boolean 
   return results.some((r) => r.findings.some((f) => severityRank(f.severity) >= min));
 }
 
+const PREFIX = "a11ymedic:history:";
+
+/** A history storage kept in one JSON file: { "<document>": [entries...] }. */
+function fileStorage(path: string): HistoryStorage & { save(): void } {
+  let data: Record<string, unknown> = {};
+  if (existsSync(path)) {
+    try {
+      const parsed = JSON.parse(readFileSync(path, "utf8")) as unknown;
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) data = parsed as Record<string, unknown>;
+    } catch {
+      throw new Error(`${path} is not a valid history file (expected JSON).`);
+    }
+  }
+  const key = (k: string): string => (k.startsWith(PREFIX) ? k.slice(PREFIX.length) : k);
+  return {
+    getItem: (k) => (key(k) in data ? JSON.stringify(data[key(k)]) : null),
+    setItem: (k, v) => {
+      data[key(k)] = JSON.parse(v) as unknown;
+    },
+    removeItem: (k) => {
+      delete data[key(k)];
+    },
+    save: () => {
+      mkdirSync(dirname(path), { recursive: true });
+      writeFileSync(path, JSON.stringify(data, null, 2) + "\n");
+    },
+  };
+}
+
 /** Runs the command line. Returns the exit code. */
 export async function main(argv: string[], io: CliIO): Promise<number> {
   const { command, targets, flags, error } = parseArgs(argv);
@@ -290,6 +345,11 @@ export async function main(argv: string[], io: CliIO): Promise<number> {
   }
   const color = flags.color && io.isTTY && !io.env.NO_COLOR;
   const lang = flags.lang;
+
+  if (command === "bookmarklet") {
+    io.stdout(bookmarklet(argv.some((a) => a.startsWith("--lang")) ? { lang } : {}) + "\n");
+    return 0;
+  }
 
   if (command === "rules") {
     const lines = RULES.map((r) => `${r.id.padEnd(28)} ${r.severity.padEnd(9)} ${r.level.padEnd(4)} WCAG ${r.wcag.join(", ").padEnd(16)} ${r.title[lang]}`);
@@ -371,6 +431,7 @@ export async function main(argv: string[], io: CliIO): Promise<number> {
       if (browser && flags.browser === "always") {
         const r = await browser.audit(pathToFileURL(file).href, options);
         r.source = rel(file);
+        r.score ??= score(r).value;
         results.push(r);
       } else {
         results.push(await auditStatic(html, rel(file), { ...options, css: linkedCss(html, file) }));
@@ -380,6 +441,7 @@ export async function main(argv: string[], io: CliIO): Promise<number> {
       if (browser) {
         const r = await browser.audit(url, options);
         r.source = url;
+        r.score ??= score(r).value;
         results.push(r);
         continue;
       }
@@ -425,8 +487,48 @@ export async function main(argv: string[], io: CliIO): Promise<number> {
   }
   if (flags.quiet || flags.output) {
     const n = results.reduce((a, r) => a + r.findings.length, 0);
-    io.stdout(`${n} ${lang === "pt" ? "problema(s)" : "problem(s)"} ${lang === "pt" ? "em" : "in"} ${results.length} ${lang === "pt" ? "documento(s)" : "document(s)"}${flags.output ? ` -> ${flags.output}` : ""}\n`);
+    io.stdout(
+      `${n} ${lang === "pt" ? "problema(s)" : "problem(s)"} ${lang === "pt" ? "em" : "in"} ${results.length} ${lang === "pt" ? "documento(s)" : "document(s)"}, ${lang === "pt" ? "nota" : "score"} ${score(results).value}/100${flags.output ? ` -> ${flags.output}` : ""}\n`,
+    );
   } else io.stdout(report);
+
+  // Notes go to stdout unless stdout carries a machine readable report.
+  const note = flags.format === "text" || flags.output || flags.quiet ? io.stdout : io.stderr;
+  if (flags.history) {
+    const path = resolve(io.cwd, flags.history);
+    let storage: ReturnType<typeof fileStorage>;
+    try {
+      storage = fileStorage(path);
+    } catch (e) {
+      io.stderr(`a11ymedic: ${(e as Error).message}\n`);
+      return 2;
+    }
+    const lines: string[] = [];
+    for (const r of results) {
+      const { change, previous } = recordScore(r.source ?? "document", r, { storage });
+      const s = r.score;
+      const since = previous ? previous.date.slice(0, 10) : "";
+      const what =
+        change === null
+          ? lang === "pt" ? "primeira medição" : "first run"
+          : change === 0
+            ? lang === "pt" ? `igual a ${since}` : `same as ${since}`
+            : lang === "pt"
+              ? `${change > 0 ? "subiu" : "caiu"} ${Math.abs(change)} desde ${since}`
+              : `${change > 0 ? "up" : "down"} ${Math.abs(change)} since ${since}`;
+      lines.push(`  ${r.source ?? "document"}: ${s}/100 (${what})`);
+    }
+    storage.save();
+    note(`${lang === "pt" ? "Histórico de notas" : "Score history"} (${flags.history}):\n${lines.join("\n")}\n`);
+  }
+  const low = flags.minScore === undefined ? [] : results.filter((r) => r.score < flags.minScore!);
+  if (low.length) {
+    note(
+      lang === "pt"
+        ? `${low.length} documento(s) abaixo da nota mínima ${flags.minScore}: ${low.map((r) => `${r.source ?? "documento"} (${r.score})`).join(", ")}\n`
+        : `${low.length} document(s) below the minimum score ${flags.minScore}: ${low.map((r) => `${r.source ?? "document"} (${r.score})`).join(", ")}\n`,
+    );
+  }
 
   const github = flags.github ?? io.env.GITHUB_ACTIONS === "true";
   if (github) {
@@ -434,7 +536,9 @@ export async function main(argv: string[], io: CliIO): Promise<number> {
     const summary = io.env.GITHUB_STEP_SUMMARY;
     if (summary) appendFileSync(summary, githubSummary(results, { lang }));
   }
-  return shouldFail(results, flags.failOn) ? 1 : 0;
+  // With only --min-score, the score is the gate; an explicit --fail-on still applies too.
+  const failOn = flags.minScore !== undefined && !flags.failOnSet ? "none" : flags.failOn;
+  return shouldFail(results, failOn) || low.length ? 1 : 0;
 }
 
 const invokedDirectly = (() => {
