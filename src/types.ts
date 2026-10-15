@@ -133,6 +133,8 @@ export interface AuditResult {
   incomplete: Incomplete[];
   /** Number of findings per severity. */
   counts: Record<Severity, number>;
+  /** Health score from 0 to 100 (100 means no findings). See `score()` for the breakdown. */
+  score: number;
   /** Rule ids that ran. */
   rules: string[];
   /** How styles were read: "computed" in a browser, "static" when cascading CSS without layout. */

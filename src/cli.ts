@@ -11,7 +11,7 @@ import { formatText, githubAnnotations, githubSummary, toHtml, toJSON, toMarkdow
 import { RULES } from "./rules";
 import { SEVERITIES, severityRank, type AuditOptions, type AuditResult, type Lang, type Level, type Severity } from "./types";
 
-const VERSION = "0.1.0";
+import { VERSION } from "./version";
 
 export interface CliIO {
   stdout: (s: string) => void;

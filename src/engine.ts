@@ -2,6 +2,7 @@ import { parseCss, type ParsedCss } from "./css";
 import { Dom, escapeText, openTag, snippet } from "./dom";
 import { ComputedStyles, StaticStyles, type StyleProvider } from "./style";
 import { criterion } from "./wcag";
+import { score } from "./score";
 import {
   SEVERITIES,
   severityRank,
@@ -331,6 +332,7 @@ export function runAudit(rules: Rule[], root: Document | Element, options: Audit
     findings,
     incomplete,
     counts,
+    score: score({ findings }).value,
     rules: ran,
     styles: mode,
     fragment,

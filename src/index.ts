@@ -27,6 +27,21 @@ export { parseColor, contrastRatio, relativeLuminance, suggestColors, toHex, toO
 export { formatText, toJSON, toMarkdown, toHtml, githubAnnotations, githubSummary, summarize } from "./report";
 export { parseHtml } from "./parse";
 export { fixHtml, applyFixes, type FixResult } from "./fix";
+export { score, gradeOf, rulePoints, SCORE_WEIGHTS, type Score, type ScoreRule, type Grade } from "./score";
+export {
+  recordScore,
+  readHistory,
+  clearHistory,
+  addEntry,
+  toEntry,
+  historyKey,
+  memoryStorage,
+  type HistoryEntry,
+  type HistoryOptions,
+  type HistoryStorage,
+  type HistoryUpdate,
+} from "./history";
+export { bookmarklet, cdnUrl, type BookmarkletOptions } from "./bookmarklet";
 export { RULES, ruleList, applyFix };
 export { Dom, StaticStyles, ComputedStyles, parseCss };
 
@@ -71,4 +86,4 @@ function styleFor(doc: Document): StaticStyles | ComputedStyles {
   return real ? new ComputedStyles(win) : new StaticStyles(doc, parseCss(collectCss(doc).map((s) => s.text)));
 }
 
-export const version = "0.1.0";
+export { VERSION as version } from "./version";
