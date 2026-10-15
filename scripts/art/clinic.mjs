@@ -1,5 +1,5 @@
 // The a11ymedic clinic art: the hero scene (Patch in his clinic room with a sick browser
-// window on the stretcher), 9 spot illustrations, the duotone icon family, the "discharged"
+// window on the stretcher), 5 spot illustrations, the duotone icon family, the "discharged"
 // stamp and the README banner. Everything is hand written SVG.
 //
 // Every drawing takes a palette `k`. Three palettes exist for each family: LIGHT and DARK
@@ -623,15 +623,6 @@ ${body}
 const blob = (k) => `<path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" fill="${k.blob}"/>`;
 
 export const SPOTS = {
-  "website-accessibility-checker": {
-    alt: "Patch's stethoscope listening to a browser window that smiles back",
-    draw: (k) => `${blob(k)}
-${browserCharacter(k, { x: 48, y: 40, w: 120, h: 96, mood: "happy", glasses: false, thermometer: false, sw: 3 })}
-<g fill="none" stroke="${k.ink}" stroke-width="3" ${ROUND}><path d="M198 30v20a16 16 0 0 1-32 0V30"/><path d="M182 66v24c0 22-16 30-30 28"/></g>
-<path d="M188 30h14M162 30h14" stroke="${k.ink}" stroke-width="5" stroke-linecap="round"/>
-<circle cx="146" cy="116" r="13" fill="${k.teal}" stroke="${k.ink}" stroke-width="3"/><circle cx="146" cy="116" r="5" fill="${k.tealPale}" stroke="${k.ink}" stroke-width="2"/>
-${plusShape(206, 120, 18, k.coral, k)}${sparkleShape(34, 132, 8, k.yellow, k)}`,
-  },
   "how-to-fix-color-contrast": {
     alt: "A color swatch fan with a low contrast card being lifted to a darker, readable shade, and a contrast dial",
     draw: (k) => `${blob(k)}
@@ -672,16 +663,6 @@ ${sparkleShape(214, 30, 8, k.yellow, k)}`,
 <path d="M112 100q-4 10 6 14" fill="none" stroke="${k.ink}" stroke-width="2.5" stroke-dasharray="2 5" stroke-linecap="round"/>
 ${sparkleShape(208, 56, 9, k.yellow, k)}${sparkleShape(30, 128, 7, k.tealSoft, k)}`,
   },
-  "wcag-2-2-checklist": {
-    alt: "A clipboard checklist with three ticked boxes and a pencil",
-    draw: (k) => `${blob(k)}
-<g stroke="${k.ink}" stroke-width="3" ${ROUND}>
-<rect x="62" y="26" width="104" height="136" rx="12" fill="${k.coral}"/>
-<rect x="72" y="40" width="84" height="114" rx="6" fill="${k.paper}"/>
-<rect x="94" y="18" width="40" height="18" rx="6" fill="${k.metal}"/>
-${[60, 90, 120].map((y, i) => `<rect x="82" y="${y}" width="16" height="16" rx="4" fill="${i === 2 ? k.paper : k.tealSoft}"/>${i < 2 ? `<path d="m85 ${y + 8} 4 4 7-8" stroke-width="3"/>` : ""}<path d="M106 ${y + 6}h38M106 ${y + 13}h24" stroke-width="2.5"/>`).join("")}
-<g transform="rotate(32 190 110)"><rect x="182" y="60" width="16" height="84" rx="4" fill="${k.yellow}"/><path d="M182 144l8 16 8-16Z" fill="${k.paper}"/><path d="M188 154l2 6 2-6" fill="${k.ink}"/><rect x="182" y="60" width="16" height="12" rx="4" fill="${k.coralSoft}"/></g></g>`,
-  },
   "accessibility-testing-in-ci": {
     alt: "Pages riding a conveyor belt under a scanner arch with a stethoscope, one coming out with a bandage",
     draw: (k) => `${blob(k)}
@@ -697,33 +678,6 @@ ${[38, 80, 160, 202].map((x) => `<circle cx="${x}" cy="131" r="4.5" fill="${k.pa
 <g transform="rotate(5 190 100)"><rect x="170" y="80" width="40" height="42" rx="7" fill="${k.paper}"/><path d="m180 102 6 6 12-12" stroke="${k.teal}" stroke-width="4"/></g></g>
 <g transform="translate(118 112) rotate(-20)">${bandageShape(30, k, 2.5)}</g>
 <path d="M214 152h-60" stroke="${k.ink}" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 9"/>`,
-  },
-  "aria-label-vs-aria-labelledby": {
-    alt: "Two labels: a tag tied directly to an icon button, and a tag whose string points to a visible heading",
-    draw: (k) => `${blob(k)}
-<g stroke="${k.ink}" stroke-width="3" ${ROUND}>
-<rect x="28" y="44" width="56" height="44" rx="14" fill="${k.teal}"/>
-<circle cx="52" cy="62" r="9" fill="${k.paper}"/><path d="m59 69 8 8"/>
-<path d="M84 66q20 0 26 18" fill="none" stroke-dasharray="1 7"/>
-<g transform="rotate(14 128 104)"><path d="M108 90h44a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6h-44l-12-16Z" fill="${k.coral}"/><circle cx="110" cy="106" r="3.5" fill="${k.paper}"/><path d="M120 106h28" stroke="${k.paper}" stroke-width="4"/></g>
-<rect x="134" y="24" width="84" height="40" rx="8" fill="${k.paper}"/><path d="M146 38h48" stroke-width="5"/><path d="M146 52h30" stroke="${k.teal}" stroke-width="3"/>
-<path d="M176 64q4 50-30 78" fill="none" stroke-dasharray="1 7"/>
-<g transform="rotate(-10 120 150)"><path d="M100 136h38a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6h-38l-10-14Z" fill="${k.tealSoft}"/><circle cx="102" cy="150" r="3" fill="${k.paper}"/><path d="M110 150h24" stroke="${k.ink}" stroke-width="3"/></g></g>`,
-  },
-  "accessibility-overlay-vs-real-fixes": {
-    alt: "On the left a cracked page hidden under a glossy overlay sheet; on the right the same page repaired at the source with stitches and a check mark",
-    draw: (k) => `${blob(k)}
-<g stroke="${k.ink}" stroke-width="3" ${ROUND}>
-<rect x="22" y="40" width="84" height="104" rx="9" fill="${k.paper}"/>
-<path d="M50 40l10 26-12 16 14 18-8 22 6 22" fill="none" stroke="${k.coral}" stroke-width="3.5"/>
-<path d="M28 52h88v80q-30-8-50 10H28Z" fill="${k.sky}" fill-opacity=".75"/>
-<path d="M116 132q-30-8-50 10 4-18 20-24" fill="${k.paper}"/>
-<path d="M40 62l12 12" stroke="${k.paper}" stroke-width="4"/>
-<rect x="134" y="40" width="84" height="104" rx="9" fill="${k.paper}"/>
-<path d="M162 40l10 26-12 16 14 18-8 22 6 22" fill="none" stroke="${k.tealSoft}" stroke-width="3.5"/>
-<path d="M158 60l12-4M162 80l12 4M164 100l12-6M160 120l12 6" stroke-width="2.5"/>
-<circle cx="200" cy="128" r="14" fill="${k.teal}"/><path d="m193 128 5 5 9-9" stroke="${k.paper}" stroke-width="3.5"/></g>
-<path d="M120 92h10" stroke="${k.ink}" stroke-width="3" stroke-linecap="round"/><path d="m126 86 6 6-6 6" fill="none" stroke="${k.ink}" stroke-width="3" ${ROUND}/>`,
   },
   "not-found": {
     alt: "An empty stretcher with a blanket and a question mark where the patient should be",

@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
-  <title>Accessibility Testing in CI with GitHub Actions and Vitest</title>
-  <meta name="description" content="Add accessibility testing to CI: fail builds on serious issues, get GitHub Actions annotations and a job summary, and test components with Vitest or Jest.">
+  <title>Running a11ymedic in CI | a11ymedic</title>
+  <meta name="description" content="Fail a build on serious problems, get annotations on pull requests, and test components with Vitest or Jest.">
   <link rel="canonical" href="https://kwy404.github.io/a11ymedic/accessibility-testing-in-ci.html">
   <meta name="author" content="Alexandre Kohler">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -14,19 +14,19 @@
   <meta name="theme-color" content="#102a2f" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="a11ymedic">
-  <meta property="og:title" content="Accessibility Testing in CI with GitHub Actions and Vitest">
-  <meta property="og:description" content="Add accessibility testing to CI: fail builds on serious issues, get GitHub Actions annotations and a job summary, and test components with Vitest or Jest.">
+  <meta property="og:title" content="Running a11ymedic in CI | a11ymedic">
+  <meta property="og:description" content="Fail a build on serious problems, get annotations on pull requests, and test components with Vitest or Jest.">
   <meta property="og:url" content="https://kwy404.github.io/a11ymedic/accessibility-testing-in-ci.html">
   <meta property="og:image" content="https://kwy404.github.io/a11ymedic/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="a11ymedic: the accessibility clinic for websites, with Patch the otter paramedic treating a sick browser window">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Accessibility Testing in CI with GitHub Actions and Vitest">
-  <meta name="twitter:description" content="Add accessibility testing to CI: fail builds on serious issues, get GitHub Actions annotations and a job summary, and test components with Vitest or Jest.">
+  <meta name="twitter:title" content="Running a11ymedic in CI | a11ymedic">
+  <meta name="twitter:description" content="Fail a build on serious problems, get annotations on pull requests, and test components with Vitest or Jest.">
   <meta name="twitter:image" content="https://kwy404.github.io/a11ymedic/og.png">
   <meta name="twitter:image:alt" content="a11ymedic: the accessibility clinic for websites, with Patch the otter paramedic treating a sick browser window">
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"Accessibility testing in CI","description":"Add accessibility testing to CI: fail builds on serious issues, get GitHub Actions annotations and a job summary, and test components with Vitest or Jest.","keywords":"accessibility testing in ci, accessibility testing, github actions accessibility, a11y ci, vitest accessibility, jest accessibility, toHaveNoViolations, automated accessibility testing","datePublished":"2026-10-13","dateModified":"2026-10-13","wordCount":780,"author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"publisher":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"image":"https://kwy404.github.io/a11ymedic/og.png","mainEntityOfPage":"https://kwy404.github.io/a11ymedic/accessibility-testing-in-ci.html","about":{"@type":"SoftwareApplication","name":"a11ymedic","url":"https://kwy404.github.io/a11ymedic/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I add accessibility testing to GitHub Actions?","acceptedAnswer":{"@type":"Answer","text":"Build your site, then run npx a11ymedic on the generated HTML with --fail-on serious. On GitHub Actions it adds inline annotations to the pull request and writes a job summary automatically."}},{"@type":"Question","name":"Can I use toHaveNoViolations with Vitest?","acceptedAnswer":{"@type":"Answer","text":"Yes. Import a11ymedic/vitest once, then call expect(await audit(html)).toHaveNoViolations(). You can pass a minimum severity or a list of rule ids to ignore."}},{"@type":"Question","name":"Should accessibility tests fail the build?","acceptedAnswer":{"@type":"Answer","text":"Yes, once the existing backlog is under control. Start in report only mode, fix shared components, then fail on critical findings and tighten the threshold over time."}},{"@type":"Question","name":"Do I need a headless browser for accessibility testing in CI?","acceptedAnswer":{"@type":"Answer","text":"Not for static HTML, which is checked quickly without one. For pages rendered by JavaScript, and for the most accurate contrast and target size results, install Playwright or Puppeteer and pass URLs."}}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"a11ymedic","item":"https://kwy404.github.io/a11ymedic/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://kwy404.github.io/a11ymedic/guides.html"},{"@type":"ListItem","position":3,"name":"Accessibility testing in CI","item":"https://kwy404.github.io/a11ymedic/accessibility-testing-in-ci.html"}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"Running accessibility checks in CI","description":"Fail a build on serious problems, get annotations on pull requests, and test components with Vitest or Jest.","datePublished":"2026-10-13","dateModified":"2026-10-13","wordCount":781,"author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"publisher":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"image":"https://kwy404.github.io/a11ymedic/og.png","mainEntityOfPage":"https://kwy404.github.io/a11ymedic/accessibility-testing-in-ci.html","about":{"@type":"SoftwareApplication","name":"a11ymedic","url":"https://kwy404.github.io/a11ymedic/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I add accessibility testing to GitHub Actions?","acceptedAnswer":{"@type":"Answer","text":"Build your site, then run npx a11ymedic on the generated HTML with --fail-on serious. On GitHub Actions it adds inline annotations to the pull request and writes a job summary automatically."}},{"@type":"Question","name":"Can I use toHaveNoViolations with Vitest?","acceptedAnswer":{"@type":"Answer","text":"Yes. Import a11ymedic/vitest once, then call expect(await audit(html)).toHaveNoViolations(). You can pass a minimum severity or a list of rule ids to ignore."}},{"@type":"Question","name":"Should accessibility tests fail the build?","acceptedAnswer":{"@type":"Answer","text":"Yes, once the existing backlog is under control. Start in report only mode, fix shared components, then fail on critical findings and tighten the threshold over time."}},{"@type":"Question","name":"Do I need a headless browser for accessibility testing in CI?","acceptedAnswer":{"@type":"Answer","text":"Not for static HTML, which is checked quickly without one. For pages rendered by JavaScript, and for the most accurate contrast and target size results, install Playwright or Puppeteer and pass URLs."}}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"a11ymedic","item":"https://kwy404.github.io/a11ymedic/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://kwy404.github.io/a11ymedic/guides.html"},{"@type":"ListItem","position":3,"name":"Running accessibility checks in CI","item":"https://kwy404.github.io/a11ymedic/accessibility-testing-in-ci.html"}]}]}</script>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,11 +59,11 @@
 <article class="cl-article">
   <div class="cl-wrap cl-article-grid">
     <div class="cl-article-main">
-      <nav class="cl-crumbs" aria-label="Breadcrumb"><ol><li><a href="./">a11ymedic</a></li><li><a href="guides.html">Guides</a></li><li><span aria-current="page">Accessibility testing in CI</span></li></ol></nav>
+      <nav class="cl-crumbs" aria-label="Breadcrumb"><ol><li><a href="./">a11ymedic</a></li><li><a href="guides.html">Guides</a></li><li><span aria-current="page">Running accessibility checks in CI</span></li></ol></nav>
       <header class="cl-article-head">
         <div class="cl-article-title">
           <p class="cl-kicker"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</p>
-          <h1>Accessibility testing in CI</h1>
+          <h1>Running accessibility checks in CI</h1>
           <p class="cl-lead">Accessibility bugs are cheapest to fix in the pull request that creates them. Running a checker in continuous integration turns accessibility from an occasional audit into a normal test: a new button without a name fails the build just like a broken import, and the report points to the exact line and the fix.</p>
         </div>
         <span class="cl-article-art"><svg class="cl-spot" viewBox="0 0 240 180" aria-hidden="true" focusable="false"><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" style="fill:var(--a-blob)"/>
@@ -159,7 +159,7 @@
 <li><strong>Tighten.</strong> Move to <code>--fail-on serious</code>, then lower as the backlog shrinks.</li>
 </ol>
 <p>Use <code>--exclude</code> with a CSS selector to skip third party widgets you cannot change, and <code>--disable</code> to turn off a rule while a known issue is being worked on. Keep those exceptions in one place, such as an <code>a11y</code> script in <code>package.json</code> that every developer and the CI job run the same way, so they stay visible and get reviewed like any other code.</p>
-<p>Pair the gate with a short manual pass on every release: keyboard only, zoom to 200 percent, and a screen reader check on the main flows. The <a href="wcag-2-2-checklist.html">WCAG 2.2 checklist</a> marks which items need that human review, and the <a href="./#install">install section</a> covers every setup.</p>
+<p>Pair the gate with a short manual pass on every release: keyboard only, zoom to 200 percent, and a screen reader check on the main flows. The <a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a> marks which items need that human review, and the <a href="./#install">install section</a> covers every setup.</p>
 
       </div>
       <section class="cl-guide-faq" aria-labelledby="faq-accessibility-testing-in-ci">
@@ -179,7 +179,7 @@
     </div>
     <aside class="cl-article-side" aria-label="Guide navigation">
       <nav class="cl-toc" aria-label="On this page"><h2 class="cl-toc-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#chart"/></svg>On this page</h2><ol><li><a href="#why-ci">Why run accessibility checks in CI</a></li><li><a href="#cli-gate">The CLI as a quality gate</a></li><li><a href="#github-actions">GitHub Actions</a></li><li><a href="#unit-tests">Unit and component tests with Vitest or Jest</a></li><li><a href="#live-urls">Testing live URLs and rendered apps</a></li><li><a href="#rollout">Rolling it out on an existing codebase</a></li></ol></nav>
-      <nav class="cl-related" aria-label="Related guides"><h2 class="cl-toc-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Related guides</h2><ul><li><a href="website-accessibility-checker.html">A website accessibility checker that explains every fix</a></li><li><a href="wcag-2-2-checklist.html">WCAG 2.2 checklist for developers</a></li><li><a href="accessible-form-labels.html">Accessible form labels: how to label every field right</a></li><li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li></ul></nav>
+      <nav class="cl-related" aria-label="Related guides"><h2 class="cl-toc-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Related guides</h2><ul><li><a href="how-to-fix-color-contrast.html">Fixing color contrast and keeping your brand colors</a></li><li><a href="accessible-form-labels.html">Labeling form fields</a></li><li><a href="wcag-cheat-sheet.html">WCAG 2.2 cheat sheet</a></li></ul></nav>
     </aside>
   </div>
 </article>

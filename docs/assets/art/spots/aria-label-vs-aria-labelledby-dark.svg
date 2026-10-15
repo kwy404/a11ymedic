@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" width="240" height="180" role="img" aria-labelledby="aria-label-vs-aria-labelledby-t"><title id="aria-label-vs-aria-labelledby-t">Two labels: a tag tied directly to an icon button, and a tag whose string points to a visible heading</title><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" fill="#183b41"/>
-<g stroke="#071417" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-<rect x="28" y="44" width="56" height="44" rx="14" fill="#22a6a3"/>
-<circle cx="52" cy="62" r="9" fill="#e6dcc7"/><path d="m59 69 8 8"/>
-<path d="M84 66q20 0 26 18" fill="none" stroke-dasharray="1 7"/>
-<g transform="rotate(14 128 104)"><path d="M108 90h44a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6h-44l-12-16Z" fill="#f0806d"/><circle cx="110" cy="106" r="3.5" fill="#e6dcc7"/><path d="M120 106h28" stroke="#e6dcc7" stroke-width="4"/></g>
-<rect x="134" y="24" width="84" height="40" rx="8" fill="#e6dcc7"/><path d="M146 38h48" stroke-width="5"/><path d="M146 52h30" stroke="#22a6a3" stroke-width="3"/>
-<path d="M176 64q4 50-30 78" fill="none" stroke-dasharray="1 7"/>
-<g transform="rotate(-10 120 150)"><path d="M100 136h38a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6h-38l-10-14Z" fill="#3f9c95"/><circle cx="102" cy="150" r="3" fill="#e6dcc7"/><path d="M110 150h24" stroke="#071417" stroke-width="3"/></g></g></svg>

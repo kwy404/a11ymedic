@@ -11,7 +11,8 @@ import { SAMPLES } from "./site/samples.mjs";
 const { GUIDES } = await import("./site/guides.mjs").catch(() => ({ GUIDES: [] }));
 const { CRITERIA, PRINCIPLES } = await import("./site/wcag.mjs").catch(() => ({ CRITERIA: [], PRINCIPLES: [] }));
 
-const { ruleList } = await import("../dist/index.js");
+const lib = await import("../dist/index.js");
+const { ruleList } = lib;
 const TODAY = "2026-10-13";
 const out = (file, html) => {
   writeFileSync(`docs/${file}`, html);
@@ -55,7 +56,7 @@ const software = {
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Any (web browsers, Node.js 18 or newer)",
   description:
-    "Free accessibility checker that explains every problem in plain language and gives the exact fix: 61 WCAG 2.2 rules, color contrast fixes in OKLCH, a browser overlay, a CLI with safe auto fix, CI annotations and test matchers.",
+    "An accessibility checker that explains every problem in plain language and gives the exact fix, in the browser, on the command line, in CI and in tests.",
   url: SITE,
   downloadUrl: "https://www.npmjs.com/package/a11ymedic",
   softwareVersion: VERSION,
@@ -69,9 +70,8 @@ const software = {
 out(
   "index.html",
   page({
-    title: "a11ymedic: website accessibility checker that writes the fix",
-    description:
-      "Free accessibility checker for WCAG 2.2: 61 rules, plain language explanations in English and Portuguese, exact HTML fixes, a contrast fixer, CLI, CI and test matchers.",
+    title: "a11ymedic: an accessibility checker that writes the fix",
+    description: "Paste your HTML or a URL and see each accessibility problem explained in plain language, with the exact fix.",
     path: "",
     scripts: '  <script src="a11ymedic.js"></script>\n',
     jsonld: {
@@ -82,7 +82,7 @@ out(
         faqLd(HOME_FAQ),
       ],
     },
-    body: homeBody({ rules, samples: SAMPLES, guides: GUIDES }),
+    body: homeBody({ rules, samples: SAMPLES, guides: GUIDES, bookmarkletHref: lib.bookmarklet?.() }),
   }),
 );
 
@@ -146,7 +146,6 @@ ${g.body}
             "@type": "TechArticle",
             headline: g.h1,
             description: g.description,
-            keywords: g.keywords,
             datePublished: TODAY,
             dateModified: TODAY,
             wordCount: words,
@@ -173,8 +172,8 @@ ${g.body}
 out(
   "guides.html",
   page({
-    title: "Web accessibility guides: contrast, alt text, forms, ARIA, CI",
-    description: "Practical accessibility guides from a11ymedic: fix color contrast, write alt text, label forms, use ARIA, test in CI and follow the WCAG 2.2 checklist.",
+    title: "Guides | a11ymedic",
+    description: "Short guides on color contrast, alt text, form labels and accessibility checks in CI.",
     path: "guides.html",
     active: "guides",
     jsonld: {
@@ -193,8 +192,8 @@ out(
     <nav class="cl-crumbs" aria-label="Breadcrumb"><ol><li><a href="./">a11ymedic</a></li><li><span aria-current="page">Guides</span></li></ol></nav>
     <div class="cl-section-head">
       <p class="cl-kicker">${icon("book", "ic ic-sm")}The reading room</p>
-      <h1 id="hub-title">Web accessibility guides</h1>
-      <p>Practical guides for developers who want to ship accessible pages: what each rule means, who it helps and the exact code that fixes it. Every guide links back to the live check-up so you can try the fix on the spot.</p>
+      <h1 id="hub-title">Guides</h1>
+      <p>Four short guides on the problems a11ymedic finds most often: what each rule means, who it helps and the code that fixes it.</p>
     </div>
     ${pamphlets(GUIDES, "h2")}
   </div>
@@ -238,7 +237,7 @@ out(
   "wcag-cheat-sheet.html",
   page({
     title: "WCAG 2.2 cheat sheet in plain language (A and AA)",
-    description: `Every WCAG 2.2 level A and AA success criterion explained in one or two plain sentences, with an example failure and the checks a11ymedic runs for ${automated} of them.`,
+    description: "Every WCAG 2.2 level A and AA success criterion in one or two plain sentences, with an example failure.",
     path: "wcag-cheat-sheet.html",
     active: "wcag",
     jsonld: {
