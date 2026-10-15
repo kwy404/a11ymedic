@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
-  <title>a11ymedic: website accessibility checker that writes the fix</title>
-  <meta name="description" content="Free accessibility checker for WCAG 2.2: 61 rules, plain language explanations in English and Portuguese, exact HTML fixes, a contrast fixer, CLI, CI and test matchers.">
+  <title>a11ymedic: an accessibility checker that writes the fix</title>
+  <meta name="description" content="Paste your HTML or a URL and see each accessibility problem explained in plain language, with the exact fix.">
   <link rel="canonical" href="https://kwy404.github.io/a11ymedic/">
   <meta name="author" content="Alexandre Kohler">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -14,19 +14,19 @@
   <meta name="theme-color" content="#102a2f" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="a11ymedic">
-  <meta property="og:title" content="a11ymedic: website accessibility checker that writes the fix">
-  <meta property="og:description" content="Free accessibility checker for WCAG 2.2: 61 rules, plain language explanations in English and Portuguese, exact HTML fixes, a contrast fixer, CLI, CI and test matchers.">
+  <meta property="og:title" content="a11ymedic: an accessibility checker that writes the fix">
+  <meta property="og:description" content="Paste your HTML or a URL and see each accessibility problem explained in plain language, with the exact fix.">
   <meta property="og:url" content="https://kwy404.github.io/a11ymedic/">
   <meta property="og:image" content="https://kwy404.github.io/a11ymedic/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="a11ymedic: the accessibility clinic for websites, with Patch the otter paramedic treating a sick browser window">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="a11ymedic: website accessibility checker that writes the fix">
-  <meta name="twitter:description" content="Free accessibility checker for WCAG 2.2: 61 rules, plain language explanations in English and Portuguese, exact HTML fixes, a contrast fixer, CLI, CI and test matchers.">
+  <meta name="twitter:title" content="a11ymedic: an accessibility checker that writes the fix">
+  <meta name="twitter:description" content="Paste your HTML or a URL and see each accessibility problem explained in plain language, with the exact fix.">
   <meta name="twitter:image" content="https://kwy404.github.io/a11ymedic/og.png">
   <meta name="twitter:image:alt" content="a11ymedic: the accessibility clinic for websites, with Patch the otter paramedic treating a sick browser window">
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SoftwareApplication","name":"a11ymedic","applicationCategory":"DeveloperApplication","operatingSystem":"Any (web browsers, Node.js 18 or newer)","description":"Free accessibility checker that explains every problem in plain language and gives the exact fix: 61 WCAG 2.2 rules, color contrast fixes in OKLCH, a browser overlay, a CLI with safe auto fix, CI annotations and test matchers.","url":"https://kwy404.github.io/a11ymedic/","downloadUrl":"https://www.npmjs.com/package/a11ymedic","softwareVersion":"0.1.0","license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"image":"https://kwy404.github.io/a11ymedic/og.png"},{"@type":"WebSite","name":"a11ymedic","url":"https://kwy404.github.io/a11ymedic/","inLanguage":"en","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best free website accessibility checker?","acceptedAnswer":{"@type":"Answer","text":"Use one that finds problems and tells you how to fix them. a11ymedic is free and open source: it checks 61 WCAG 2.2 rules in the browser, on the command line and in CI, explains each problem in plain English or Portuguese and gives the patched HTML for every finding."}},{"@type":"Question","name":"How do I check a website for accessibility problems?","acceptedAnswer":{"@type":"Answer","text":"Run npx a11ymedic https://your-site.com for a full report, or add the a11ymedic script tag (or the bookmarklet) to see numbered pins on the page itself. For your own code, run npx a11ymedic \"src/**/*.html\" and add --fail-on serious in CI."}},{"@type":"Question","name":"Can a11ymedic fix accessibility issues automatically?","acceptedAnswer":{"@type":"Answer","text":"It fixes the safe ones: a11ymedic fix \"src/**/*.html\" shows a diff and --write applies it. Safe fixes are things like an empty alt on a spacer image, tabindex 0 instead of 5, re-enabling zoom or a misspelled ARIA attribute. Everything that needs a human decision (alt text that describes a photo, a label text) comes as a ready to paste suggestion instead."}},{"@type":"Question","name":"Does a11ymedic replace testing with real users?","acceptedAnswer":{"@type":"Answer","text":"No. Automated checks catch a large share of common problems, but not all of them: whether alt text is accurate, whether a flow makes sense with a screen reader or whether captions are correct still need people. a11ymedic marks what it cannot decide as a human check."}},{"@type":"Question","name":"Does it work with React, Vue, Angular and Next.js?","acceptedAnswer":{"@type":"Answer","text":"Yes. Test rendered components with expect(await audit(container)).toHaveNoViolations() in Vitest or Jest, check built HTML with the CLI, or load the overlay script in development."}},{"@type":"Question","name":"Is a11ymedic an accessibility overlay?","acceptedAnswer":{"@type":"Answer","text":"No. Its overlay is a diagnosis tool for the people who build the site: it highlights problems and shows the fix. It never changes the page for visitors. Real fixes belong in your source code."}}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SoftwareApplication","name":"a11ymedic","applicationCategory":"DeveloperApplication","operatingSystem":"Any (web browsers, Node.js 18 or newer)","description":"An accessibility checker that explains every problem in plain language and gives the exact fix, in the browser, on the command line, in CI and in tests.","url":"https://kwy404.github.io/a11ymedic/","downloadUrl":"https://www.npmjs.com/package/a11ymedic","softwareVersion":"0.1.0","license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"image":"https://kwy404.github.io/a11ymedic/og.png"},{"@type":"WebSite","name":"a11ymedic","url":"https://kwy404.github.io/a11ymedic/","inLanguage":"en","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is a11ymedic free?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is open source under the MIT license. The checks run in your browser, on your machine or in your CI; there is no a11ymedic server and nothing to sign up for."}},{"@type":"Question","name":"How do I check a page that is already online?","acceptedAnswer":{"@type":"Answer","text":"Type its address in the box at the top of this page. If the site does not let other pages read it, run npx a11ymedic https://your-site.com in a terminal, or press the bookmarklet on the page to see numbered pins on it."}},{"@type":"Question","name":"Can it fix problems automatically?","acceptedAnswer":{"@type":"Answer","text":"It fixes the safe ones: a11ymedic fix \"src/**/*.html\" shows a diff and --write applies it. Safe fixes are things like an empty alt on a spacer image, tabindex 0 instead of 5, re-enabling zoom or a misspelled ARIA attribute. Anything that needs a human decision, such as alt text for a photo or a label text, comes as a suggestion to review."}},{"@type":"Question","name":"Does it replace testing with real people?","acceptedAnswer":{"@type":"Answer","text":"No. Automated checks catch many common problems, but not all of them: whether alt text is accurate, whether a flow makes sense with a screen reader or whether captions are correct still need people. a11ymedic lists what it cannot decide as a human check."}},{"@type":"Question","name":"Does it work with React, Vue, Angular and Next.js?","acceptedAnswer":{"@type":"Answer","text":"Yes. Test rendered components with expect(await audit(container)).toHaveNoViolations() in Vitest or Jest, check built HTML with the CLI, or load the overlay script in development."}},{"@type":"Question","name":"Does the overlay change my site for visitors?","acceptedAnswer":{"@type":"Answer","text":"No. The overlay is a diagnosis tool for the people who build the site: it highlights problems and shows the fix. Real fixes belong in your source code."}}]}]}</script>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,18 +61,35 @@
   <div class="cl-wrap cl-hero-grid">
     <div class="cl-hero-copy">
       <p class="cl-nametag"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#stethoscope"/></svg><span>Free accessibility checker for WCAG 2.2</span></p>
-      <h1 id="hero-title">The accessibility checker that <span class="cl-hl">explains every problem</span> and <span class="cl-hl cl-hl-coral">writes the fix.</span></h1>
-      <p class="cl-lead">Bring any page in for a check-up. a11ymedic examines it with 61 WCAG 2.2 rules, tells you in plain language what is wrong and who it hurts, and hands you the patched HTML. It works as a page overlay, on the command line, in CI and inside your tests.</p>
-      <div class="cl-hero-cta">
-        <a class="btn btn-primary btn-lg cl-btn" href="#checkup"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#stethoscope"/></svg>Start a check-up</a>
+      <h1 id="hero-title">Paste your page. <span class="cl-hl">See what is wrong</span> and <span class="cl-hl cl-hl-coral">get the fix.</span></h1>
+      <p class="cl-lead">a11ymedic checks 61 WCAG 2.2 rules, says in plain words what is wrong and who it hurts, and hands you the patched HTML. It runs in your browser: nothing is uploaded.</p>
+      <form class="cl-quick" @submit.prevent="quickCheck()" novalidate>
+        <label class="cl-quick-label" for="quick-input">Your HTML or a web address</label>
+        <div class="cl-quick-box">
+          <textarea id="quick-input" class="textarea cl-quick-input" rows="3" spellcheck="false" autocomplete="off" v-model="quick" @keydown.ctrl.enter.prevent="quickCheck()" @keydown.meta.enter.prevent="quickCheck()" aria-describedby="quick-hint" placeholder="&lt;img src=&quot;team.jpg&quot;&gt;  or  https://your-site.com"></textarea>
+          <button type="submit" class="btn btn-primary btn-lg cl-btn cl-quick-go" :disabled="busy"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#stethoscope"/></svg><span v-text="busy ? 'Checking' : 'Check it'">Check it</span></button>
+        </div>
+        <p id="quick-hint" class="cl-quick-hint">One tag or a whole page both work. <kbd class="kbd kbd-sm">Ctrl</kbd> + <kbd class="kbd kbd-sm">Enter</kbd> also checks it.</p>
+        <p class="cl-quick-try"><span>Or try</span>
+          <button type="button" class="cl-chip" @click="trySample('bakery')">a bakery page</button>
+          <button type="button" class="cl-chip" @click="trySample('signup')">a sign-up form</button>
+          <button type="button" class="cl-chip" @click="tryUrl('guides.html')">a URL from this site</button>
+        </p>
+        <p class="cl-quick-msg" role="status" v-text="quickMsg"></p>
+        <div class="cl-cors" role="alert" v-show="corsUrl && corsWhere === 'hero'" style="display:none">
+          <p class="cl-cors-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#ambulance"/></svg><span>Your browser could not read <strong v-text="corsHost">that site</strong>.</span></p>
+          <p>Most sites do not let other pages download them (a browser safety rule called CORS), so the check cannot start from here. Your site is not broken. These always work:</p>
+          <ol>
+            <li>In a terminal: <button type="button" class="cl-rx-slip cl-rx-slip-sm" @click="copyText('npx a11ymedic ' + corsUrl, 'cors-hero')"><code v-text="'npx a11ymedic ' + corsUrl">npx a11ymedic</code><span class="cl-rx-copy"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#copy"/></svg><span v-text="copied === 'cors-hero' ? 'Copied' : 'Copy'">Copy</span></span></button></li>
+            <li>Open the page and press the <a href="#install">a11ymedic bookmarklet</a>: numbered pins appear on the page itself.</li>
+            <li>Open the page, press <kbd class="kbd kbd-sm">Ctrl</kbd> + <kbd class="kbd kbd-sm">U</kbd> to see its source, then copy and paste it here.</li>
+          </ol>
+        </div>
+      </form>
+      <div class="cl-hero-alt">
+        <span>Prefer the terminal?</span>
         <button type="button" class="cl-rx-slip" @click="copyText('npx a11ymedic index.html', 'npx')"><span class="cl-rx-mark" aria-hidden="true">Rx</span><code>npx a11ymedic index.html</code><span class="cl-rx-copy"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#copy"/></svg><span v-text="copied === 'npx' ? 'Copied' : 'Copy'">Copy</span></span></button>
       </div>
-      <ul class="cl-vitals" aria-label="At a glance">
-        <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#cabinet"/></svg><strong>61</strong><span>WCAG 2.2 rules</span></li>
-        <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#language"/></svg><strong>EN + PT</strong><span>plain language</span></li>
-        <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#contrast"/></svg><strong>OKLCH</strong><span>color fixes</span></li>
-        <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#bandage"/></svg><strong>1 diff</strong><span>safe auto fix</span></li>
-      </ul>
     </div>
     <figure class="cl-hero-art">
       <svg class="cl-scene" viewBox="0 0 760 600" role="img" aria-labelledby="clinic-hero-title" focusable="false"><title id="clinic-hero-title">Patch, the a11ymedic otter paramedic, in his clinic. A sick browser window sits on the stretcher with a thermometer, glasses for low vision and bandaged buttons, next to a heart monitor, an eye chart that reads A11Y MEDIC and an IV bag of alt text.</title><defs><clipPath id="clinic-hero-room"><rect width="760" height="600" rx="40"/></clipPath><clipPath id="clinic-hero-patch-body"><path d="M138 226C122 258 112 298 118 330C124 356 160 368 200 368C240 368 276 356 282 330C288 298 278 258 262 226Z"/></clipPath><filter id="clinic-hero-patch-rim" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="5" result="grown"/><feFlood style="flood-color:var(--a-rim)"/><feComposite in2="grown" operator="in" result="rim"/><feMerge><feMergeNode in="rim"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
@@ -118,36 +135,17 @@
 <g class="art-bob"><g transform="translate(4 282) scale(.72)"><g filter="url(#clinic-hero-patch-rim)"><g stroke="#12343B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M256 320C296 334 336 342 358 316C370 302 386 308 382 330C374 362 320 378 260 358Z" fill="#7F4A2A"/><path d="M138 226C122 258 112 298 118 330C124 356 160 368 200 368C240 368 276 356 282 330C288 298 278 258 262 226Z" fill="#A8693D"/><g clip-path="url(#clinic-hero-patch-body)"><path d="M90 214H310V338C270 352 130 352 90 338Z" fill="#0F8B8D" stroke-width="5"/><rect x="90" y="298" width="220" height="16" fill="#D9F6F1" stroke-width="4"/><path d="M300 302H90M300 310H90" fill="none" stroke="#2EC4B6" stroke-width="2" stroke-dasharray="6 6" stroke-linecap="butt"/><path d="M170 212C186 250 194 290 196 352H204C206 290 214 250 230 212Z" fill="#F7E3C6" stroke-width="5"/></g><path d="M138 226C122 258 112 298 118 330C124 356 160 368 200 368C240 368 276 356 282 330C288 298 278 258 262 226Z" fill="none"/><rect x="220" y="258" width="28" height="28" rx="7" fill="#FFFFFF" stroke-width="4.5"/><path d="M231 264H237V269H242V275H237V280H231V275H226V269H231Z" fill="#FF7A66" stroke="none"/><ellipse cx="164" cy="366" rx="27" ry="13" fill="#A8693D"/><ellipse cx="236" cy="366" rx="27" ry="13" fill="#A8693D"/><path d="M156 358V364M166 357V363M234 357V363M244 358V364" fill="none" stroke-width="3.5"/><circle cx="113" cy="112" r="14" fill="#A8693D"/><circle cx="287" cy="112" r="14" fill="#A8693D"/><circle cx="112" cy="112" r="6" fill="#7F4A2A" stroke="none"/><circle cx="288" cy="112" r="6" fill="#7F4A2A" stroke="none"/><path d="M200 62C260 62 298 100 298 150C298 202 258 234 200 234C142 234 102 202 102 150C102 100 140 62 200 62Z" fill="#A8693D"/><path d="M132 186C134 162 168 158 200 170C232 158 266 162 268 186C270 214 240 234 200 234C160 234 130 214 132 186Z" fill="#F7E3C6" stroke="none"/><path d="M200 62C260 62 298 100 298 150C298 202 258 234 200 234C142 234 102 202 102 150C102 100 140 62 200 62Z" fill="none"/><ellipse cx="146" cy="184" rx="12" ry="7" fill="#FF7A66" fill-opacity=".45" stroke="none"/><ellipse cx="254" cy="184" rx="12" ry="7" fill="#FF7A66" fill-opacity=".45" stroke="none"/><circle cx="166" cy="154" r="12" fill="#12343B" stroke="none"/><circle cx="234" cy="154" r="12" fill="#12343B" stroke="none"/><circle cx="161.5" cy="149" r="4.5" fill="#FFFFFF" stroke="none"/><circle cx="229.5" cy="149" r="4.5" fill="#FFFFFF" stroke="none"/><circle cx="170" cy="159" r="1.8" fill="#FFFFFF" stroke="none"/><circle cx="238" cy="159" r="1.8" fill="#FFFFFF" stroke="none"/><path d="M166 194L134 188M166 203L137 208M234 194L266 188M234 203L263 208" fill="none" stroke-width="3.5"/><path d="M189 206C192 222 208 222 211 206Z" fill="#E35E4B" stroke-width="4.5"/><ellipse cx="183" cy="196" rx="20" ry="15" fill="#FFF5E8" stroke-width="5"/><ellipse cx="217" cy="196" rx="20" ry="15" fill="#FFF5E8" stroke-width="5"/><g fill="#12343B" stroke="none"><circle cx="175" cy="195" r="2"/><circle cx="184" cy="202" r="2"/><circle cx="171" cy="203" r="2"/><circle cx="225" cy="195" r="2"/><circle cx="216" cy="202" r="2"/><circle cx="229" cy="203" r="2"/></g><path d="M184 181C184 172 216 172 216 181C216 190 207 196 200 196C193 196 184 190 184 181Z" fill="#12343B" stroke-width="4"/><ellipse cx="194" cy="178" rx="5" ry="2.6" fill="#FFFFFF" fill-opacity=".85" stroke="none"/><path d="M134 108C132 72 164 50 200 50C236 50 268 72 266 108Z" fill="#0F8B8D"/><path d="M156 70C164 62 176 57 188 56" fill="none" stroke="#2EC4B6" stroke-width="5" stroke-opacity=".7"/><circle cx="200" cy="51" r="6" fill="#0A6B6D" stroke-width="5"/><circle cx="200" cy="83" r="17" fill="#FFFFFF" stroke-width="5"/><path d="M195.5 72H204.5V78.5H211V87.5H204.5V94H195.5V87.5H189V78.5H195.5Z" fill="#FF7A66" stroke="none"/><path d="M126 104C158 118 242 118 274 104C281 108 280 118 272 122C238 134 162 134 128 122C120 118 119 108 126 104Z" fill="#0A6B6D"/><path d="M150 246C134 254 116 262 104 268" fill="none" stroke-width="34"/><path d="M150 246C134 254 116 262 104 268" fill="none" stroke="#A8693D" stroke-width="20"/><path d="M72 292C72 258 124 258 124 292" fill="none" stroke-width="10"/><rect x="40" y="288" width="108" height="76" rx="16" fill="#FF7A66"/><path d="M56 288H132A16 16 0 0 1 148 304V312H40V304A16 16 0 0 1 56 288Z" fill="#E35E4B" stroke="none"/><path d="M40 312H148" fill="none" stroke-width="5"/><rect x="40" y="288" width="108" height="76" rx="16" fill="none"/><circle cx="94" cy="338" r="19" fill="#FFFFFF" stroke-width="4.5"/><g transform="translate(94 338)" fill="none" stroke="#0F8B8D" stroke-width="2.76" stroke-linecap="round" stroke-linejoin="round"><circle r="12.88"/><circle cy="-6.9" r="2.21" fill="#0F8B8D" stroke="none"/><path d="M-6.9 -2.3H6.9M0 -2.3V3.22L-4.14 8.74M0 3.22L4.14 8.74"/></g><g transform="translate(100 270) rotate(-20)"><ellipse rx="16" ry="13" fill="#A8693D"/><path d="M-5 -8V-2M3 -8V-2" fill="none" stroke-width="3.5"/></g><path d="M248 252C260 258 272 260 282 258" fill="none" stroke-width="34"/><path d="M248 252C260 258 272 260 282 258" fill="none" stroke="#A8693D" stroke-width="20"/><g transform="translate(328 228) rotate(-12)"><rect x="-58" y="-29" width="116" height="58" rx="16" fill="#FFFFFF"/><path d="M-42 -5H-10" fill="none" stroke="#0F8B8D" stroke-width="8"/><path d="M-42 10H-22" fill="none" stroke="#2EC4B6" stroke-width="6"/><path d="M25 -29L16 -15L28 -4L17 8L23 29" fill="none" stroke-width="4.5"/><g transform="translate(22 0)"><g transform="rotate(32)"><rect x="-29" y="-8.5" width="58" height="17" rx="7" fill="#F9C89E" stroke-width="4"/><rect x="-8.5" y="-5.5" width="17" height="11" rx="2.5" fill="#EDA27A" stroke="none"/><g fill="#12343B" fill-opacity=".45" stroke="none"><circle cx="-19" cy="-2.5" r="1.4"/><circle cx="-19" cy="2.5" r="1.4"/><circle cx="19" cy="-2.5" r="1.4"/><circle cx="19" cy="2.5" r="1.4"/></g></g><g transform="rotate(-32)"><rect x="-29" y="-8.5" width="58" height="17" rx="7" fill="#F9C89E" stroke-width="4"/><rect x="-8.5" y="-5.5" width="17" height="11" rx="2.5" fill="#EDA27A" stroke="none"/><g fill="#12343B" fill-opacity=".45" stroke="none"><circle cx="-19" cy="-2.5" r="1.4"/><circle cx="-19" cy="2.5" r="1.4"/><circle cx="19" cy="-2.5" r="1.4"/><circle cx="19" cy="2.5" r="1.4"/></g></g></g></g><g transform="translate(284 257) rotate(-25)"><ellipse rx="16" ry="13" fill="#A8693D"/><path d="M-5 -8V-2M3 -8V-2" fill="none" stroke-width="3.5"/></g></g></g></g></g>
 <g class="art-float"><path d="M274 285h8v7h7v8h-7v7h-8v-7h-7v-8h7Z" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="fill:var(--a-coral);stroke:var(--a-ink)" /><path class="" d="M508 200C509.2 208.8 509.2 208.8 518 210C509.2 211.2 509.2 211.2 508 220C506.8 211.2 506.8 211.2 498 210C506.8 208.8 506.8 208.8 508 200Z" stroke-width="2.5" stroke-linejoin="round" style="fill:var(--a-yellow);stroke:var(--a-ink)"/><path d="M377.45454545454544 279h5.090909090909091v4.454545454545455h4.454545454545455v5.090909090909091h-4.454545454545455v4.454545454545455h-5.090909090909091v-4.454545454545455h-4.454545454545455v-5.090909090909091h4.454545454545455Z" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="fill:var(--a-tealSoft);stroke:var(--a-ink)" /></g>
 </g><rect x="1.5" y="1.5" width="757" height="597" rx="39" fill="none" stroke-width="3" style="stroke:var(--a-ink)"/></svg>
-      <figcaption class="cl-handnote"><span>Patient: one browser window.</span> <span>Symptoms: no alt text, mystery buttons, pale grey text.</span></figcaption>
+      <figcaption class="cl-handnote"><span>Before: <code>&lt;img src="team.jpg"&gt;</code></span> <span class="cl-handnote-after">After: <code>&lt;img src="team.jpg" <ins>alt="Our team"</ins>&gt;</code></span></figcaption>
     </figure>
   </div>
 </section>
 
-<section id="patients" class="cl-section cl-people-sec" aria-labelledby="people-title">
-  <div class="cl-wrap">
-    <div class="cl-section-head cl-center">
-      <p class="cl-kicker"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#heart-pulse"/></svg>Who it is for</p>
-      <h2 id="people-title">Every diagnosis names who it hurts</h2>
-      <p>A finding is not a lint warning. Each one says which people hit the barrier, so you know why the fix matters before you write it.</p>
-    </div>
-    <ul class="cl-people">
-      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#screen-reader"/></svg><strong>Screen reader users</strong><span>Hear the page read aloud and move by headings, links and landmarks.</span></li>
-      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#low-vision"/></svg><strong>Low vision</strong><span>Zoom to 200 percent and beyond, and need strong contrast to read.</span></li>
-      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#color-blind"/></svg><strong>Color blindness</strong><span>Cannot tell some colors apart, so color alone says nothing.</span></li>
-      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#keyboard-only"/></svg><strong>Keyboard only</strong><span>Tab, Enter and arrows instead of a mouse, so focus must show.</span></li>
-      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#cognitive"/></svg><strong>Cognitive and learning</strong><span>Need clear labels, steady layouts and time to read.</span></li>
-      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#motor"/></svg><strong>Motor and dexterity</strong><span>Tremors or a switch device make tiny targets and drags hard.</span></li>
-      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#deaf"/></svg><strong>Deaf and hard of hearing</strong><span>Rely on captions and transcripts for anything spoken.</span></li>
-    </ul>
-  </div>
-</section>
-<div class="cl-divider" aria-hidden="true"><svg viewBox="0 0 1200 40" preserveAspectRatio="none" focusable="false"><path d="M0 22c40-8 80 8 120 0s80-8 120 0 80 8 120 0 80-8 120 0 60 6 80 0l14-16 16 30 14-24 10 10c20 4 60-6 100 0s80 8 120 0 80-8 120 0 80 8 120 0 80-8 120 0"/></svg></div>
 <section id="checkup" class="cl-section cl-checkup" aria-labelledby="checkup-title">
   <div class="cl-wrap">
     <div class="cl-section-head">
       <p class="cl-kicker"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#stethoscope"/></svg>Live demo</p>
-      <h2 id="checkup-title">The check-up room</h2>
-      <p>Pick a patient or paste your own HTML and run the medic. Numbered pins land on the page, the chart explains each problem with the exact fix, and <strong>Treat</strong> applies it to the live page so you can watch the patient recover.</p>
+      <h2 id="checkup-title" tabindex="-1">The check-up room</h2>
+      <p>Numbered pins mark each problem on the page. Open one in the chart to read the fix, then press <strong>Treat</strong> to apply it and watch the health score climb.</p>
     </div>
     <div class="cl-room">
       <div class="cl-intake cl-clipboard">
@@ -156,7 +154,7 @@
           <h3 class="cl-card-title"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#report"/></svg>Patient intake</h3>
           <div class="segmented segmented-block" role="radiogroup" aria-label="Patient source">
             <label class="segmented-item"><input type="radio" name="src" value="samples" v-model="tab" checked> Sample patients</label>
-            <label class="segmented-item"><input type="radio" name="src" value="paste" v-model="tab"> Paste HTML</label>
+            <label class="segmented-item"><input type="radio" name="src" value="paste" v-model="tab"> HTML or URL</label>
           </div>
           <fieldset class="cl-samples" v-show="tab === 'samples'">
             <legend class="sr-only">Sample patient</legend>
@@ -167,9 +165,18 @@
             <label class="cl-sample"><input type="radio" name="sample" value="healthy" v-model="sample"><span><strong>Healthy bakery</strong><small>The bakery after treatment. Run it to see a discharge.</small></span></label>
           </fieldset>
           <div class="cl-paste" v-show="tab === 'paste'" style="display:none">
-            <label for="paste-html">Your HTML</label>
+            <label for="paste-html">Your HTML or a URL</label>
             <textarea id="paste-html" class="textarea" rows="9" spellcheck="false" v-model="paste" placeholder="&lt;img src=&quot;team.jpg&quot;&gt;"></textarea>
           </div>
+          <div class="cl-cors" role="alert" v-show="corsUrl && corsWhere === 'room'" style="display:none">
+          <p class="cl-cors-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#ambulance"/></svg><span>Your browser could not read <strong v-text="corsHost">that site</strong>.</span></p>
+          <p>Most sites do not let other pages download them (a browser safety rule called CORS), so the check cannot start from here. Your site is not broken. These always work:</p>
+          <ol>
+            <li>In a terminal: <button type="button" class="cl-rx-slip cl-rx-slip-sm" @click="copyText('npx a11ymedic ' + corsUrl, 'cors-room')"><code v-text="'npx a11ymedic ' + corsUrl">npx a11ymedic</code><span class="cl-rx-copy"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#copy"/></svg><span v-text="copied === 'cors-room' ? 'Copied' : 'Copy'">Copy</span></span></button></li>
+            <li>Open the page and press the <a href="#install">a11ymedic bookmarklet</a>: numbered pins appear on the page itself.</li>
+            <li>Open the page, press <kbd class="kbd kbd-sm">Ctrl</kbd> + <kbd class="kbd kbd-sm">U</kbd> to see its source, then copy and paste it here.</li>
+          </ol>
+        </div>
           <div class="cl-options">
             <div>
               <label for="opt-level">WCAG level</label>
@@ -204,7 +211,8 @@
   <g class="cl-needle" :style="{ transform: 'rotate(' + (score * 1.8 - 90) + 'deg)' }"><path d="M100 100 97 98 100 30 103 98Z"/></g>
   <circle class="g-hub" cx="100" cy="100" r="8"/>
 </svg>
-            <p class="cl-score"><strong v-text="score">0</strong><span>health</span></p>
+            <p class="cl-score"><strong v-text="shownScore">0</strong><span>health</span></p>
+            <p class="cl-delta" v-show="delta > 0" style="display:none" v-text="'+' + delta + ' ' + t.since">+0</p>
           </div>
           <div class="cl-monitor-read">
             <div class="cl-moods" :data-mood="mood">
@@ -246,7 +254,7 @@
             <button type="button" class="btn btn-sm btn-ghost" @click="run()" v-text="t.reset">Start over</button>
           </div>
           <p class="cl-healed" role="status" v-text="status"></p>
-          <ol class="cl-findings" aria-label="Findings">
+          <ol class="cl-findings" aria-label="Findings" :class="{ 'is-fresh': fresh }">
             <li v-for="f in items" :key="f.key" class="cl-finding" :data-sev="f.severity" :class="{ 'is-open': open === f.i }" :id="'finding-' + f.i">
               <button type="button" class="cl-finding-head" @click="toggle(f.i)" :aria-expanded="open === f.i ? 'true' : 'false'" :aria-controls="'fbody-' + f.i">
                 <span class="cl-num" :data-sev="f.severity" v-text="f.n" aria-hidden="true"></span>
@@ -277,6 +285,55 @@
         </div>
       </section>
     </div>
+  </div>
+</section>
+
+<section id="how" class="cl-section cl-how" aria-labelledby="how-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head cl-center">
+      <p class="cl-kicker"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#ambulance"/></svg>How it works</p>
+      <h2 id="how-title">Exam, diagnosis, treatment</h2>
+      <p>Three steps, the same everywhere: in this page, on any site, in the terminal, in CI and in your tests.</p>
+    </div>
+    <ol class="cl-journey" data-reveal>
+      <li style="--step: 0">
+        <span class="cl-station"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#stethoscope"/></svg></span>
+        <h3><span>1</span> Exam</h3>
+        <div class="cl-mini" aria-hidden="true"><code class="cl-mini-code">&lt;button&gt;<b class="cl-mini-svg">&lt;svg&gt;</b>&lt;/button&gt;</code><span class="cl-mini-scan"></span></div>
+        <p>61 rules run on a real page. In the browser a11ymedic reads the real colors and sizes; on Node it parses your HTML and applies your CSS itself.</p>
+      </li>
+      <li style="--step: 1">
+        <span class="cl-station"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#chart"/></svg></span>
+        <h3><span>2</span> Diagnosis</h3>
+        <div class="cl-mini" aria-hidden="true"><span class="cl-mini-finding"><span class="cl-num" data-sev="critical">1</span><span><strong>Button has no name</strong><small>Screen readers say only "button".</small></span></span></div>
+        <p>Each problem says what is wrong with this exact element, why it matters, who it hurts and which WCAG 2.2 rule it breaks, in English and Portuguese.</p>
+      </li>
+      <li style="--step: 2">
+        <span class="cl-station"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#bandage"/></svg></span>
+        <h3><span>3</span> Treatment</h3>
+        <div class="cl-mini" aria-hidden="true"><code class="cl-mini-code">&lt;button <ins>aria-label="Search"</ins>&gt;&lt;svg&gt;&lt;/button&gt;</code></div>
+        <p>Every finding comes with the patched code. Safe fixes apply in one command with a diff preview; the rest come ready to paste and review.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+<div class="cl-divider" aria-hidden="true"><svg viewBox="0 0 1200 40" preserveAspectRatio="none" focusable="false"><path d="M0 22c40-8 80 8 120 0s80-8 120 0 80 8 120 0 80-8 120 0 60 6 80 0l14-16 16 30 14-24 10 10c20 4 60-6 100 0s80 8 120 0 80-8 120 0 80 8 120 0 80-8 120 0"/></svg></div>
+<section id="patients" class="cl-section cl-people-sec" aria-labelledby="people-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head cl-center">
+      <p class="cl-kicker"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#heart-pulse"/></svg>Who it is for</p>
+      <h2 id="people-title">Every diagnosis names who it hurts</h2>
+      <p>A finding is not a lint warning. Each one says which people hit the barrier, so you know why the fix matters before you write it.</p>
+    </div>
+    <ul class="cl-people" data-reveal>
+      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#screen-reader"/></svg><strong>Screen reader users</strong><span>Hear the page read aloud and move by headings, links and landmarks.</span></li>
+      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#low-vision"/></svg><strong>Low vision</strong><span>Zoom to 200 percent and beyond, and need strong contrast to read.</span></li>
+      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#color-blind"/></svg><strong>Color blindness</strong><span>Cannot tell some colors apart, so color alone says nothing.</span></li>
+      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#keyboard-only"/></svg><strong>Keyboard only</strong><span>Tab, Enter and arrows instead of a mouse, so focus must show.</span></li>
+      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#cognitive"/></svg><strong>Cognitive and learning</strong><span>Need clear labels, steady layouts and time to read.</span></li>
+      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#motor"/></svg><strong>Motor and dexterity</strong><span>Tremors or a switch device make tiny targets and drags hard.</span></li>
+      <li class="cl-person"><svg class="ic ic-xl" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#deaf"/></svg><strong>Deaf and hard of hearing</strong><span>Rely on captions and transcripts for anything spoken.</span></li>
+    </ul>
   </div>
 </section>
 
@@ -351,20 +408,6 @@
   </div>
 </section>
 <div class="cl-divider" aria-hidden="true"><svg viewBox="0 0 1200 40" preserveAspectRatio="none" focusable="false"><path d="M0 22c40-8 80 8 120 0s80-8 120 0 80 8 120 0 80-8 120 0 60 6 80 0l14-16 16 30 14-24 10 10c20 4 60-6 100 0s80 8 120 0 80-8 120 0 80 8 120 0 80-8 120 0"/></svg></div>
-<section id="how" class="cl-section" aria-labelledby="how-title">
-  <div class="cl-wrap">
-    <div class="cl-section-head cl-center">
-      <p class="cl-kicker"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#ambulance"/></svg>How it works</p>
-      <h2 id="how-title">Exam, diagnosis, treatment</h2>
-    </div>
-    <ol class="cl-journey">
-      <li><span class="cl-station"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#stethoscope"/></svg></span><h3><span>1</span> Exam</h3><p>An engine written from scratch runs 61 rules on a real DOM. In the browser it reads computed styles and real boxes. On Node it parses HTML with jsdom, cascades your CSS itself (specificity, variables, inheritance) and keeps line numbers.</p></li>
-      <li><span class="cl-station"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#chart"/></svg></span><h3><span>2</span> Diagnosis</h3><p>Every finding says what is wrong with this exact element, why it matters, who is affected and which WCAG 2.2 criterion it breaks, in English and Portuguese, with the selector and the HTML snippet.</p></li>
-      <li><span class="cl-station"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#bandage"/></svg></span><h3><span>3</span> Treatment</h3><p>Each finding comes with patched code: the missing alt, aria-label or label for, a contrast safe color picked in OKLCH. Safe fixes apply in one command with a diff preview, and running them twice changes nothing.</p></li>
-    </ol>
-  </div>
-</section>
-
 <section id="install" class="cl-section cl-install" aria-labelledby="install-title">
   <div class="cl-wrap">
     <div class="cl-section-head">
@@ -372,13 +415,13 @@
       <h2 id="install-title">Four ways to call the medic</h2>
       <p>Same rules, same explanations and the same fixes wherever you run it.</p>
     </div>
-    <div class="cl-folders">
+    <div class="cl-folders" data-reveal>
       <article class="cl-folder" data-tone="coral"><p class="cl-folder-tab"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#pin"/></svg>House call</p><div class="cl-folder-body">
         <h3>On any page: script tag or bookmarklet</h3>
         <p>Add one script tag in development. Numbered pins mark each problem and a keyboard accessible side panel explains it. <kbd class="kbd kbd-sm">Alt</kbd> + <kbd class="kbd kbd-sm">Shift</kbd> + <kbd class="kbd kbd-sm">A</kbd> toggles it.</p>
         <figure class="cl-code" id="code-1" data-lang="html"><div class="cl-code-bar"><span class="cl-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-code-tab"><span class="cl-code-badge" aria-hidden="true">&lt;&gt;</span>index.html</span><button type="button" class="cl-code-copy" aria-label="Copy code from index.html" @click="copy($el)"><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span v-text="copied === 'code-1' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="index.html code example"><code><span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">&#x3C;</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">script</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> src</span><span style="--shiki-light:#000000FF;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"https://cdn.jsdelivr.net/npm/a11ymedic@0.1.0/dist/a11ymedic.js"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> data-overlay</span><span style="--shiki-light:#800000;--shiki-dark:#808080">>&#x3C;/</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">script</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span></span>
 <span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">&#x3C;!-- Portuguese: data-overlay="pt" --></span></span></code></pre><div class="cl-code-status" aria-hidden="true"><span>a11ymedic</span><span>HTML</span><span>UTF-8</span><span>2 lines</span></div></figure>
-        <p>Or drag this bookmarklet to your bookmarks bar and press it on any site: <a class="cl-bookmarklet" data-a11ymedic-ignore href="javascript:(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/a11ymedic@0.1.0/dist/a11ymedic.js';s.setAttribute('data-overlay','');document.body.appendChild(s)})()"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#first-aid"/></svg>a11ymedic check-up</a></p>
+        <p>Or drag this bookmarklet to your bookmarks bar and press it on any site: <a class="cl-bookmarklet" data-a11ymedic-ignore href="javascript:(function(){var%20a=window.a11ymedic;if(a&amp;&amp;a.toggleOverlay){a.toggleOverlay({});return}var%20s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/a11ymedic@0.1.0/dist/a11ymedic.js';s.setAttribute('data-overlay','');s.onerror=function(){alert('a11ymedic%20could%20not%20load.%20The%20page%20may%20block%20outside%20scripts%20(Content%20Security%20Policy).')};document.body.appendChild(s)})()"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#first-aid"/></svg>a11ymedic check-up</a></p>
       </div></article>
       <article class="cl-folder" data-tone="teal"><p class="cl-folder-tab"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#terminal"/></svg>Walk-in clinic</p><div class="cl-folder-body">
         <h3>Command line: files, globs and URLs</h3>
@@ -964,13 +1007,7 @@
       <h2 id="guides-title">Accessibility, explained by the medic</h2>
       <p>Short guides with the code to copy. Pick a pamphlet from the rack.</p>
     </div>
-    <ul class="cl-pamphlets">
-      <li><a class="cl-pamphlet" href="website-accessibility-checker.html"><span class="cl-pamphlet-art"><svg class="cl-spot" viewBox="0 0 240 180" aria-hidden="true" focusable="false"><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" style="fill:var(--a-blob)"/>
-<rect x="48" y="40" width="120" height="96" rx="9.6" stroke-width="3" style="fill:var(--a-paper);stroke:var(--a-ink)"/><path d="M48 59V49.6a9.6 9.6 0 0 1 9.6 -9.6H158.4a9.6 9.6 0 0 1 9.6 9.6V59Z" stroke-width="3" stroke-linejoin="round" style="fill:var(--a-tealPale);stroke:var(--a-ink)"/><circle cx="59.4" cy="49.5" r="3.2300000000000004" stroke-width="1.5" style="fill:var(--a-coral);stroke:var(--a-ink)"/><circle cx="69.85" cy="49.5" r="3.2300000000000004" stroke-width="1.5" style="fill:var(--a-yellow);stroke:var(--a-ink)"/><circle cx="80.3" cy="49.5" r="3.2300000000000004" stroke-width="1.5" style="fill:var(--a-tealSoft);stroke:var(--a-ink)"/><rect x="91.69999999999999" y="45.32" width="66.80000000000001" height="8.36" rx="4.18" stroke-width="1.6500000000000001" style="fill:var(--a-paper);stroke:var(--a-ink)"/><ellipse cx="76.68" cy="111.74" rx="8.55" ry="4.788" style="fill:var(--a-coralPale)"/><ellipse cx="139.32" cy="111.74" rx="8.55" ry="4.788" style="fill:var(--a-coralPale)"/><path d="M79.56 90.08a6.84 6.84 0 0 1 13.68 0" fill="none" stroke-width="2.4000000000000004" stroke-linecap="round" style="stroke:var(--a-ink)"/><path d="M122.75999999999999 90.08a6.84 6.84 0 0 1 13.68 0" fill="none" stroke-width="2.4000000000000004" stroke-linecap="round" style="stroke:var(--a-ink)"/><path d="M96.6 115.16a11.4 11.4 0 0 0 22.8 0Z" stroke-width="2.4000000000000004" stroke-linejoin="round" style="fill:var(--a-coral);stroke:var(--a-ink)"/>
-<g fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--a-ink)"><path d="M198 30v20a16 16 0 0 1-32 0V30"/><path d="M182 66v24c0 22-16 30-30 28"/></g>
-<path d="M188 30h14M162 30h14" stroke-width="5" stroke-linecap="round" style="stroke:var(--a-ink)"/>
-<circle cx="146" cy="116" r="13" stroke-width="3" style="fill:var(--a-teal);stroke:var(--a-ink)"/><circle cx="146" cy="116" r="5" stroke-width="2" style="fill:var(--a-tealPale);stroke:var(--a-ink)"/>
-<path d="M202.72727272727272 111h6.545454545454546v5.727272727272727h5.727272727272727v6.545454545454546h-5.727272727272727v5.727272727272727h-6.545454545454546v-5.727272727272727h-5.727272727272727v-6.545454545454546h5.727272727272727Z" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="fill:var(--a-coral);stroke:var(--a-ink)" /><path class="" d="M34 124C34.96 131.04 34.96 131.04 42 132C34.96 132.96 34.96 132.96 34 140C33.04 132.96 33.04 132.96 26 132C33.04 131.04 33.04 131.04 34 124Z" stroke-width="2.5" stroke-linejoin="round" style="fill:var(--a-yellow);stroke:var(--a-ink)"/></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">A website accessibility checker that explains every fix</h3><span class="cl-pamphlet-text">Check any website for WCAG 2.2 accessibility problems in the browser, the terminal or your tests, with a plain language explanation and the exact fix for each.</span></a></li>
+    <ul class="cl-pamphlets" data-reveal>
       <li><a class="cl-pamphlet" href="how-to-fix-color-contrast.html"><span class="cl-pamphlet-art"><svg class="cl-spot" viewBox="0 0 240 180" aria-hidden="true" focusable="false"><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" style="fill:var(--a-blob)"/>
 <g stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--a-ink)">
 <g transform="rotate(-24 70 150)"><rect x="50" y="40" width="40" height="110" rx="8" style="fill:var(--a-paper)"/><rect x="56" y="48" width="28" height="22" rx="4" style="fill:var(--a-coralPale)"/></g>
@@ -980,7 +1017,7 @@
 <path d="M176 74l16-14" stroke-width="4"/><circle cx="176" cy="74" r="5" style="fill:var(--a-coral)"/>
 <rect x="148" y="122" width="62" height="26" rx="13" style="fill:var(--a-tealPale)"/></g>
 <text x="179" y="140" font-family="'Atkinson Hyperlegible Mono', Consolas, Menlo, monospace" font-size="13" font-weight="700" text-anchor="middle" style="fill:var(--a-ink)">4.5:1</text>
-<path class="" d="M214 22C214.96 29.04 214.96 29.04 222 30C214.96 30.96 214.96 30.96 214 38C213.04 30.96 213.04 30.96 206 30C213.04 29.04 213.04 29.04 214 22Z" stroke-width="2.5" stroke-linejoin="round" style="fill:var(--a-yellow);stroke:var(--a-ink)"/></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">How to fix color contrast without losing your brand</h3><span class="cl-pamphlet-text">Learn the WCAG contrast ratios (4.5:1, 3:1 and 7:1), find failing text automatically, and fix it with the closest passing color that keeps your brand hue.</span></a></li>
+<path class="" d="M214 22C214.96 29.04 214.96 29.04 222 30C214.96 30.96 214.96 30.96 214 38C213.04 30.96 213.04 30.96 206 30C213.04 29.04 213.04 29.04 214 22Z" stroke-width="2.5" stroke-linejoin="round" style="fill:var(--a-yellow);stroke:var(--a-ink)"/></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">Fixing color contrast and keeping your brand colors</h3><span class="cl-pamphlet-text">The WCAG contrast ratios, the traps that hide failing text, and how to pick a passing color close to the one you have.</span></a></li>
       <li><a class="cl-pamphlet" href="alt-text-best-practices.html"><span class="cl-pamphlet-art"><svg class="cl-spot" viewBox="0 0 240 180" aria-hidden="true" focusable="false"><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" style="fill:var(--a-blob)"/>
 <g stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--a-ink)">
 <rect x="34" y="36" width="116" height="90" rx="10" style="fill:var(--a-paper)"/>
@@ -990,7 +1027,7 @@
 <path d="M166 120h40a6 6 0 0 1 6 6v22a6 6 0 0 1-6 6h-40l-12-17Z" style="fill:var(--a-coralPale)"/><circle cx="168" cy="137" r="3.5" style="fill:var(--a-paper)"/>
 <path d="M176 132h26M176 142h18" />
 <path d="M168 34h44a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10h-18l-12 12V74h-14a10 10 0 0 1-10-10V44a10 10 0 0 1 10-10Z" style="fill:var(--a-paper)"/>
-<path d="M172 48h36M172 60h24" stroke-width="4" style="stroke:var(--a-teal)"/></g></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">Alt text best practices, with examples for every kind of image</h3><span class="cl-pamphlet-text">Write alt text that helps: when to describe and when to leave alt empty, images in links and buttons, icons, charts and SVG, with before and after examples.</span></a></li>
+<path d="M172 48h36M172 60h24" stroke-width="4" style="stroke:var(--a-teal)"/></g></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">Writing alt text for every kind of image</h3><span class="cl-pamphlet-text">When to describe an image and when to leave alt empty, with examples for links, buttons, icons, charts and SVG.</span></a></li>
       <li><a class="cl-pamphlet" href="accessible-form-labels.html"><span class="cl-pamphlet-art"><svg class="cl-spot" viewBox="0 0 240 180" aria-hidden="true" focusable="false"><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" style="fill:var(--a-blob)"/>
 <g stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--a-ink)">
 <rect x="40" y="28" width="124" height="128" rx="12" style="fill:var(--a-paper)"/>
@@ -1001,14 +1038,7 @@
 <path d="M66 71v.1" stroke-width="4"/>
 <g transform="rotate(-12 170 100)"><rect x="132" y="80" width="78" height="44" rx="8" style="fill:var(--a-paper)"/><path d="M132 96V88a8 8 0 0 1 8-8h62a8 8 0 0 1 8 8v8Z" style="fill:var(--a-coral)"/><path d="M146 110h48" stroke-width="4" style="stroke:var(--a-teal)"/></g></g>
 <path d="M112 100q-4 10 6 14" fill="none" stroke-width="2.5" stroke-dasharray="2 5" stroke-linecap="round" style="stroke:var(--a-ink)"/>
-<path class="" d="M208 47C209.08 54.92 209.08 54.92 217 56C209.08 57.08 209.08 57.08 208 65C206.92 57.08 206.92 57.08 199 56C206.92 54.92 206.92 54.92 208 47Z" stroke-width="2.5" stroke-linejoin="round" style="fill:var(--a-yellow);stroke:var(--a-ink)"/><path class="" d="M30 121C30.84 127.16 30.84 127.16 37 128C30.84 128.84 30.84 128.84 30 135C29.16 128.84 29.16 128.84 23 128C29.16 127.16 29.16 127.16 30 121Z" stroke-width="2.5" stroke-linejoin="round" style="fill:var(--a-tealSoft);stroke:var(--a-ink)"/></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">Accessible form labels: how to label every field right</h3><span class="cl-pamphlet-text">Label every form field the accessible way: visible labels, fieldset and legend, hints and errors with aria-describedby, autocomplete and paste friendly logins.</span></a></li>
-      <li><a class="cl-pamphlet" href="wcag-2-2-checklist.html"><span class="cl-pamphlet-art"><svg class="cl-spot" viewBox="0 0 240 180" aria-hidden="true" focusable="false"><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" style="fill:var(--a-blob)"/>
-<g stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--a-ink)">
-<rect x="62" y="26" width="104" height="136" rx="12" style="fill:var(--a-coral)"/>
-<rect x="72" y="40" width="84" height="114" rx="6" style="fill:var(--a-paper)"/>
-<rect x="94" y="18" width="40" height="18" rx="6" style="fill:var(--a-metal)"/>
-<rect x="82" y="60" width="16" height="16" rx="4" style="fill:var(--a-tealSoft)"/><path d="m85 68 4 4 7-8" stroke-width="3"/><path d="M106 66h38M106 73h24" stroke-width="2.5"/><rect x="82" y="90" width="16" height="16" rx="4" style="fill:var(--a-tealSoft)"/><path d="m85 98 4 4 7-8" stroke-width="3"/><path d="M106 96h38M106 103h24" stroke-width="2.5"/><rect x="82" y="120" width="16" height="16" rx="4" style="fill:var(--a-paper)"/><path d="M106 126h38M106 133h24" stroke-width="2.5"/>
-<g transform="rotate(32 190 110)"><rect x="182" y="60" width="16" height="84" rx="4" style="fill:var(--a-yellow)"/><path d="M182 144l8 16 8-16Z" style="fill:var(--a-paper)"/><path d="M188 154l2 6 2-6" style="fill:var(--a-ink)"/><rect x="182" y="60" width="16" height="12" rx="4" style="fill:var(--a-coralSoft)"/></g></g></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">WCAG 2.2 checklist for developers</h3><span class="cl-pamphlet-text">A practical WCAG 2.2 checklist for levels A and AA: what changed from 2.1, the six new criteria, and which items a tool can check and which need a human.</span></a></li>
+<path class="" d="M208 47C209.08 54.92 209.08 54.92 217 56C209.08 57.08 209.08 57.08 208 65C206.92 57.08 206.92 57.08 199 56C206.92 54.92 206.92 54.92 208 47Z" stroke-width="2.5" stroke-linejoin="round" style="fill:var(--a-yellow);stroke:var(--a-ink)"/><path class="" d="M30 121C30.84 127.16 30.84 127.16 37 128C30.84 128.84 30.84 128.84 30 135C29.16 128.84 29.16 128.84 23 128C29.16 127.16 29.16 127.16 30 121Z" stroke-width="2.5" stroke-linejoin="round" style="fill:var(--a-tealSoft);stroke:var(--a-ink)"/></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">Labeling form fields</h3><span class="cl-pamphlet-text">Visible labels, groups of options, hints and errors, and autocomplete for every kind of form field.</span></a></li>
       <li><a class="cl-pamphlet" href="accessibility-testing-in-ci.html"><span class="cl-pamphlet-art"><svg class="cl-spot" viewBox="0 0 240 180" aria-hidden="true" focusable="false"><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" style="fill:var(--a-blob)"/>
 <g stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--a-ink)">
 <rect x="18" y="122" width="204" height="18" rx="9" style="fill:var(--a-metal)"/>
@@ -1021,28 +1051,7 @@
 <rect x="100" y="84" width="40" height="38" rx="7" style="fill:var(--a-paper)"/><path d="M108 96h16M108 106h24" stroke-width="2.5"/>
 <g transform="rotate(5 190 100)"><rect x="170" y="80" width="40" height="42" rx="7" style="fill:var(--a-paper)"/><path d="m180 102 6 6 12-12" stroke-width="4" style="stroke:var(--a-teal)"/></g></g>
 <g transform="translate(118 112) rotate(-20)"><rect x="-15" y="-4.8" width="30" height="9.6" rx="4.363636363636363" stroke-width="2.5" style="fill:var(--a-plaster);stroke:var(--a-ink)"/><rect x="-4.285714285714286" y="-2.8" width="8.571428571428571" height="5.6" rx="2" style="fill:var(--a-pad)"/><g fill-opacity=".45" style="fill:var(--a-ink)"><circle cx="-10" cy="-1.5999999999999999" r="1.3"/><circle cx="-10" cy="1.5999999999999999" r="1.3"/><circle cx="10" cy="-1.5999999999999999" r="1.3"/><circle cx="10" cy="1.5999999999999999" r="1.3"/></g></g>
-<path d="M214 152h-60" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 9" style="stroke:var(--a-ink)"/></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">Accessibility testing in CI</h3><span class="cl-pamphlet-text">Add accessibility testing to CI: fail builds on serious issues, get GitHub Actions annotations and a job summary, and test components with Vitest or Jest.</span></a></li>
-      <li><a class="cl-pamphlet" href="aria-label-vs-aria-labelledby.html"><span class="cl-pamphlet-art"><svg class="cl-spot" viewBox="0 0 240 180" aria-hidden="true" focusable="false"><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" style="fill:var(--a-blob)"/>
-<g stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--a-ink)">
-<rect x="28" y="44" width="56" height="44" rx="14" style="fill:var(--a-teal)"/>
-<circle cx="52" cy="62" r="9" style="fill:var(--a-paper)"/><path d="m59 69 8 8"/>
-<path d="M84 66q20 0 26 18" fill="none" stroke-dasharray="1 7"/>
-<g transform="rotate(14 128 104)"><path d="M108 90h44a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6h-44l-12-16Z" style="fill:var(--a-coral)"/><circle cx="110" cy="106" r="3.5" style="fill:var(--a-paper)"/><path d="M120 106h28" stroke-width="4" style="stroke:var(--a-paper)"/></g>
-<rect x="134" y="24" width="84" height="40" rx="8" style="fill:var(--a-paper)"/><path d="M146 38h48" stroke-width="5"/><path d="M146 52h30" stroke-width="3" style="stroke:var(--a-teal)"/>
-<path d="M176 64q4 50-30 78" fill="none" stroke-dasharray="1 7"/>
-<g transform="rotate(-10 120 150)"><path d="M100 136h38a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6h-38l-10-14Z" style="fill:var(--a-tealSoft)"/><circle cx="102" cy="150" r="3" style="fill:var(--a-paper)"/><path d="M110 150h24" stroke-width="3" style="stroke:var(--a-ink)"/></g></g></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">aria-label vs aria-labelledby: which one to use and when</h3><span class="cl-pamphlet-text">aria-label vs aria-labelledby explained with examples: how accessible names are computed, when each attribute fits, and the mistakes screen readers ignore.</span></a></li>
-      <li><a class="cl-pamphlet" href="accessibility-overlay-vs-real-fixes.html"><span class="cl-pamphlet-art"><svg class="cl-spot" viewBox="0 0 240 180" aria-hidden="true" focusable="false"><path d="M38 40C66 6 150 2 196 26c40 22 44 78 26 108-20 34-78 44-126 36C46 162 10 130 12 94 13 70 22 58 38 40Z" style="fill:var(--a-blob)"/>
-<g stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--a-ink)">
-<rect x="22" y="40" width="84" height="104" rx="9" style="fill:var(--a-paper)"/>
-<path d="M50 40l10 26-12 16 14 18-8 22 6 22" fill="none" stroke-width="3.5" style="stroke:var(--a-coral)"/>
-<path d="M28 52h88v80q-30-8-50 10H28Z" fill-opacity=".75" style="fill:var(--a-sky)"/>
-<path d="M116 132q-30-8-50 10 4-18 20-24" style="fill:var(--a-paper)"/>
-<path d="M40 62l12 12" stroke-width="4" style="stroke:var(--a-paper)"/>
-<rect x="134" y="40" width="84" height="104" rx="9" style="fill:var(--a-paper)"/>
-<path d="M162 40l10 26-12 16 14 18-8 22 6 22" fill="none" stroke-width="3.5" style="stroke:var(--a-tealSoft)"/>
-<path d="M158 60l12-4M162 80l12 4M164 100l12-6M160 120l12 6" stroke-width="2.5"/>
-<circle cx="200" cy="128" r="14" style="fill:var(--a-teal)"/><path d="m193 128 5 5 9-9" stroke-width="3.5" style="stroke:var(--a-paper)"/></g>
-<path d="M120 92h10" stroke-width="3" stroke-linecap="round" style="stroke:var(--a-ink)"/><path d="m126 86 6 6-6 6" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--a-ink)"/></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">Accessibility overlay vs real fixes: what actually works</h3><span class="cl-pamphlet-text">Accessibility overlay vs real fixes: what runtime widgets can and cannot repair, why source fixes last longer, and how a diagnostic overlay fits a dev workflow.</span></a></li>
+<path d="M214 152h-60" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 9" style="stroke:var(--a-ink)"/></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#book"/></svg>Guide</span><h3 class="cl-pamphlet-title">Running accessibility checks in CI</h3><span class="cl-pamphlet-text">Fail a build on serious problems, get annotations on pull requests, and test components with Vitest or Jest.</span></a></li>
       <li><a class="cl-pamphlet" href="wcag-cheat-sheet.html"><span class="cl-pamphlet-art cl-pour-art"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#eye"/></svg><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#hand"/></svg><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#lightbulb"/></svg><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#blocks"/></svg></span><span class="cl-pamphlet-kicker"><svg class="ic ic-xs" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#clipboard-check"/></svg>Cheat sheet</span><h3 class="cl-pamphlet-title">WCAG 2.2 cheat sheet in plain language</h3><span class="cl-pamphlet-text">Every A and AA success criterion in one or two sentences, with the a11ymedic rules that check it.</span></a></li>
     </ul>
   </div>
@@ -1054,12 +1063,12 @@
       <p class="cl-kicker"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="assets/art/icons.svg#heart-pulse"/></svg>FAQ</p>
       <h2 id="faq-title">Questions people ask the medic</h2>
     </div>
-    <details class="cl-faq"><summary>What is the best free website accessibility checker?</summary><p>Use one that finds problems and tells you how to fix them. a11ymedic is free and open source: it checks 61 WCAG 2.2 rules in the browser, on the command line and in CI, explains each problem in plain English or Portuguese and gives the patched HTML for every finding.</p></details>
-    <details class="cl-faq"><summary>How do I check a website for accessibility problems?</summary><p>Run npx a11ymedic https://your-site.com for a full report, or add the a11ymedic script tag (or the bookmarklet) to see numbered pins on the page itself. For your own code, run npx a11ymedic &quot;src/**/*.html&quot; and add --fail-on serious in CI.</p></details>
-    <details class="cl-faq"><summary>Can a11ymedic fix accessibility issues automatically?</summary><p>It fixes the safe ones: a11ymedic fix &quot;src/**/*.html&quot; shows a diff and --write applies it. Safe fixes are things like an empty alt on a spacer image, tabindex 0 instead of 5, re-enabling zoom or a misspelled ARIA attribute. Everything that needs a human decision (alt text that describes a photo, a label text) comes as a ready to paste suggestion instead.</p></details>
-    <details class="cl-faq"><summary>Does a11ymedic replace testing with real users?</summary><p>No. Automated checks catch a large share of common problems, but not all of them: whether alt text is accurate, whether a flow makes sense with a screen reader or whether captions are correct still need people. a11ymedic marks what it cannot decide as a human check.</p></details>
+    <details class="cl-faq"><summary>Is a11ymedic free?</summary><p>Yes. It is open source under the MIT license. The checks run in your browser, on your machine or in your CI; there is no a11ymedic server and nothing to sign up for.</p></details>
+    <details class="cl-faq"><summary>How do I check a page that is already online?</summary><p>Type its address in the box at the top of this page. If the site does not let other pages read it, run npx a11ymedic https://your-site.com in a terminal, or press the bookmarklet on the page to see numbered pins on it.</p></details>
+    <details class="cl-faq"><summary>Can it fix problems automatically?</summary><p>It fixes the safe ones: a11ymedic fix &quot;src/**/*.html&quot; shows a diff and --write applies it. Safe fixes are things like an empty alt on a spacer image, tabindex 0 instead of 5, re-enabling zoom or a misspelled ARIA attribute. Anything that needs a human decision, such as alt text for a photo or a label text, comes as a suggestion to review.</p></details>
+    <details class="cl-faq"><summary>Does it replace testing with real people?</summary><p>No. Automated checks catch many common problems, but not all of them: whether alt text is accurate, whether a flow makes sense with a screen reader or whether captions are correct still need people. a11ymedic lists what it cannot decide as a human check.</p></details>
     <details class="cl-faq"><summary>Does it work with React, Vue, Angular and Next.js?</summary><p>Yes. Test rendered components with expect(await audit(container)).toHaveNoViolations() in Vitest or Jest, check built HTML with the CLI, or load the overlay script in development.</p></details>
-    <details class="cl-faq"><summary>Is a11ymedic an accessibility overlay?</summary><p>No. Its overlay is a diagnosis tool for the people who build the site: it highlights problems and shows the fix. It never changes the page for visitors. Real fixes belong in your source code.</p></details>
+    <details class="cl-faq"><summary>Does the overlay change my site for visitors?</summary><p>No. The overlay is a diagnosis tool for the people who build the site: it highlights problems and shows the fix. Real fixes belong in your source code.</p></details>
   </div>
 </section>
 

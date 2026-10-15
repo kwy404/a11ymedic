@@ -34,7 +34,13 @@ const T = {
     examined: (n, m) => `Examined: ${n} ${n === 1 ? "problem" : "problems"}${m ? `, ${m} need a human check` : ""}.`,
     treated: (title, n) => `Treated "${title}". ${n} ${n === 1 ? "problem" : "problems"} left.`,
     treatedMany: (k, n) => `Applied ${k} ${k === 1 ? "fix" : "fixes"}. ${n} ${n === 1 ? "problem" : "problems"} left.`,
-    empty: "Paste some HTML first.",
+    empty: "Paste some HTML or a URL first.",
+    since: "since the first exam",
+    yourHtml: "Your HTML",
+    fetching: (host) => `Asking ${host} for its page...`,
+    blocked: (host) => `Your browser could not read ${host}. The options below always work.`,
+    httpError: (host, code) => `${host} answered with error ${code}. Check the address and try again.`,
+    notHtml: (host) => `${host} did not send an HTML page. Paste the address of a web page.`,
   },
   pt: {
     chart: "Prontuário",
@@ -62,7 +68,13 @@ const T = {
     examined: (n, m) => `Exame concluído: ${n} ${n === 1 ? "problema" : "problemas"}${m ? `, ${m} precisam de verificação humana` : ""}.`,
     treated: (title, n) => `Tratado: "${title}". Restam ${n} ${n === 1 ? "problema" : "problemas"}.`,
     treatedMany: (k, n) => `${k} ${k === 1 ? "correção aplicada" : "correções aplicadas"}. Restam ${n} ${n === 1 ? "problema" : "problemas"}.`,
-    empty: "Cole algum HTML primeiro.",
+    empty: "Cole algum HTML ou uma URL primeiro.",
+    since: "desde o primeiro exame",
+    yourHtml: "Seu HTML",
+    fetching: (host) => `Pedindo a página para ${host}...`,
+    blocked: (host) => `Seu navegador não conseguiu ler ${host}. As opções abaixo sempre funcionam.`,
+    httpError: (host, code) => `${host} respondeu com o erro ${code}. Confira o endereço e tente de novo.`,
+    notHtml: (host) => `${host} não enviou uma página HTML. Cole o endereço de uma página web.`,
   },
 };
 
@@ -114,6 +126,7 @@ if (V) {
   let raw = [];
   let doc = null;
   let pins = null;
+  let skipSampleWatch = false;
 
   const S = V.data({
     menu: false,
@@ -134,7 +147,17 @@ if (V) {
     status: "",
     patientName: "Bakery landing page",
     score: 0,
+    shownScore: 0,
+    delta: 0,
     mood: "sick",
+    fresh: false,
+    // the quick check in the hero
+    quick: "",
+    quickMsg: "",
+    busy: false,
+    corsUrl: "",
+    corsHost: "",
+    corsWhere: "",
     conditionText: T.en.waiting,
     healing: false,
     focusing: false,
@@ -174,7 +197,31 @@ if (V) {
       if (pre) S.copyText(pre.textContent.replace(/\n$/, ""), fig.id);
     },
     run() {
-      return examineFresh();
+      return examineFresh("room");
+    },
+    /** The hero box: HTML or a URL goes straight to the check-up room. */
+    async quickCheck() {
+      const text = String(S.quick ?? "").trim();
+      if (!text) {
+        S.quickMsg = S.t.empty;
+        document.getElementById("quick-input")?.focus();
+        return;
+      }
+      S.quickMsg = "";
+      S.tab = "paste";
+      S.paste = text;
+      if (await examineFresh("hero")) showRoom();
+    },
+    async trySample(id) {
+      S.quickMsg = "";
+      S.tab = "samples";
+      if (S.sample !== id) skipSampleWatch = true;
+      S.sample = id;
+      if (await examineFresh("hero")) showRoom();
+    },
+    tryUrl(url) {
+      S.quick = new URL(url, location.href).href;
+      return S.quickCheck();
     },
     toggle(i) {
       S.open = S.open === i ? -1 : i;
@@ -228,15 +275,46 @@ if (V) {
     });
   }
 
-  /** Health score from 0 to 100: every finding costs points by severity. */
+  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /** Health score from 0 to 100. Uses the engine score when the build has it. */
   function vitals() {
-    const c = S.counts;
-    const penalty = c.critical * 10 + c.serious * 6 + c.moderate * 3 + c.minor;
-    const score = S.ran ? Math.round(100 * Math.exp(-penalty / 90)) : 0;
+    let score = 0;
+    let label = "";
+    if (S.ran && typeof A.score === "function") {
+      const s = A.score({ findings: raw });
+      score = s.value;
+      label = s.label?.[S.lang] ?? "";
+    } else if (S.ran) {
+      const c = S.counts;
+      const penalty = c.critical * 10 + c.serious * 6 + c.moderate * 3 + c.minor;
+      score = Math.round(100 * Math.exp(-penalty / 90));
+    }
     S.score = score;
-    S.mood = !S.ran ? "sick" : score >= 100 ? "happy" : score >= 65 ? "ok" : "sick";
+    S.delta = S.ran && startScore !== null ? Math.max(0, score - startScore) : 0;
+    S.mood = !S.ran ? "sick" : score >= 100 ? "happy" : score >= 70 ? "ok" : "sick";
     const names = S.t.conditions;
-    S.conditionText = !S.ran ? S.t.waiting : score >= 100 ? names[4] : score >= 90 ? names[3] : score >= 65 ? names[2] : score >= 40 ? names[1] : names[0];
+    S.conditionText = !S.ran ? S.t.waiting : label || (score >= 100 ? names[4] : score >= 90 ? names[3] : score >= 70 ? names[2] : score >= 40 ? names[1] : names[0]);
+    countTo(score);
+  }
+
+  /** Counts the score display up or down to the new value in about 0.7 seconds. */
+  let counting = 0;
+  function countTo(to) {
+    cancelAnimationFrame(counting);
+    const from = Number(S.shownScore) || 0;
+    if (reduced() || from === to) {
+      S.shownScore = to;
+      return;
+    }
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / 700);
+      const ease = 1 - Math.pow(1 - p, 3);
+      S.shownScore = Math.round(from + (to - from) * ease);
+      if (p < 1) counting = requestAnimationFrame(step);
+    };
+    counting = requestAnimationFrame(step);
   }
 
   /** Rebuilds the reactive view of the findings and redraws the pins. */
@@ -305,24 +383,108 @@ if (V) {
     if (r.width || r.height) win.scrollTo({ top: Math.max(0, r.top + win.scrollY - 60), behavior: "auto" });
   }
 
-  async function examineFresh() {
-    if (!frame) return;
-    if (!samples.length) samples = (await import("./samples.js")).SAMPLES;
-    const sample = samples.find((s) => s.id === S.sample) ?? samples[0];
-    const html = S.tab === "paste" ? S.paste : sample.html;
-    if (!html.trim()) {
-      S.status = S.t.empty;
-      return;
+  const looksLikeUrl = (text) => !/[\s<>]/.test(text) && (/^https?:\/\/\S+$/i.test(text) || /^[a-z0-9-]+(\.[a-z0-9-]+)+(:\d+)?([/?#]\S*)?$/i.test(text));
+  const escAttr = (v) => String(v).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+
+  /**
+   * Downloads a page for the check. Only works when the site allows it (CORS), which is the
+   * case for GitHub Pages and many static hosts. A <base> keeps its images and CSS working.
+   */
+  async function fetchPage(url) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 15000);
+    try {
+      let res;
+      try {
+        res = await fetch(url, { mode: "cors", credentials: "omit", signal: ctrl.signal });
+      } catch {
+        return { error: "blocked" };
+      }
+      if (!res.ok) return { error: "http", code: res.status };
+      const type = res.headers.get("content-type") ?? "";
+      if (type && !/html|xml/i.test(type)) return { error: "type" };
+      const base = `<base href="${escAttr(res.url || url)}">`;
+      // Scripts cannot run in the sandboxed frame, so drop them instead of letting them fail.
+      const text = (await res.text()).replace(/<script\b[\s\S]*?<\/script>/gi, "");
+      return { html: /<head[^>]*>/i.test(text) ? text.replace(/<head[^>]*>/i, (m) => m + base) : base + text };
+    } finally {
+      clearTimeout(timer);
     }
-    S.patientName = S.tab === "paste" ? (S.lang === "pt" ? "Seu HTML" : "Your HTML") : S.lang === "pt" ? sample.pt : sample.name;
-    S.open = -1;
-    await new Promise((resolve) => {
-      frame.addEventListener("load", resolve, { once: true });
-      frame.srcdoc = html;
-    });
-    doc = frame.contentDocument;
-    const result = examine();
-    S.status = S.t.examined(raw.length, result?.incomplete.length ?? 0);
+  }
+
+  /** Loads the chosen patient into the frame and examines it. Resolves to true when it ran. */
+  let runId = 0;
+  let startScore = null;
+  async function examineFresh(where = "room") {
+    if (!frame) return false;
+    const id = ++runId;
+    S.busy = true;
+    try {
+      if (!samples.length) samples = (await import("./samples.js")).SAMPLES;
+      const sample = samples.find((s) => s.id === S.sample) ?? samples[0];
+      let html = S.tab === "paste" ? String(S.paste ?? "").trim() : sample.html;
+      S.corsUrl = "";
+      if (!html) {
+        S.status = S.t.empty;
+        if (where === "hero") S.quickMsg = S.t.empty;
+        return false;
+      }
+      let name = S.tab === "paste" ? S.t.yourHtml : S.lang === "pt" ? sample.pt : sample.name;
+      if (S.tab === "paste" && looksLikeUrl(html)) {
+        const url = /^https?:/i.test(html) ? html : `https://${html}`;
+        const u = new URL(url);
+        const host = u.host;
+        const say = (msg) => {
+          S.status = msg;
+          if (where === "hero") S.quickMsg = msg;
+        };
+        say(S.t.fetching(host));
+        const page = await fetchPage(url);
+        if (id !== runId) return false;
+        if (page.error) {
+          if (page.error === "blocked") {
+            S.corsUrl = url;
+            S.corsHost = host;
+            S.corsWhere = where;
+            S.status = S.t.blocked(host);
+            // In the hero the help box itself is the message.
+            if (where === "hero") S.quickMsg = "";
+          } else say(page.error === "http" ? S.t.httpError(host, page.code) : S.t.notHtml(host));
+          return false;
+        }
+        html = page.html;
+        name = host + (u.pathname === "/" ? "" : u.pathname);
+        if (where === "hero") S.quickMsg = "";
+      }
+      S.patientName = name;
+      S.open = -1;
+      startScore = null;
+      await new Promise((resolve) => {
+        frame.addEventListener("load", resolve, { once: true });
+        frame.srcdoc = html;
+      });
+      if (id !== runId) return false;
+      doc = frame.contentDocument;
+      const result = examine();
+      startScore = S.score;
+      S.delta = 0;
+      S.status = S.t.examined(raw.length, result?.incomplete.length ?? 0);
+      pulse("fresh", 1200);
+      return true;
+    } finally {
+      if (id === runId) S.busy = false;
+    }
+  }
+
+  /** Brings the check-up room into view and moves focus to it, after a check from the hero. */
+  function showRoom() {
+    const title = document.getElementById("checkup-title");
+    const intake = document.querySelector(".cl-intake");
+    const exam = document.querySelector(".cl-exam");
+    // On narrow screens the intake sits above the patient, so jump straight to the patient.
+    const stacked = intake && exam && exam.getBoundingClientRect().top > intake.getBoundingClientRect().bottom - 20;
+    (stacked ? exam : document.getElementById("checkup"))?.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" });
+    title?.focus({ preventScroll: true });
   }
 
   // Contrast fixer: recompute whenever a color or the target changes.
@@ -358,10 +520,11 @@ if (V) {
     });
     V.watch(() => S.level, () => examine());
     V.watch(() => S.sample, () => {
-      if (S.tab === "samples") examineFresh();
+      if (skipSampleWatch) skipSampleWatch = false;
+      else if (S.tab === "samples") examineFresh("room");
     });
     // Examine the first patient as soon as the page is idle, so the room is never empty.
-    (window.requestIdleCallback ?? setTimeout)(() => examineFresh());
+    (window.requestIdleCallback ?? setTimeout)(() => examineFresh("room"));
   }
 
   // Open every drawer of the medicine cabinet while a search or a triage filter is active.
@@ -384,4 +547,32 @@ if (V) {
   });
 
   V.start();
+}
+
+// Scroll reveal: groups marked data-reveal rise in once when they come into view. Content stays
+// visible without this script, without IntersectionObserver and with reduced motion.
+const groups = [...document.querySelectorAll("[data-reveal]")];
+if (groups.length && "IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  for (const g of groups) {
+    [...g.children].forEach((child, i) => {
+      if (!child.style.getPropertyValue("--step")) child.style.setProperty("--step", String(Math.min(i, 7)));
+    });
+    // Groups already on screen at load show at once, with no animation.
+    const r = g.getBoundingClientRect();
+    if (r.top < innerHeight && r.bottom > 0) g.classList.add("is-in", "is-done");
+  }
+  document.documentElement.classList.add("js-reveal");
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        const g = e.target;
+        g.classList.add("is-in");
+        io.unobserve(g);
+        setTimeout(() => g.classList.add("is-done"), 1600);
+      }
+    },
+    { rootMargin: "0px 0px -12% 0px" },
+  );
+  groups.filter((g) => !g.classList.contains("is-in")).forEach((g) => io.observe(g));
 }

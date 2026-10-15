@@ -6,28 +6,28 @@ import { code, divider, esc, icons, PEOPLE, REPO, VERSION } from "./layout.mjs";
 
 export const HOME_FAQ = [
   {
-    q: "What is the best free website accessibility checker?",
-    a: "Use one that finds problems and tells you how to fix them. a11ymedic is free and open source: it checks 61 WCAG 2.2 rules in the browser, on the command line and in CI, explains each problem in plain English or Portuguese and gives the patched HTML for every finding.",
+    q: "Is a11ymedic free?",
+    a: "Yes. It is open source under the MIT license. The checks run in your browser, on your machine or in your CI; there is no a11ymedic server and nothing to sign up for.",
   },
   {
-    q: "How do I check a website for accessibility problems?",
-    a: "Run npx a11ymedic https://your-site.com for a full report, or add the a11ymedic script tag (or the bookmarklet) to see numbered pins on the page itself. For your own code, run npx a11ymedic \"src/**/*.html\" and add --fail-on serious in CI.",
+    q: "How do I check a page that is already online?",
+    a: "Type its address in the box at the top of this page. If the site does not let other pages read it, run npx a11ymedic https://your-site.com in a terminal, or press the bookmarklet on the page to see numbered pins on it.",
   },
   {
-    q: "Can a11ymedic fix accessibility issues automatically?",
-    a: "It fixes the safe ones: a11ymedic fix \"src/**/*.html\" shows a diff and --write applies it. Safe fixes are things like an empty alt on a spacer image, tabindex 0 instead of 5, re-enabling zoom or a misspelled ARIA attribute. Everything that needs a human decision (alt text that describes a photo, a label text) comes as a ready to paste suggestion instead.",
+    q: "Can it fix problems automatically?",
+    a: "It fixes the safe ones: a11ymedic fix \"src/**/*.html\" shows a diff and --write applies it. Safe fixes are things like an empty alt on a spacer image, tabindex 0 instead of 5, re-enabling zoom or a misspelled ARIA attribute. Anything that needs a human decision, such as alt text for a photo or a label text, comes as a suggestion to review.",
   },
   {
-    q: "Does a11ymedic replace testing with real users?",
-    a: "No. Automated checks catch a large share of common problems, but not all of them: whether alt text is accurate, whether a flow makes sense with a screen reader or whether captions are correct still need people. a11ymedic marks what it cannot decide as a human check.",
+    q: "Does it replace testing with real people?",
+    a: "No. Automated checks catch many common problems, but not all of them: whether alt text is accurate, whether a flow makes sense with a screen reader or whether captions are correct still need people. a11ymedic lists what it cannot decide as a human check.",
   },
   {
     q: "Does it work with React, Vue, Angular and Next.js?",
     a: "Yes. Test rendered components with expect(await audit(container)).toHaveNoViolations() in Vitest or Jest, check built HTML with the CLI, or load the overlay script in development.",
   },
   {
-    q: "Is a11ymedic an accessibility overlay?",
-    a: "No. Its overlay is a diagnosis tool for the people who build the site: it highlights problems and shows the fix. It never changes the page for visitors. Real fixes belong in your source code.",
+    q: "Does the overlay change my site for visitors?",
+    a: "No. The overlay is a diagnosis tool for the people who build the site: it highlights problems and shows the fix. Real fixes belong in your source code.",
   },
 ];
 
@@ -98,53 +98,62 @@ const gauge = `<svg class="cl-gauge" viewBox="0 0 200 116" aria-hidden="true" fo
   <circle class="g-hub" cx="100" cy="100" r="8"/>
 </svg>`;
 
-export function homeBody({ rules, samples, guides }) {
-  const bookmarklet = `javascript:(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/a11ymedic@${VERSION}/dist/a11ymedic.js';s.setAttribute('data-overlay','');document.body.appendChild(s)})()`;
+/** What to do when the browser may not read a URL (CORS). Shown where the check started. */
+function corsHelp(where) {
+  return `<div class="cl-cors" role="alert" v-show="corsUrl && corsWhere === '${where}'" style="display:none">
+          <p class="cl-cors-title">${icon("ambulance", "ic ic-sm")}<span>Your browser could not read <strong v-text="corsHost">that site</strong>.</span></p>
+          <p>Most sites do not let other pages download them (a browser safety rule called CORS), so the check cannot start from here. Your site is not broken. These always work:</p>
+          <ol>
+            <li>In a terminal: <button type="button" class="cl-rx-slip cl-rx-slip-sm" @click="copyText('npx a11ymedic ' + corsUrl, 'cors-${where}')"><code v-text="'npx a11ymedic ' + corsUrl">npx a11ymedic</code><span class="cl-rx-copy">${icons.copy}<span v-text="copied === 'cors-${where}' ? 'Copied' : 'Copy'">Copy</span></span></button></li>
+            <li>Open the page and press the <a href="#install">a11ymedic bookmarklet</a>: numbered pins appear on the page itself.</li>
+            <li>Open the page, press <kbd class="kbd kbd-sm">Ctrl</kbd> + <kbd class="kbd kbd-sm">U</kbd> to see its source, then copy and paste it here.</li>
+          </ol>
+        </div>`;
+}
+
+export function homeBody({ rules, samples, guides, bookmarkletHref }) {
+  const bookmarklet = bookmarkletHref ?? `javascript:(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/a11ymedic@${VERSION}/dist/a11ymedic.js';s.setAttribute('data-overlay','');document.body.appendChild(s)})()`;
   const cab = cabinet(rules);
   return `
 <section class="cl-hero" aria-labelledby="hero-title">
   <div class="cl-wrap cl-hero-grid">
     <div class="cl-hero-copy">
       <p class="cl-nametag">${icon("stethoscope", "ic")}<span>Free accessibility checker for WCAG 2.2</span></p>
-      <h1 id="hero-title">The accessibility checker that <span class="cl-hl">explains every problem</span> and <span class="cl-hl cl-hl-coral">writes the fix.</span></h1>
-      <p class="cl-lead">Bring any page in for a check-up. a11ymedic examines it with 61 WCAG 2.2 rules, tells you in plain language what is wrong and who it hurts, and hands you the patched HTML. It works as a page overlay, on the command line, in CI and inside your tests.</p>
-      <div class="cl-hero-cta">
-        <a class="btn btn-primary btn-lg cl-btn" href="#checkup">${icon("stethoscope", "ic")}Start a check-up</a>
+      <h1 id="hero-title">Paste your page. <span class="cl-hl">See what is wrong</span> and <span class="cl-hl cl-hl-coral">get the fix.</span></h1>
+      <p class="cl-lead">a11ymedic checks 61 WCAG 2.2 rules, says in plain words what is wrong and who it hurts, and hands you the patched HTML. It runs in your browser: nothing is uploaded.</p>
+      <form class="cl-quick" @submit.prevent="quickCheck()" novalidate>
+        <label class="cl-quick-label" for="quick-input">Your HTML or a web address</label>
+        <div class="cl-quick-box">
+          <textarea id="quick-input" class="textarea cl-quick-input" rows="3" spellcheck="false" autocomplete="off" v-model="quick" @keydown.ctrl.enter.prevent="quickCheck()" @keydown.meta.enter.prevent="quickCheck()" aria-describedby="quick-hint" placeholder="&lt;img src=&quot;team.jpg&quot;&gt;  or  https://your-site.com"></textarea>
+          <button type="submit" class="btn btn-primary btn-lg cl-btn cl-quick-go" :disabled="busy">${icon("stethoscope", "ic")}<span v-text="busy ? 'Checking' : 'Check it'">Check it</span></button>
+        </div>
+        <p id="quick-hint" class="cl-quick-hint">One tag or a whole page both work. <kbd class="kbd kbd-sm">Ctrl</kbd> + <kbd class="kbd kbd-sm">Enter</kbd> also checks it.</p>
+        <p class="cl-quick-try"><span>Or try</span>
+          <button type="button" class="cl-chip" @click="trySample('bakery')">a bakery page</button>
+          <button type="button" class="cl-chip" @click="trySample('signup')">a sign-up form</button>
+          <button type="button" class="cl-chip" @click="tryUrl('guides.html')">a URL from this site</button>
+        </p>
+        <p class="cl-quick-msg" role="status" v-text="quickMsg"></p>
+        ${corsHelp("hero")}
+      </form>
+      <div class="cl-hero-alt">
+        <span>Prefer the terminal?</span>
         <button type="button" class="cl-rx-slip" @click="copyText('npx a11ymedic index.html', 'npx')"><span class="cl-rx-mark" aria-hidden="true">Rx</span><code>npx a11ymedic index.html</code><span class="cl-rx-copy">${icons.copy}<span v-text="copied === 'npx' ? 'Copied' : 'Copy'">Copy</span></span></button>
       </div>
-      <ul class="cl-vitals" aria-label="At a glance">
-        <li>${icon("cabinet", "ic")}<strong>61</strong><span>WCAG 2.2 rules</span></li>
-        <li>${icon("language", "ic")}<strong>EN + PT</strong><span>plain language</span></li>
-        <li>${icon("contrast", "ic")}<strong>OKLCH</strong><span>color fixes</span></li>
-        <li>${icon("bandage", "ic")}<strong>1 diff</strong><span>safe auto fix</span></li>
-      </ul>
     </div>
     <figure class="cl-hero-art">
       ${inline.scene()}
-      <figcaption class="cl-handnote"><span>Patient: one browser window.</span> <span>Symptoms: no alt text, mystery buttons, pale grey text.</span></figcaption>
+      <figcaption class="cl-handnote"><span>Before: <code>&lt;img src="team.jpg"&gt;</code></span> <span class="cl-handnote-after">After: <code>&lt;img src="team.jpg" <ins>alt="Our team"</ins>&gt;</code></span></figcaption>
     </figure>
   </div>
 </section>
 
-<section id="patients" class="cl-section cl-people-sec" aria-labelledby="people-title">
-  <div class="cl-wrap">
-    <div class="cl-section-head cl-center">
-      <p class="cl-kicker">${icon("heart-pulse", "ic ic-sm")}Who it is for</p>
-      <h2 id="people-title">Every diagnosis names who it hurts</h2>
-      <p>A finding is not a lint warning. Each one says which people hit the barrier, so you know why the fix matters before you write it.</p>
-    </div>
-    <ul class="cl-people">
-      ${Object.entries(PEOPLE).map(([key, [label, line]]) => `<li class="cl-person">${icon(key, "ic ic-xl")}<strong>${label}</strong><span>${line}</span></li>`).join("\n      ")}
-    </ul>
-  </div>
-</section>
-${divider}
 <section id="checkup" class="cl-section cl-checkup" aria-labelledby="checkup-title">
   <div class="cl-wrap">
     <div class="cl-section-head">
       <p class="cl-kicker">${icon("stethoscope", "ic ic-sm")}Live demo</p>
-      <h2 id="checkup-title">The check-up room</h2>
-      <p>Pick a patient or paste your own HTML and run the medic. Numbered pins land on the page, the chart explains each problem with the exact fix, and <strong>Treat</strong> applies it to the live page so you can watch the patient recover.</p>
+      <h2 id="checkup-title" tabindex="-1">The check-up room</h2>
+      <p>Numbered pins mark each problem on the page. Open one in the chart to read the fix, then press <strong>Treat</strong> to apply it and watch the health score climb.</p>
     </div>
     <div class="cl-room">
       <div class="cl-intake cl-clipboard">
@@ -153,7 +162,7 @@ ${divider}
           <h3 class="cl-card-title">${icon("report", "ic")}Patient intake</h3>
           <div class="segmented segmented-block" role="radiogroup" aria-label="Patient source">
             <label class="segmented-item"><input type="radio" name="src" value="samples" v-model="tab" checked> Sample patients</label>
-            <label class="segmented-item"><input type="radio" name="src" value="paste" v-model="tab"> Paste HTML</label>
+            <label class="segmented-item"><input type="radio" name="src" value="paste" v-model="tab"> HTML or URL</label>
           </div>
           <fieldset class="cl-samples" v-show="tab === 'samples'">
             <legend class="sr-only">Sample patient</legend>
@@ -165,9 +174,10 @@ ${divider}
               .join("\n            ")}
           </fieldset>
           <div class="cl-paste" v-show="tab === 'paste'" style="display:none">
-            <label for="paste-html">Your HTML</label>
+            <label for="paste-html">Your HTML or a URL</label>
             <textarea id="paste-html" class="textarea" rows="9" spellcheck="false" v-model="paste" placeholder="&lt;img src=&quot;team.jpg&quot;&gt;"></textarea>
           </div>
+          ${corsHelp("room")}
           <div class="cl-options">
             <div>
               <label for="opt-level">WCAG level</label>
@@ -197,7 +207,8 @@ ${divider}
         <div class="cl-monitor">
           <div class="cl-monitor-gauge">
             ${gauge}
-            <p class="cl-score"><strong v-text="score">0</strong><span>health</span></p>
+            <p class="cl-score"><strong v-text="shownScore">0</strong><span>health</span></p>
+            <p class="cl-delta" v-show="delta > 0" style="display:none" v-text="'+' + delta + ' ' + t.since">+0</p>
           </div>
           <div class="cl-monitor-read">
             <div class="cl-moods" :data-mood="mood">
@@ -231,7 +242,7 @@ ${divider}
             <button type="button" class="btn btn-sm btn-ghost" @click="run()" v-text="t.reset">Start over</button>
           </div>
           <p class="cl-healed" role="status" v-text="status"></p>
-          <ol class="cl-findings" aria-label="Findings">
+          <ol class="cl-findings" aria-label="Findings" :class="{ 'is-fresh': fresh }">
             <li v-for="f in items" :key="f.key" class="cl-finding" :data-sev="f.severity" :class="{ 'is-open': open === f.i }" :id="'finding-' + f.i">
               <button type="button" class="cl-finding-head" @click="toggle(f.i)" :aria-expanded="open === f.i ? 'true' : 'false'" :aria-controls="'fbody-' + f.i">
                 <span class="cl-num" :data-sev="f.severity" v-text="f.n" aria-hidden="true"></span>
@@ -262,6 +273,49 @@ ${divider}
         </div>
       </section>
     </div>
+  </div>
+</section>
+
+<section id="how" class="cl-section cl-how" aria-labelledby="how-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head cl-center">
+      <p class="cl-kicker">${icon("ambulance", "ic ic-sm")}How it works</p>
+      <h2 id="how-title">Exam, diagnosis, treatment</h2>
+      <p>Three steps, the same everywhere: in this page, on any site, in the terminal, in CI and in your tests.</p>
+    </div>
+    <ol class="cl-journey" data-reveal>
+      <li style="--step: 0">
+        <span class="cl-station">${icon("stethoscope", "ic")}</span>
+        <h3><span>1</span> Exam</h3>
+        <div class="cl-mini" aria-hidden="true"><code class="cl-mini-code">&lt;button&gt;<b class="cl-mini-svg">&lt;svg&gt;</b>&lt;/button&gt;</code><span class="cl-mini-scan"></span></div>
+        <p>61 rules run on a real page. In the browser a11ymedic reads the real colors and sizes; on Node it parses your HTML and applies your CSS itself.</p>
+      </li>
+      <li style="--step: 1">
+        <span class="cl-station">${icon("chart", "ic")}</span>
+        <h3><span>2</span> Diagnosis</h3>
+        <div class="cl-mini" aria-hidden="true"><span class="cl-mini-finding"><span class="cl-num" data-sev="critical">1</span><span><strong>Button has no name</strong><small>Screen readers say only "button".</small></span></span></div>
+        <p>Each problem says what is wrong with this exact element, why it matters, who it hurts and which WCAG 2.2 rule it breaks, in English and Portuguese.</p>
+      </li>
+      <li style="--step: 2">
+        <span class="cl-station">${icon("bandage", "ic")}</span>
+        <h3><span>3</span> Treatment</h3>
+        <div class="cl-mini" aria-hidden="true"><code class="cl-mini-code">&lt;button <ins>aria-label="Search"</ins>&gt;&lt;svg&gt;&lt;/button&gt;</code></div>
+        <p>Every finding comes with the patched code. Safe fixes apply in one command with a diff preview; the rest come ready to paste and review.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+${divider}
+<section id="patients" class="cl-section cl-people-sec" aria-labelledby="people-title">
+  <div class="cl-wrap">
+    <div class="cl-section-head cl-center">
+      <p class="cl-kicker">${icon("heart-pulse", "ic ic-sm")}Who it is for</p>
+      <h2 id="people-title">Every diagnosis names who it hurts</h2>
+      <p>A finding is not a lint warning. Each one says which people hit the barrier, so you know why the fix matters before you write it.</p>
+    </div>
+    <ul class="cl-people" data-reveal>
+      ${Object.entries(PEOPLE).map(([key, [label, line]]) => `<li class="cl-person">${icon(key, "ic ic-xl")}<strong>${label}</strong><span>${line}</span></li>`).join("\n      ")}
+    </ul>
   </div>
 </section>
 
@@ -336,20 +390,6 @@ ${divider}
   </div>
 </section>
 ${divider}
-<section id="how" class="cl-section" aria-labelledby="how-title">
-  <div class="cl-wrap">
-    <div class="cl-section-head cl-center">
-      <p class="cl-kicker">${icon("ambulance", "ic ic-sm")}How it works</p>
-      <h2 id="how-title">Exam, diagnosis, treatment</h2>
-    </div>
-    <ol class="cl-journey">
-      <li><span class="cl-station">${icon("stethoscope", "ic")}</span><h3><span>1</span> Exam</h3><p>An engine written from scratch runs 61 rules on a real DOM. In the browser it reads computed styles and real boxes. On Node it parses HTML with jsdom, cascades your CSS itself (specificity, variables, inheritance) and keeps line numbers.</p></li>
-      <li><span class="cl-station">${icon("chart", "ic")}</span><h3><span>2</span> Diagnosis</h3><p>Every finding says what is wrong with this exact element, why it matters, who is affected and which WCAG 2.2 criterion it breaks, in English and Portuguese, with the selector and the HTML snippet.</p></li>
-      <li><span class="cl-station">${icon("bandage", "ic")}</span><h3><span>3</span> Treatment</h3><p>Each finding comes with patched code: the missing alt, aria-label or label for, a contrast safe color picked in OKLCH. Safe fixes apply in one command with a diff preview, and running them twice changes nothing.</p></li>
-    </ol>
-  </div>
-</section>
-
 <section id="install" class="cl-section cl-install" aria-labelledby="install-title">
   <div class="cl-wrap">
     <div class="cl-section-head">
@@ -357,7 +397,7 @@ ${divider}
       <h2 id="install-title">Four ways to call the medic</h2>
       <p>Same rules, same explanations and the same fixes wherever you run it.</p>
     </div>
-    <div class="cl-folders">
+    <div class="cl-folders" data-reveal>
       <article class="cl-folder" data-tone="coral"><p class="cl-folder-tab">${icon("pin", "ic ic-sm")}House call</p><div class="cl-folder-body">
         <h3>On any page: script tag or bookmarklet</h3>
         <p>Add one script tag in development. Numbered pins mark each problem and a keyboard accessible side panel explains it. <kbd class="kbd kbd-sm">Alt</kbd> + <kbd class="kbd kbd-sm">Shift</kbd> + <kbd class="kbd kbd-sm">A</kbd> toggles it.</p>
@@ -473,7 +513,7 @@ ${divider}
 /** The guide rack: one pamphlet per guide with its spot illustration, plus the cheat sheet. */
 export function pamphlets(guides, heading = "h3") {
   const cheat = `<li><a class="cl-pamphlet" href="wcag-cheat-sheet.html"><span class="cl-pamphlet-art cl-pour-art">${["eye", "hand", "lightbulb", "blocks"].map((n) => icon(n, "ic")).join("")}</span><span class="cl-pamphlet-kicker">${icon("clipboard-check", "ic ic-xs")}Cheat sheet</span><${heading} class="cl-pamphlet-title">WCAG 2.2 cheat sheet in plain language</${heading}><span class="cl-pamphlet-text">Every A and AA success criterion in one or two sentences, with the a11ymedic rules that check it.</span></a></li>`;
-  return `<ul class="cl-pamphlets">
+  return `<ul class="cl-pamphlets" data-reveal>
       ${guides.map((g) => `<li><a class="cl-pamphlet" href="${g.slug}.html"><span class="cl-pamphlet-art">${inline.spot(g.slug)}</span><span class="cl-pamphlet-kicker">${icon("book", "ic ic-xs")}Guide</span><${heading} class="cl-pamphlet-title">${esc(g.h1)}</${heading}><span class="cl-pamphlet-text">${esc(g.description)}</span></a></li>`).join("\n      ")}
       ${cheat}
     </ul>`;
