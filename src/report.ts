@@ -300,7 +300,7 @@ export function toHtml(input: AuditResult | AuditResult[], options: ReportOption
         : "";
       return `<section class="doc" aria-labelledby="${id}">
 <div class="doc-head">${scoreGauge(s, lang, "small")}<div><h2 id="${id}">${esc(docName(r))}</h2><p class="summary">${esc(s.label[lang])}: ${esc(summarize(r.counts, lang))}</p></div></div>
-${groups || `<p class="healthy">${L(lang, "Healthy: no problems found.", "Saudável: nenhum problema encontrado.")}</p>`}
+${groups}
 ${review}
 </section>`;
     })
