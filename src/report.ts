@@ -248,7 +248,7 @@ footer{margin-top:40px;border-top:1px solid var(--line);padding-top:12px;color:v
 body{font-size:11pt;line-height:1.45;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 main{max-width:none;padding:0}.print{display:none}.gauge .arc{animation:none}
 .rule{padding:10px 12px;margin:10px 0}
-h2,h3{break-after:avoid}.finding,.code,.doc-head,.overview,tr{break-inside:avoid}
+h2,h3{break-after:avoid}.code,.doc-head,.overview,tr{break-inside:avoid}.msg,.loc{break-after:avoid}
 .code{grid-template-columns:1fr 1fr}pre{overflow:visible}
 .wcag a{color:inherit;text-decoration:none}.wcag a::after{content:" (" attr(href) ")";font-size:8pt;word-break:break-all}
 }
@@ -338,8 +338,8 @@ ${sections}
 <footer>
 <p>${L(
     lang,
-    "How the score works: every failing rule takes points by severity (critical 12, serious 7, moderate 3, minor 1), up to double when it repeats. 100 means no automated findings.",
-    "Como a nota funciona: cada regra com problema tira pontos pela gravidade (crítico 12, grave 7, moderado 3, leve 1), até o dobro quando se repete. 100 significa nenhum problema encontrado automaticamente.",
+    "How the score works: every failing rule takes points by severity (critical 12, serious 7, moderate 3, minor 1), up to double when it repeats. 100 means no automated findings. Healthy needs 90 or more and no critical or serious problem.",
+    "Como a nota funciona: cada regra com problema tira pontos pela gravidade (crítico 12, grave 7, moderado 3, leve 1), até o dobro quando se repete. 100 significa nenhum problema encontrado automaticamente. Saudável pede 90 ou mais e nenhum problema crítico ou grave.",
   )}</p>
 <p>${L(
     lang,

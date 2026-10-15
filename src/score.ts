@@ -61,13 +61,18 @@ function fromFindings(findings: Pick<Finding, "rule" | "severity">[]): Score {
   const lost = rules.reduce((a, r) => a + r.points, 0);
   // Any finding keeps the score below 100, so 100 always means a clean result.
   const value = rules.length ? Math.min(99, Math.max(0, Math.round(100 - lost))) : 100;
-  const grade = gradeOf(value);
+  const grade = capGrade(gradeOf(value), rules);
   return { value, grade, label: LABELS[grade], rules };
 }
 
+/** A page with a critical or serious problem is never called healthy, whatever its score. */
+const capGrade = (grade: Grade, rules: ScoreRule[]): Grade =>
+  grade === "healthy" && rules.some((r) => r.severity === "critical" || r.severity === "serious") ? "fair" : grade;
+
 /**
  * A 0 to 100 health score. Each failing rule takes points by severity (critical 12, serious 7,
- * moderate 3, minor 1), up to double when it repeats; several results are averaged.
+ * moderate 3, minor 1), up to double when it repeats; several results are averaged. The grade is
+ * healthy from 90 up, but never while a critical or serious problem is left.
  *
  *   score(await audit(html)).value; // 81
  */
@@ -77,6 +82,6 @@ export function score(input: Pick<AuditResult, "findings"> | Pick<AuditResult, "
   const parts = input.map((r) => fromFindings(r.findings));
   const value = Math.round(parts.reduce((a, p) => a + p.value, 0) / parts.length);
   const all = fromFindings(input.flatMap((r) => r.findings));
-  const grade = gradeOf(value);
+  const grade = capGrade(gradeOf(value), all.rules);
   return { value, grade, label: LABELS[grade], rules: all.rules };
 }

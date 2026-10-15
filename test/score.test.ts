@@ -46,6 +46,14 @@ describe("score", () => {
     expect(s.label).toEqual({ en: "Needs care", pt: "Precisa de cuidados" });
   });
 
+  it("never calls a page with a critical or serious problem healthy", async () => {
+    const serious = score({ findings: [f("color-contrast", "serious")] as Finding[] });
+    expect(serious).toMatchObject({ value: 93, grade: "fair" });
+    expect(score({ findings: [f("input-purpose", "minor"), f("heading-order", "moderate")] as Finding[] })).toMatchObject({ value: 96, grade: "healthy" });
+    const many = [await audit('<p style="color:#aaa">Low</p>'), ...(await Promise.all([1, 2, 3].map(() => audit("<p>ok</p>"))))];
+    expect(score(many)).toMatchObject({ value: 98, grade: "fair" });
+  });
+
   it("uses the worst severity when one rule reports several", () => {
     const s = score({ findings: [f("target-size", "minor"), f("target-size", "serious")] as Finding[] });
     expect(s.rules[0]).toMatchObject({ severity: "serious", count: 2 });
