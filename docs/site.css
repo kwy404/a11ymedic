@@ -790,3 +790,39 @@ p code, li code, td code, dd code, .cl-prose code { background: var(--teal-soft)
   .cl-principle-head .cl-principle-badge { width: 54px; height: 54px; border-radius: 16px; }
   .cl-principle-head .cl-principle-badge .ic { width: 34px; height: 34px; }
 }
+
+/* ---------------------------------------------------------------- seasonal themes
+   seasons.js sets data-season on <html> on special dates (or with ?season=<id>). The art comes
+   from assets/seasons/seasons.svg; everything here is decoration and hidden from assistive tech. */
+.cl-season-scene, .cl-season-icons { display: none; }
+[data-season] .cl-season-scene { display: block; position: absolute; left: 0; top: 0; width: 100%; height: auto; pointer-events: none; clip-path: inset(0 round 40px); }
+[data-season] .cl-season-icons { display: flex; gap: 10px; position: absolute; right: 18px; top: -18px; pointer-events: none; }
+.cl-season-icons .ic { width: 40px; height: 40px; padding: 6px; background: var(--card); border: 2px solid var(--stroke); border-radius: 14px; box-shadow: var(--shadow); }
+.cl-season-icons .ic:nth-child(2) { transform: rotate(-6deg) translateY(6px); }
+.cl-season-icons .ic:nth-child(3) { transform: rotate(5deg); }
+@media (prefers-reduced-motion: no-preference) {
+  [data-season] .cl-season-icons .ic { animation: cl-season-pop 0.6s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+  [data-season] .cl-season-icons .ic:nth-child(2) { animation-delay: 0.1s; }
+  [data-season] .cl-season-icons .ic:nth-child(3) { animation-delay: 0.2s; }
+  [data-season] .cl-season-scene { animation: cl-season-fade 0.8s ease both; }
+}
+@keyframes cl-season-pop { from { opacity: 0; scale: 0.4; } to { opacity: 1; scale: 1; } }
+@keyframes cl-season-fade { from { opacity: 0; } to { opacity: 1; } }
+.cl-foot-patch, .cl-cta-box img { object-fit: contain; }
+.season-fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+.season-chip { position: fixed; right: 16px; bottom: 16px; z-index: 45; display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 10px; background: var(--card); color: var(--ink); border: 2px solid var(--stroke); border-radius: 999px; box-shadow: var(--shadow); font: 600 14px/1.2 var(--font-display); }
+.season-chip-ic { width: 24px; height: 24px; flex: none; }
+.season-switch { position: relative; flex: none; width: 46px; height: 28px; padding: 0; border-radius: 999px; border: 2px solid var(--stroke); background: var(--card-2); cursor: pointer; }
+.season-switch[aria-checked="true"] { background: var(--teal-fill); }
+.season-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: var(--card); border: 2px solid var(--stroke); transition: transform 0.2s ease; }
+.season-switch[aria-checked="true"] .season-knob { transform: translateX(18px); }
+.season-switch:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) { .season-chip { animation: cl-rise 0.5s 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; } }
+@media (prefers-reduced-motion: reduce) { .season-knob { transition: none; } }
+@media print { .season-chip, .season-fx { display: none; } }
+@media (max-width: 640px) {
+  .season-chip { right: 12px; bottom: 12px; padding: 4px 6px 4px 8px; }
+  .season-chip #season-chip-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  [data-season] .cl-season-icons { right: 8px; top: -14px; }
+  .cl-season-icons .ic { width: 34px; height: 34px; padding: 5px; }
+}

@@ -143,6 +143,8 @@ export function homeBody({ rules, samples, guides, bookmarkletHref }) {
     </div>
     <figure class="cl-hero-art">
       ${inline.scene()}
+      <svg class="cl-season-scene" viewBox="0 0 760 600" aria-hidden="true" focusable="false"><use data-season-use="accent"/><g class="art-bob"><use data-season-use="costume"/></g></svg>
+      <span class="cl-season-icons" aria-hidden="true">${[1, 2, 3].map((n) => `<svg class="ic" viewBox="0 0 24 24" focusable="false"><use data-season-use="icon-${n}"/></svg>`).join("")}</span>
       <figcaption class="cl-handnote"><span>Before: <code>&lt;img src="team.jpg"&gt;</code></span> <span class="cl-handnote-after">After: <code>&lt;img src="team.jpg" <ins>alt="Our team"</ins>&gt;</code></span></figcaption>
     </figure>
   </div>

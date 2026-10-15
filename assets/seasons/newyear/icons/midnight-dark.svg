@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="t">
+<title id="t">Clock at midnight</title>
+<g fill="none" stroke="#f2e8d5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8.5" fill="#102a2f"/><path d="M12 13V7.5M12 13l.01 0"/><path d="M12 13V7.5" stroke="#c25a49" stroke-width="2.5"/><path d="M12 4.5V2.5M9 2.5h6"/><path d="M5 5.5l1.5 1.5M19 5.5 17.5 7"/></g>
+</svg>

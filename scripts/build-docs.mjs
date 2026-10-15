@@ -4,7 +4,9 @@
 //
 //   npm run build && node scripts/build-docs.mjs && node scripts/highlight-docs.mjs
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { transformSync } from "esbuild";
 import { icon, inline, writeArt } from "./art/clinic.mjs";
+import { writeSeasons } from "./art/seasons.mjs";
 import { AUTHOR, PEOPLE, REPO, SITE, VERSION, breadcrumbs, esc, faqLd, page } from "./site/layout.mjs";
 import { HOME_FAQ, homeBody, pamphlets } from "./site/home.mjs";
 import { SAMPLES } from "./site/samples.mjs";
@@ -27,6 +29,11 @@ for (const f of ["mascot.svg", "mascot-dark.svg", "mascot-head.svg"]) copyFileSy
 rmSync("docs/assets/icons", { recursive: true, force: true });
 copyFileSync("assets/favicon.svg", "docs/favicon.svg");
 writeArt();
+
+// Seasonal themes: the art sprite and costume heads, and the date script, minified.
+writeSeasons();
+writeFileSync("docs/seasons.js", `/* a11ymedic seasonal themes. Source: assets/seasons/seasons.js */
+${transformSync(readFileSync("assets/seasons/seasons.js", "utf8"), { minify: true, target: "es2019" }).code}`);
 
 // Understanding page slugs for every criterion on the cheat sheet.
 const SLUGS = Object.fromEntries(
@@ -119,7 +126,7 @@ ${g.body}
         ${g.faq.map((f) => `<details class="cl-faq"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("\n        ")}
       </section>
       <aside class="cl-cta-box" aria-labelledby="cta-${g.slug}">
-        <img src="assets/mascot-head.svg" width="72" height="72" alt="">
+        <img src="assets/mascot-head.svg" data-season-src="assets/seasons/{id}/patch-head.svg" width="72" height="72" alt="">
         <div>
           <h2 id="cta-${g.slug}">Run a check-up on your own page</h2>
           <p>Paste your HTML into the <a href="./#checkup">live check-up room</a>, or run <code>npx a11ymedic index.html</code>.</p>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
+  <script src="seasons.js" data-sprite-href="assets/seasons/seasons.svg"></script>
   <title>Writing alt text | a11ymedic</title>
   <meta name="description" content="When to describe an image and when to leave alt empty, with examples for links, buttons, icons, charts and SVG.">
   <link rel="canonical" href="https://kwy404.github.io/a11ymedic/alt-text-best-practices.html">
@@ -164,7 +165,7 @@
         <details class="cl-faq"><summary>What alt text should a logo have?</summary><p>The company name. If the logo links to the home page, describe the destination, for example the company name followed by home.</p></details>
       </section>
       <aside class="cl-cta-box" aria-labelledby="cta-alt-text-best-practices">
-        <img src="assets/mascot-head.svg" width="72" height="72" alt="">
+        <img src="assets/mascot-head.svg" data-season-src="assets/seasons/{id}/patch-head.svg" width="72" height="72" alt="">
         <div>
           <h2 id="cta-alt-text-best-practices">Run a check-up on your own page</h2>
           <p>Paste your HTML into the <a href="./#checkup">live check-up room</a>, or run <code>npx a11ymedic index.html</code>.</p>
@@ -181,7 +182,7 @@
   <footer class="cl-foot">
   <div class="cl-wrap cl-foot-grid">
     <div class="cl-foot-desk">
-      <img class="cl-foot-patch" src="assets/mascot-head.svg" width="84" height="84" alt="">
+      <img class="cl-foot-patch" src="assets/mascot-head.svg" data-season-src="assets/seasons/{id}/patch-head.svg" width="84" height="84" alt="">
       <div>
         <p class="cl-foot-hello">Front desk</p>
         <p class="cl-foot-name">a11y<b>medic</b></p>

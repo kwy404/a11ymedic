@@ -79,7 +79,7 @@ export function footer() {
   return `<footer class="cl-foot">
   <div class="cl-wrap cl-foot-grid">
     <div class="cl-foot-desk">
-      <img class="cl-foot-patch" src="assets/mascot-head.svg" width="84" height="84" alt="">
+      <img class="cl-foot-patch" src="assets/mascot-head.svg" data-season-src="assets/seasons/{id}/patch-head.svg" width="84" height="84" alt="">
       <div>
         <p class="cl-foot-hello">Front desk</p>
         <p class="cl-foot-name">a11y<b>medic</b></p>
@@ -130,6 +130,7 @@ export function page({ title, description, path, body, jsonld, active = "", scri
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
+  <script src="seasons.js" data-sprite-href="assets/seasons/seasons.svg"></script>
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
   <link rel="canonical" href="${url}">

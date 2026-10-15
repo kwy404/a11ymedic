@@ -588,3 +588,125 @@ if (groups.length && "IntersectionObserver" in window && !matchMedia("(prefers-r
   );
   groups.filter((g) => !g.classList.contains("is-in")).forEach((g) => io.observe(g));
 }
+
+// Seasonal particles: one light canvas behind the content while a seasonal theme is on
+// (see seasons.js). Skipped with reduced motion, paused while the tab is hidden.
+const FX = {
+  halloween: { n: 16, fall: 1, kinds: ["leaf", "leaf", "leaf", "bat"], colors: ["#e0874a", "#c96f3b", "#b98a55", "#5e4b7c"] },
+  christmas: { n: 34, fall: 1, kinds: ["flake"], colors: ["#ffffff", "#e6f2f1", "#d8ecea"] },
+  carnival: { n: 26, fall: 1, kinds: ["confetti"], colors: ["#e07a8a", "#e3b552", "#9fd8c4", "#b7a6dc", "#7fd3c8"] },
+  junina: { n: 18, fall: -1, kinds: ["spark"], colors: ["#ef8f4a", "#e3b552", "#f2d98a"] },
+  valentine: { n: 16, fall: 1, kinds: ["heart", "petal"], colors: ["#e07a8a", "#f3b4bd", "#c25a6c"] },
+  easter: { n: 16, fall: 1, kinds: ["petal"], colors: ["#b7a6dc", "#f2d98a", "#9fd8c4", "#f3b4bd"] },
+  newyear: { n: 20, fall: -1, kinds: ["spark", "star"], colors: ["#e3b552", "#ff9a87", "#9fd8c4"] },
+};
+let fx = null;
+function seasonFx(id) {
+  fx?.stop();
+  fx = null;
+  const conf = FX[id];
+  if (!conf || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const canvas = document.createElement("canvas");
+  canvas.className = "season-fx";
+  canvas.setAttribute("aria-hidden", "true");
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext("2d");
+  let w = 0;
+  let h = 0;
+  let raf = 0;
+  let last = 0;
+  const size = () => {
+    const dpr = Math.min(1.5, devicePixelRatio || 1);
+    w = innerWidth;
+    h = innerHeight;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  size();
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const pick = (list) => list[Math.floor(Math.random() * list.length)];
+  const spawn = (p, fresh) => {
+    p.kind = pick(conf.kinds);
+    p.color = pick(conf.colors);
+    p.r = p.kind === "bat" ? rand(7, 10) : p.kind === "flake" ? rand(1.5, 3.4) : p.kind === "spark" ? rand(1.2, 2.6) : rand(4, 7);
+    p.x = rand(0, w);
+    p.y = fresh ? rand(0, h) : conf.fall > 0 ? -20 : h + 20;
+    p.vy = conf.fall * (p.kind === "spark" ? rand(18, 40) : p.kind === "bat" ? rand(4, 10) : rand(14, 34));
+    p.vx = p.kind === "bat" ? rand(18, 34) * (Math.random() < 0.5 ? -1 : 1) : rand(-10, 10);
+    p.rot = rand(0, 6.28);
+    p.vr = rand(-1.2, 1.2);
+    p.phase = rand(0, 6.28);
+    p.alpha = p.kind === "flake" ? rand(0.45, 0.85) : rand(0.35, 0.6);
+    return p;
+  };
+  const count = innerWidth < 640 ? Math.ceil(conf.n / 2) : conf.n;
+  const parts = Array.from({ length: count }, () => spawn({}, true));
+  const draw = (p) => {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    if (p.kind === "leaf" || p.kind === "petal") ctx.ellipse(0, 0, p.r, p.r * 0.5, 0, 0, 6.28);
+    else if (p.kind === "confetti") ctx.rect(-p.r / 2, -p.r / 4, p.r, p.r / 2);
+    else if (p.kind === "heart") {
+      const s = p.r / 6;
+      ctx.moveTo(0, 5 * s);
+      ctx.bezierCurveTo(-7 * s, 0, -5 * s, -6 * s, 0, -3 * s);
+      ctx.bezierCurveTo(5 * s, -6 * s, 7 * s, 0, 0, 5 * s);
+    } else if (p.kind === "bat") {
+      const flap = Math.sin(p.phase * 3) * 0.5 * p.r;
+      ctx.rotate(-p.rot);
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(-p.r, -p.r * 0.6 - flap, -p.r * 1.6, flap);
+      ctx.quadraticCurveTo(-p.r * 0.8, -flap * 0.2, 0, p.r * 0.35);
+      ctx.quadraticCurveTo(p.r * 0.8, -flap * 0.2, p.r * 1.6, flap);
+      ctx.quadraticCurveTo(p.r, -p.r * 0.6 - flap, 0, 0);
+    } else if (p.kind === "star") {
+      for (let i = 0; i < 4; i++) {
+        ctx.rotate(Math.PI / 2);
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(p.r * 0.2, -p.r * 0.2, 0, -p.r);
+        ctx.quadraticCurveTo(-p.r * 0.2, -p.r * 0.2, 0, 0);
+      }
+    } else ctx.arc(0, 0, p.r, 0, 6.28);
+    ctx.fill();
+    ctx.restore();
+  };
+  const tick = (now) => {
+    const dt = Math.min(0.05, (now - (last || now)) / 1000);
+    last = now;
+    ctx.clearRect(0, 0, w, h);
+    for (const p of parts) {
+      p.phase += dt;
+      p.x += (p.vx + Math.sin(p.phase * 1.3) * 12) * dt;
+      p.y += p.vy * dt;
+      p.rot += p.vr * dt;
+      if (p.kind === "spark" || p.kind === "star") p.alpha = Math.max(0, p.alpha - dt * 0.05);
+      const gone = p.y > h + 30 || p.y < -30 || p.x < -40 || p.x > w + 40 || p.alpha <= 0.02;
+      if (gone) spawn(p, false);
+      draw(p);
+    }
+    raf = requestAnimationFrame(tick);
+  };
+  const play = () => {
+    cancelAnimationFrame(raf);
+    last = 0;
+    if (!document.hidden) raf = requestAnimationFrame(tick);
+  };
+  addEventListener("resize", size);
+  document.addEventListener("visibilitychange", play);
+  play();
+  fx = {
+    stop() {
+      cancelAnimationFrame(raf);
+      removeEventListener("resize", size);
+      document.removeEventListener("visibilitychange", play);
+      canvas.remove();
+    },
+  };
+}
+document.addEventListener("seasonchange", (e) => seasonFx(e.detail || ""));
+seasonFx(document.documentElement.getAttribute("data-season") || "");

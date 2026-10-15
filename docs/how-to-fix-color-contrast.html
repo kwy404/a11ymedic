@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
+  <script src="seasons.js" data-sprite-href="assets/seasons/seasons.svg"></script>
   <title>Fixing color contrast | a11ymedic</title>
   <meta name="description" content="The WCAG contrast ratios, the traps that hide failing text, and how to pick a passing color close to the one you have.">
   <link rel="canonical" href="https://kwy404.github.io/a11ymedic/how-to-fix-color-contrast.html">
@@ -157,7 +158,7 @@
         <details class="cl-faq"><summary>Is #767676 accessible on white?</summary><p>Yes. #767676 on #ffffff is about 4.54:1, which passes AA for normal text. It is the lightest neutral gray that does.</p></details>
       </section>
       <aside class="cl-cta-box" aria-labelledby="cta-how-to-fix-color-contrast">
-        <img src="assets/mascot-head.svg" width="72" height="72" alt="">
+        <img src="assets/mascot-head.svg" data-season-src="assets/seasons/{id}/patch-head.svg" width="72" height="72" alt="">
         <div>
           <h2 id="cta-how-to-fix-color-contrast">Run a check-up on your own page</h2>
           <p>Paste your HTML into the <a href="./#checkup">live check-up room</a>, or run <code>npx a11ymedic index.html</code>.</p>
@@ -174,7 +175,7 @@
   <footer class="cl-foot">
   <div class="cl-wrap cl-foot-grid">
     <div class="cl-foot-desk">
-      <img class="cl-foot-patch" src="assets/mascot-head.svg" width="84" height="84" alt="">
+      <img class="cl-foot-patch" src="assets/mascot-head.svg" data-season-src="assets/seasons/{id}/patch-head.svg" width="84" height="84" alt="">
       <div>
         <p class="cl-foot-hello">Front desk</p>
         <p class="cl-foot-name">a11y<b>medic</b></p>
