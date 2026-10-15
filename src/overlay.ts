@@ -186,9 +186,9 @@ position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:var(--bg
 box-shadow:-8px 0 24px rgba(0,0,0,.18);font:14px/1.5 system-ui,"Segoe UI",Helvetica,Arial,sans-serif;display:flex;flex-direction:column;z-index:2147483647}
 @media (prefers-color-scheme:dark){.panel{--bg:#0b1f24;--soft:#10323a;--text:#e8f6f5;--muted:#9fc9c6;--line:#1f5660;--teal:#5fd6cb;--coral:#ff9a8a;--code:#081a1e}}
 @media (max-width:520px){.panel{top:auto;height:62vh;width:100vw;border-left:0;border-top:1px solid var(--line);border-radius:16px 16px 0 0}}
-header{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--soft)}
+header{display:flex;align-items:center;gap:8px;padding:12px 14px 4px;background:var(--soft)}
 h2{margin:0;font-size:16px;flex:1}h2:focus{outline:none}
-.tools{display:flex;gap:6px}
+.tools{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px;border-bottom:1px solid var(--line);background:var(--soft)}
 button{font:inherit;color:inherit;cursor:pointer}
 .tool{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 10px;min-height:32px;min-width:32px}
 .tool:hover{border-color:var(--teal)}
@@ -403,10 +403,10 @@ export function overlay(options: OverlayOptions = {}): OverlayController {
 <aside class="panel${enter ? " enter" : ""}" aria-labelledby="a11ymedic-title"${options.open === false ? " hidden" : ""}>
 <header><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#0f8b8d"/><path d="M12 6v12M6 12h12" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
 <h2 id="a11ymedic-title" tabindex="-1">${ui.title}: ${ui.problems(f.length)}</h2>
-<div class="tools"><button type="button" class="tool" data-act="lang" lang="${lang === "pt" ? "en" : "pt-BR"}">${ui.lang}</button>
-<button type="button" class="tool" data-act="rerun">${ui.rerun}</button>
+<button type="button" class="tool" data-act="close" aria-label="${ui.close}">&times;</button></header>
+<div class="tools"><button type="button" class="tool" data-act="rerun">${ui.rerun}</button>
 <button type="button" class="tool" data-act="print">${ui.print}</button>
-<button type="button" class="tool" data-act="close" aria-label="${ui.close}">&times;</button></div></header>
+<button type="button" class="tool" data-act="lang" lang="${lang === "pt" ? "en" : "pt-BR"}">${ui.lang}</button></div>
 ${scoreBox}
 ${counts ? `<ul class="counts">${counts}</ul>` : ""}
 ${f.length ? `<ol class="list">${items}</ol>` : `<p class="empty">${ui.healthy}</p>`}
