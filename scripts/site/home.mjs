@@ -235,6 +235,7 @@ export function homeBody({ rules, samples, guides, bookmarkletHref }) {
             <button type="button" class="btn btn-sm btn-primary cl-btn" @click="treatAll(true)" :disabled="safeCount === 0">${icons.bandage}<span v-text="t.treatSafe + ' (' + safeCount + ')'">Treat safe fixes</span></button>
             <button type="button" class="btn btn-sm btn-outline" @click="treatAll(false)" v-text="t.treatAll">Treat everything</button>
             <button type="button" class="btn btn-sm btn-ghost" @click="run()" v-text="t.reset">Start over</button>
+            <button type="button" class="btn btn-sm btn-ghost" v-show="canPrint" style="display:none" @click="printChart()" v-text="t.print">Print report</button>
           </div>
           <div class="cl-discharged" v-show="ran && total === 0" style="display:none">
             ${inline.stamp()}
@@ -400,8 +401,8 @@ ${divider}
     <div class="cl-folders" data-reveal>
       <article class="cl-folder" data-tone="coral"><p class="cl-folder-tab">${icon("pin", "ic ic-sm")}House call</p><div class="cl-folder-body">
         <h3>On any page: script tag or bookmarklet</h3>
-        <p>Add one script tag in development. Numbered pins mark each problem and a keyboard accessible side panel explains it. <kbd class="kbd kbd-sm">Alt</kbd> + <kbd class="kbd kbd-sm">Shift</kbd> + <kbd class="kbd kbd-sm">A</kbd> toggles it.</p>
-        ${code("html", "index.html", `<script src="https://cdn.jsdelivr.net/npm/a11ymedic@${VERSION}/dist/a11ymedic.js" data-overlay></script>\n<!-- Portuguese: data-overlay="pt" -->`)}
+        <p>Add one script tag in development. Numbered pins mark each problem and a keyboard accessible side panel explains it, with the health score, how it changed since your last check and a print friendly report. <kbd class="kbd kbd-sm">Alt</kbd> + <kbd class="kbd kbd-sm">Shift</kbd> + <kbd class="kbd kbd-sm">A</kbd> toggles it.</p>
+        ${code("html", "index.html", `<script src="https://cdn.jsdelivr.net/npm/a11ymedic@${VERSION}/dist/a11ymedic.js" data-overlay></script>\n<!-- Portuguese: data-overlay="pt". A floating "Check this page" button: data-button -->`)}
         <p>Or drag this bookmarklet to your bookmarks bar and press it on any site: <a class="cl-bookmarklet" data-a11ymedic-ignore href="${esc(bookmarklet)}">${icon("first-aid", "ic ic-sm")}a11ymedic check-up</a></p>
       </div></article>
       <article class="cl-folder" data-tone="teal"><p class="cl-folder-tab">${icon("terminal", "ic ic-sm")}Walk-in clinic</p><div class="cl-folder-body">
@@ -478,7 +479,9 @@ ${divider}
             <tr><td><code>contrastRatio(fg, bg)</code>, <code>suggestColors(fg, bg, { ratio })</code></td><td>WCAG contrast and the closest passing pair in OKLCH.</td></tr>
             <tr><td><code>accessibleName(el)</code>, <code>getRole(el)</code></td><td>Accessible name and role, as assistive technology sees them.</td></tr>
             <tr><td><code>formatText</code>, <code>toJSON</code>, <code>toMarkdown</code>, <code>toHtml</code>, <code>githubAnnotations</code>, <code>githubSummary</code></td><td>Reports.</td></tr>
-            <tr><td><code>overlay(options?)</code>, <code>drawPins(doc, findings)</code></td><td>Browser build only: the pins and panel.</td></tr>
+            <tr><td><code>score(result)</code>, <code>recordScore(key, result)</code></td><td>The 0 to 100 health score, and a score history kept in localStorage.</td></tr>
+            <tr><td><code>bookmarklet({ lang })</code></td><td>The bookmarklet URL.</td></tr>
+            <tr><td><code>overlay(options?)</code>, <code>printReport(result)</code></td><td>Browser build only: the pins and panel, and the print friendly report.</td></tr>
           </tbody>
         </table>
       </div>

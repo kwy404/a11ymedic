@@ -36,6 +36,8 @@ const T = {
     treatedMany: (k, n) => `Applied ${k} ${k === 1 ? "fix" : "fixes"}. ${n} ${n === 1 ? "problem" : "problems"} left.`,
     empty: "Paste some HTML or a URL first.",
     since: "since the first exam",
+    print: "Print report",
+    saved: "The report was saved as a file.",
     yourHtml: "Your HTML",
     fetching: (host) => `Asking ${host} for its page...`,
     blocked: (host) => `Your browser could not read ${host}. The options below always work.`,
@@ -70,6 +72,8 @@ const T = {
     treatedMany: (k, n) => `${k} ${k === 1 ? "correção aplicada" : "correções aplicadas"}. Restam ${n} ${n === 1 ? "problema" : "problemas"}.`,
     empty: "Cole algum HTML ou uma URL primeiro.",
     since: "desde o primeiro exame",
+    print: "Imprimir relatório",
+    saved: "O relatório foi salvo como arquivo.",
     yourHtml: "Seu HTML",
     fetching: (host) => `Pedindo a página para ${host}...`,
     blocked: (host) => `Seu navegador não conseguiu ler ${host}. As opções abaixo sempre funcionam.`,
@@ -127,6 +131,7 @@ if (V) {
   let doc = null;
   let pins = null;
   let skipSampleWatch = false;
+  let lastResult = null;
 
   const S = V.data({
     menu: false,
@@ -151,6 +156,7 @@ if (V) {
     delta: 0,
     mood: "sick",
     fresh: false,
+    canPrint: typeof A?.printReport === "function",
     // the quick check in the hero
     quick: "",
     quickMsg: "",
@@ -246,6 +252,11 @@ if (V) {
       S.open = -1;
       S.status = S.t.treatedMany(applied, raw.length);
       if (applied) pulse("healing", 1300);
+    },
+    /** The chart as a print friendly report (it can be saved as PDF). */
+    printChart() {
+      if (!lastResult || typeof A.printReport !== "function") return;
+      if (A.printReport({ ...lastResult, source: S.patientName }, { lang: S.lang }) === "downloaded") S.status = S.t.saved;
     },
     selfCheck() {
       A.overlay({ lang: S.lang });
@@ -367,6 +378,7 @@ if (V) {
   function examine() {
     if (!doc) return;
     const result = A.auditDocument(doc, { level: S.level });
+    lastResult = result;
     raw = result.findings;
     S.ran = true;
     view();
