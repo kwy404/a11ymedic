@@ -52,7 +52,7 @@ describe("CLI", () => {
     expect(a.out).toContain("Usage");
     const b = io();
     expect(await main(["-v"], b)).toBe(0);
-    expect(b.out.trim()).toBe("0.1.0");
+    expect(b.out.trim()).toBe("0.2.0");
   });
 
   it("lists rules", async () => {
@@ -252,7 +252,7 @@ describe("CLI", () => {
   it("prints a bookmarklet", async () => {
     const a = io();
     expect(await main(["bookmarklet"], a)).toBe(0);
-    expect(a.out).toMatch(/^javascript:\(function\(\)\{.*a11ymedic@0\.1\.0\/dist\/a11ymedic\.js.*\}\)\(\)\n$/);
+    expect(a.out).toMatch(/^javascript:\(function\(\)\{.*a11ymedic@0\.2\.0\/dist\/a11ymedic\.js.*\}\)\(\)\n$/);
     const pt = io();
     await main(["bookmarklet", "--lang", "pt"], pt);
     expect(pt.out).toContain("a.toggleOverlay({lang:'pt'})");
